@@ -1,0 +1,7 @@
+.env
+node_modules
+.git
+dist
+ANDYLCC_PRD.md
+CHANGELOG.md
+guidelines/

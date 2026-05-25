@@ -8,7 +8,8 @@ type ApiResponse<T> = {
 export const AUTH_TOKEN_KEY = 'cardinal_auth_token';
 export const AUTH_ADMIN_KEY = 'cardinal_current_admin';
 
-const apiBase = '/api';
+const rawApiBase = import.meta.env.VITE_API_BASE_URL?.trim() || '/api';
+const apiBase = rawApiBase.endsWith('/') ? rawApiBase.slice(0, -1) : rawApiBase;
 
 const readStorage = (storage: Storage, key: string) => {
   try {

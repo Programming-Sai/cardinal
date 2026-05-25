@@ -1,51 +1,33 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import { Eye, EyeOff } from "lucide-react";
-import BrandLogo from "../../components/brand/BrandLogo";
-import {
-  addAdmin,
-  getAdmins,
-  initializeAdmins,
-  loginAdmin,
-} from "../../utils/adminAuth";
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { Eye, EyeOff } from 'lucide-react';
+import BrandLogo from '../../components/brand/BrandLogo';
+import { loginAdmin } from '../../utils/adminAuth';
 
 export default function AdminLogin() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [isBootstrapMode, setIsBootstrapMode] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    initializeAdmins();
-    setIsBootstrapMode(getAdmins().length === 0);
-  }, []);
-
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
+    setLoading(true);
 
-    if (isBootstrapMode) {
-      if (!fullName || !email) {
-        setError("Please enter a full name and email address.");
+    try {
+      const admin = await loginAdmin(email, password);
+      if (!admin) {
+        setError('No admin account found or password is incorrect.');
         return;
       }
 
-      addAdmin(email, fullName, "super_admin");
-      loginAdmin(email);
-      navigate("/admin/dashboard");
-      return;
+      navigate('/admin/dashboard');
+    } finally {
+      setLoading(false);
     }
-
-    const admin = loginAdmin(email);
-    if (!admin) {
-      setError("No admin account found.");
-      return;
-    }
-
-    navigate("/admin/dashboard");
   };
 
   return (
@@ -54,7 +36,7 @@ export default function AdminLogin() {
         <div
           className="bg-white p-8 sm:p-10 shadow-2xl border border-[#e6bcbf]"
           style={{
-            clipPath: "polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)",
+            clipPath: 'polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)',
           }}
         >
           <div className="text-center mb-8">
@@ -62,49 +44,17 @@ export default function AdminLogin() {
               <BrandLogo to="/" size="lg" />
             </div>
             <div className="w-16 h-1 bg-[#F71C56] mx-auto mb-4" />
-            <h2 className="font-bold text-xl text-[#0A1C3A]">
-              {isBootstrapMode ? "Create Admin Access" : "Admin Login"}
-            </h2>
+            <h2 className="font-bold text-xl text-[#0A1C3A]">Admin Login</h2>
           </div>
 
-          {isBootstrapMode ? (
-            <div className="bg-[#f7fafd] border border-[#e6bcbf] p-4 mb-6 text-sm text-[#0A1C3A]">
-              <p className="font-bold mb-1">Initial setup</p>
-              <p>Create the first super admin for this admin panel.</p>
-            </div>
-          ) : (
-            <div className="bg-[#f7fafd] border border-[#e6bcbf] p-4 mb-6 text-sm text-[#0A1C3A]">
-              <p className="font-bold mb-1">Admin access</p>
-              <p>Sign in with an existing admin account.</p>
-            </div>
-          )}
+          <div className="bg-[#f7fafd] border border-[#e6bcbf] p-4 mb-6 text-sm text-[#0A1C3A]">
+            <p className="font-bold mb-1">Admin access</p>
+            <p>Sign in with your Cardinal Immersions admin credentials.</p>
+          </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
-            {isBootstrapMode && (
-              <div>
-                <label
-                  htmlFor="fullName"
-                  className="block text-[#0A1C3A] mb-2 font-bold"
-                >
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="fullName"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  className="w-full px-4 py-3 bg-white border border-[#cbcdd1] rounded focus:outline-none focus:border-[#F71C56] transition-colors"
-                  placeholder="Dr. Nia"
-                  required
-                />
-              </div>
-            )}
-
             <div>
-              <label
-                htmlFor="email"
-                className="block text-[#0A1C3A] mb-2 font-bold"
-              >
+              <label htmlFor="email" className="block text-[#0A1C3A] mb-2 font-bold">
                 Email Address
               </label>
               <input
@@ -118,37 +68,29 @@ export default function AdminLogin() {
               />
             </div>
 
-            {!isBootstrapMode && (
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-[#0A1C3A] mb-2 font-bold"
+            <div>
+              <label htmlFor="password" className="block text-[#0A1C3A] mb-2 font-bold">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 pr-12 bg-white border border-[#cbcdd1] rounded focus:outline-none focus:border-[#F71C56] transition-colors"
+                  placeholder="Enter password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((value) => !value)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#737576] hover:text-[#0A1C3A] transition-colors"
                 >
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 pr-12 bg-white border border-[#cbcdd1] rounded focus:outline-none focus:border-[#F71C56] transition-colors"
-                    placeholder="Enter password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((value) => !value)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#737576] hover:text-[#0A1C3A] transition-colors"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-5 h-5" />
-                    ) : (
-                      <Eye className="w-5 h-5" />
-                    )}
-                  </button>
-                </div>
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
               </div>
-            )}
+            </div>
 
             {error && (
               <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded text-sm">
@@ -158,18 +100,16 @@ export default function AdminLogin() {
 
             <button
               type="submit"
-              className="w-full bg-[#F71C56] text-white font-bold px-8 py-4 rounded transition-all hover:brightness-110 uppercase tracking-widest text-sm"
+              disabled={loading}
+              className="w-full bg-[#F71C56] text-white font-bold px-8 py-4 rounded transition-all hover:brightness-110 uppercase tracking-widest text-sm disabled:opacity-60"
             >
-              {isBootstrapMode ? "Create Admin" : "Login"}
+              {loading ? 'Signing in...' : 'Login'}
             </button>
           </form>
         </div>
 
         <div className="text-center mt-6">
-          <a
-            href="/"
-            className="text-white hover:text-[#F71C56] transition-colors text-sm"
-          >
+          <a href="/" className="text-white hover:text-[#F71C56] transition-colors text-sm">
             Back to Main Website
           </a>
         </div>

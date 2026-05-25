@@ -22,6 +22,28 @@ export default function Contact() {
 
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
+  const buildGmailComposeUrl = () => {
+    const subjectParts = [
+      'Cardinal Immersions Contact Form',
+      formData.inquiryType ? `- ${formData.inquiryType}` : '',
+    ].filter(Boolean);
+
+    const bodyLines = [
+      `Name: ${formData.fullName}`,
+      `Email: ${formData.email}`,
+      formData.organization ? `Organization: ${formData.organization}` : '',
+      formData.inquiryType ? `Inquiry Type: ${formData.inquiryType}` : '',
+      '',
+      'Message:',
+      formData.message,
+    ].filter(Boolean);
+
+    const subject = encodeURIComponent(subjectParts.join(' '));
+    const body = encodeURIComponent(bodyLines.join('\n'));
+
+    return `https://mail.google.com/mail/?view=cm&fs=1&to=hello@cardinalimmersions.com&su=${subject}&body=${body}`;
+  };
+
   useEffect(() => {
     const observerOptions = {
       root: null,
@@ -46,10 +68,10 @@ export default function Contact() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted (placeholder):", formData);
-    alert(
-      "Thank you for your message. We will respond within 2-3 business days.",
-    );
+
+    const composeUrl = buildGmailComposeUrl();
+    window.open(composeUrl, "_blank", "noopener,noreferrer");
+
     setFormData({
       fullName: "",
       email: "",
@@ -404,8 +426,7 @@ export default function Contact() {
                 </h2>
               </div>
               <p className="text-[#737576] max-w-xl">
-                We are not publishing a street-level office address yet. This map shows our current
-                coordination base in Accra, Ghana.
+                This Google Maps view shows our current coordination hub in Accra, Ghana.
               </p>
             </div>
 
@@ -414,8 +435,8 @@ export default function Contact() {
               style={{ clipPath: "polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)" }}
             >
               <iframe
-                title="Accra, Ghana map"
-                src="https://www.openstreetmap.org/export/embed.html?bbox=-0.235%2C5.55%2C-0.14%2C5.66&layer=mapnik&marker=5.6037%2C-0.1870"
+                title="Google Maps - Accra, Ghana coordination hub"
+                src="https://www.google.com/maps?q=Accra%2C%20Ghana&output=embed"
                 className="w-full h-[320px] md:h-[420px] border-0"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
@@ -426,7 +447,7 @@ export default function Contact() {
                   <p className="text-sm text-[#0A1C3A] font-bold">Accra, Ghana</p>
                 </div>
                 <p className="text-xs text-[#737576]">
-                  Map shown for the current coordination hub.
+                  Map shown via Google Maps for the current coordination hub.
                 </p>
               </div>
             </div>

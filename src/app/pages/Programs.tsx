@@ -14,10 +14,26 @@ import {
   ScrollText,
   X,
 } from 'lucide-react';
-import { programs } from '../data/programs';
+import { fetchPrograms, type Program } from '../utils/programApi';
 
 export default function Programs() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [programs, setPrograms] = useState<Program[]>([]);
+  const [isLoadingPrograms, setIsLoadingPrograms] = useState(true);
+  const currentYear = new Date().getFullYear();
+
+  const getProgramCategoryLabel = (category: Program['category']) => {
+    if (category === 'student') return 'Student Mobility';
+    if (category === 'professional') return 'Professional Fellowship';
+    return 'Institutional Partnership';
+  };
+
+  const getProgramStatusLabel = (status: Program['status']) => {
+    if (status === 'accepting') return 'Accepting Applications';
+    if (status === 'coming_soon') return 'Coming Soon';
+    if (status === 'full') return 'Full';
+    return 'Closed';
+  };
 
   useEffect(() => {
     const observerOptions = {
@@ -39,6 +55,32 @@ export default function Programs() {
     });
 
     return () => revealObserver.disconnect();
+  }, [programs]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadPrograms = async () => {
+      try {
+        setIsLoadingPrograms(true);
+        const data = await fetchPrograms();
+        if (!cancelled) {
+          setPrograms(data);
+        }
+      } catch (error) {
+        console.error('Failed to load programs:', error);
+      } finally {
+        if (!cancelled) {
+          setIsLoadingPrograms(false);
+        }
+      }
+    };
+
+    loadPrograms();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const compareItems = {
@@ -174,66 +216,96 @@ export default function Programs() {
 
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
-            {programs.map((program, index) => (
-              <div
-                key={program.slug}
-                className="group bg-white overflow-hidden border border-[#e6bcbf] hover:shadow-2xl transition-all duration-500 reveal"
-                style={{
-                  borderTop: `6px solid ${program.colors.accent}`,
-                  clipPath: 'polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)',
-                  transitionDelay: `${index * 120}ms`,
-                }}
-              >
-                <ImageWithFallback
-                  src={program.image}
-                  alt={program.title}
-                  className="w-full h-52 object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                />
-                <div className="p-8 space-y-5">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#F71C56] mb-2">
-                        {program.status}
-                      </p>
-                      <h3 className="font-bold text-[28px] leading-[34px] text-[#0A1C3A]">
-                        {program.title}
-                      </h3>
-                    </div>
-                    <BrandIcon
-                      icon={
-                        program.category === 'student'
-                          ? GraduationCap
-                          : program.category === 'professional'
-                            ? BriefcaseBusiness
-                            : Landmark
-                      }
-                      size="md"
-                    />
+            {isLoadingPrograms ? (
+              Array.from({ length: 3 }).map((_, index) => (
+                <div
+                  key={`category-skeleton-${index}`}
+                  className="bg-white overflow-hidden border border-[#e6bcbf] animate-pulse"
+                  style={{
+                    borderTop: '6px solid #e6bcbf',
+                    clipPath: 'polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)',
+                  }}
+                >
+                  <div className="w-full h-52 bg-[#eef1f4]" />
+                  <div className="p-8 space-y-5">
+                    <div className="h-4 w-28 bg-[#e6bcbf]" />
+                    <div className="h-8 w-2/3 bg-[#e6bcbf]" />
+                    <div className="h-4 w-full bg-[#eef1f4]" />
+                    <div className="h-4 w-4/5 bg-[#eef1f4]" />
                   </div>
-
-                  <p className="text-[#737576] leading-7">{program.summary}</p>
-
-                  <div className="space-y-3 text-[#737576]">
-                    <p>
-                      <span className="font-bold text-[#0A1C3A]">Target:</span> {program.target}
-                    </p>
-                    <p>
-                      <span className="font-bold text-[#0A1C3A]">Duration:</span> {program.duration}
-                    </p>
-                    <p>
-                      <span className="font-bold text-[#0A1C3A]">Outcome:</span> {program.outcome}
-                    </p>
-                  </div>
-
-                  <Link
-                    to={`/programs/${program.slug}`}
-                    className="inline-flex items-center gap-2 font-bold text-[#F71C56] uppercase text-xs tracking-widest group-hover:gap-4 transition-all"
-                  >
-                    View details <ArrowRight className="h-4 w-4" />
-                  </Link>
                 </div>
+              ))
+            ) : programs.length > 0 ? (
+              programs.map((program, index) => {
+                const accentColor = program.colors?.accent || '#F71C56';
+                const programImage = program.image || 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1080&q=80';
+
+                return (
+                  <div
+                    key={program.slug}
+                    className="group bg-white overflow-hidden border border-[#e6bcbf] hover:shadow-2xl transition-all duration-500 reveal"
+                    style={{
+                      borderTop: `6px solid ${accentColor}`,
+                      clipPath: 'polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)',
+                      transitionDelay: `${index * 120}ms`,
+                    }}
+                  >
+                    <ImageWithFallback
+                      src={programImage}
+                      alt={program.title}
+                      className="w-full h-52 object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                    />
+                    <div className="p-8 space-y-5">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#F71C56] mb-2">
+                            {getProgramStatusLabel(program.status)}
+                          </p>
+                          <h3 className="font-bold text-[28px] leading-[34px] text-[#0A1C3A]">
+                            {program.title}
+                          </h3>
+                        </div>
+                        <BrandIcon
+                          icon={
+                            program.category === 'student'
+                              ? GraduationCap
+                              : program.category === 'professional'
+                                ? BriefcaseBusiness
+                                : Landmark
+                          }
+                          size="md"
+                        />
+                      </div>
+
+                      <p className="text-[#737576] leading-7">{program.summary || program.description || ''}</p>
+
+                      <div className="space-y-3 text-[#737576]">
+                        <p>
+                          <span className="font-bold text-[#0A1C3A]">Target:</span> {program.target}
+                        </p>
+                        <p>
+                          <span className="font-bold text-[#0A1C3A]">Duration:</span> {program.duration}
+                        </p>
+                        <p>
+                          <span className="font-bold text-[#0A1C3A]">Outcome:</span> {program.outcome}
+                        </p>
+                      </div>
+
+                      <Link
+                        to={`/programs/${program.slug}`}
+                        className="inline-flex items-center gap-2 font-bold text-[#F71C56] uppercase text-xs tracking-widest group-hover:gap-4 transition-all"
+                      >
+                        View details <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="md:col-span-3 bg-white border border-[#e6bcbf] p-8 text-center text-[#737576]">
+                No programs are currently available. Please check back soon.
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>
@@ -404,7 +476,7 @@ export default function Programs() {
               Program Openings
             </span>
             <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A]">
-              2026 Program Calendar
+              {currentYear} Program Calendar
             </h2>
             <p className="text-[#737576] mt-4 max-w-2xl mx-auto">
               These openings update as cohorts are confirmed. Each listing shows the current
@@ -413,9 +485,31 @@ export default function Programs() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 reveal">
-            {programs.map((program, index) => {
-              const isOpen = program.status === 'Accepting Applications';
+            {isLoadingPrograms ? (
+              Array.from({ length: 3 }).map((_, index) => (
+                <div
+                  key={`opening-skeleton-${index}`}
+                  className="bg-white border border-[#e6bcbf] p-6 animate-pulse"
+                  style={{
+                    clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)',
+                  }}
+                >
+                  <div className="h-56 w-full bg-[#eef1f4] mb-5" />
+                  <div className="h-4 w-28 bg-[#e6bcbf] mb-3" />
+                  <div className="h-7 w-3/4 bg-[#e6bcbf] mb-5" />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="h-16 bg-[#f7fafd] border border-[#e6bcbf]" />
+                    <div className="h-16 bg-[#f7fafd] border border-[#e6bcbf]" />
+                    <div className="h-16 bg-[#f7fafd] border border-[#e6bcbf]" />
+                    <div className="h-16 bg-[#f7fafd] border border-[#e6bcbf]" />
+                  </div>
+                </div>
+              ))
+            ) : programs.length > 0 ? (
+              programs.map((program, index) => {
+              const isOpen = program.status === 'accepting';
               const ctaLabel = isOpen ? 'Apply now' : 'View details';
+              const programImage = program.image || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1080&q=80';
 
               return (
                 <div
@@ -427,7 +521,7 @@ export default function Programs() {
                   }}
                 >
                   <ImageWithFallback
-                    src={program.image}
+                    src={programImage}
                     alt={program.title}
                     className="w-full h-56 object-cover grayscale hover:grayscale-0 transition-all duration-700"
                   />
@@ -435,11 +529,7 @@ export default function Programs() {
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#F71C56] mb-2">
-                          {program.category === 'student'
-                            ? 'Student Mobility'
-                            : program.category === 'professional'
-                              ? 'Professional Fellowship'
-                              : 'Institutional Partnership'}
+                          {getProgramCategoryLabel(program.category)}
                         </p>
                         <h3 className="font-bold text-[24px] leading-[30px] text-[#0A1C3A]">
                           {program.title}
@@ -484,7 +574,7 @@ export default function Programs() {
                       </div>
                     </div>
 
-                    <p className="text-[#737576] leading-7">{program.summary}</p>
+                    <p className="text-[#737576] leading-7">{program.summary || ''}</p>
 
                     <div className="space-y-2">
                       <p className="text-sm font-bold uppercase tracking-widest text-[#0A1C3A] flex items-center gap-2">
@@ -504,7 +594,12 @@ export default function Programs() {
                   </div>
                 </div>
               );
-            })}
+              })
+            ) : (
+              <div className="md:col-span-3 bg-white border border-[#e6bcbf] p-8 text-center text-[#737576]">
+                No program openings are published yet.
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -537,11 +632,7 @@ export default function Programs() {
                 <div className="flex items-start justify-between gap-4 mb-5">
                   <div>
                     <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#F71C56] mb-2">
-                      {program.category === 'student'
-                        ? 'Student Mobility'
-                        : program.category === 'professional'
-                          ? 'Professional Fellowship'
-                          : 'Institutional Partnership'}
+                      {getProgramCategoryLabel(program.category)}
                     </p>
                     <h3 className="font-bold text-[26px] leading-[32px] text-[#0A1C3A]">
                       {program.title}
@@ -574,7 +665,7 @@ export default function Programs() {
                   </div>
                   <div>
                     <p className="text-xs uppercase tracking-widest text-[#F71C56] mb-1">What you get</p>
-                    <p className="leading-7">{program.outcome}</p>
+                    <p className="leading-7">{program.outcome || program.summary || ''}</p>
                   </div>
                 </div>
               </div>

@@ -1,5 +1,4 @@
-// Admin authentication and authorization utilities.
-// Local-storage backed for now; replace with real backend auth in production.
+import { apiRequest, clearAuth, getStoredAdmin, setStoredAdmin, setStoredToken } from './api';
 
 export interface Admin {
   id: string;
@@ -8,107 +7,32 @@ export interface Admin {
   role: 'super_admin' | 'admin' | 'viewer';
   createdAt: string;
   lastLogin: string | null;
+  isActive?: boolean;
 }
 
-const ADMINS_KEY = 'andylcc_admins';
-const CURRENT_ADMIN_KEY = 'currentAdminId';
+export const initializeAdmins = () => false;
 
-const safeLocalStorage = {
-  getItem(key: string) {
-    try {
-      return window.localStorage.getItem(key);
-    } catch {
-      return null;
-    }
-  },
-  setItem(key: string, value: string) {
-    try {
-      window.localStorage.setItem(key, value);
-    } catch {
-      // noop
-    }
-  },
-  removeItem(key: string) {
-    try {
-      window.localStorage.removeItem(key);
-    } catch {
-      // noop
-    }
-  },
-};
+export const getAdmins = async (): Promise<Admin[]> => apiRequest<Admin[]>('/admin/admins');
 
-const safeSessionStorage = {
-  getItem(key: string) {
-    try {
-      return window.sessionStorage.getItem(key);
-    } catch {
-      return null;
-    }
-  },
-  setItem(key: string, value: string) {
-    try {
-      window.sessionStorage.setItem(key, value);
-    } catch {
-      // noop
-    }
-  },
-  removeItem(key: string) {
-    try {
-      window.sessionStorage.removeItem(key);
-    } catch {
-      // noop
-    }
-  },
-};
+export const getCurrentAdmin = (): Admin | null => getStoredAdmin<Admin>();
 
-export const initializeAdmins = () => {
-  const admins = getAdmins();
-  if (admins.length === 0) {
-    safeLocalStorage.setItem(ADMINS_KEY, JSON.stringify([]));
-    return true;
-  }
-
-  return false;
-};
-
-export const getAdmins = (): Admin[] => {
-  const raw = safeLocalStorage.getItem(ADMINS_KEY);
-  if (!raw) return [];
-
+export const loginAdmin = async (email: string, password: string): Promise<Admin | null> => {
   try {
-    return JSON.parse(raw) as Admin[];
+    const result = await apiRequest<{ token: string; admin: Admin }>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    });
+
+    setStoredToken(result.token);
+    setStoredAdmin(result.admin);
+    return result.admin;
   } catch {
-    return [];
+    return null;
   }
-};
-
-export const setAdmins = (admins: Admin[]) => {
-  safeLocalStorage.setItem(ADMINS_KEY, JSON.stringify(admins));
-};
-
-export const getCurrentAdmin = (): Admin | null => {
-  const currentAdminId = safeSessionStorage.getItem(CURRENT_ADMIN_KEY);
-  if (!currentAdminId) return null;
-
-  const admins = getAdmins();
-  return admins.find((a) => a.id === currentAdminId) || null;
-};
-
-export const loginAdmin = (email: string): Admin | null => {
-  const admins = getAdmins();
-  const admin = admins.find((a) => a.email.toLowerCase() === email.toLowerCase());
-
-  if (!admin) return null;
-
-  admin.lastLogin = new Date().toISOString();
-  setAdmins(admins.map((a) => (a.id === admin.id ? admin : a)));
-  safeSessionStorage.setItem(CURRENT_ADMIN_KEY, admin.id);
-
-  return admin;
 };
 
 export const logoutAdmin = () => {
-  safeSessionStorage.removeItem(CURRENT_ADMIN_KEY);
+  clearAuth();
 };
 
 export const isSuperAdmin = (): boolean => getCurrentAdmin()?.role === 'super_admin';
@@ -124,58 +48,27 @@ export const canManagePrograms = (): boolean => isAdminOrHigher();
 export const canExport = (): boolean => isAdminOrHigher();
 export const canManageAdmins = (): boolean => isSuperAdmin();
 
-export const addAdmin = (email: string, fullName: string, role: Admin['role']): Admin => {
-  const admins = getAdmins();
-
-  if (admins.some((a) => a.email.toLowerCase() === email.toLowerCase())) {
-    throw new Error('Admin with this email already exists');
-  }
-
-  const newAdmin: Admin = {
-    id: `admin_${Date.now()}`,
-    email,
-    fullName,
-    role,
-    createdAt: new Date().toISOString(),
-    lastLogin: null,
-  };
-
-  setAdmins([...admins, newAdmin]);
-  return newAdmin;
+export const addAdmin = async (email: string, fullName: string, role: Admin['role'], password: string, sendInvite = false): Promise<Admin> => {
+  return apiRequest<Admin>('/admin/admins', {
+    method: 'POST',
+    body: JSON.stringify({ email, fullName, role, password, sendInvite }),
+  });
 };
 
-export const updateAdmin = (
+export const updateAdmin = async (
   id: string,
-  updates: Partial<Omit<Admin, 'id' | 'createdAt'>>
-): Admin => {
-  const admins = getAdmins();
-  const index = admins.findIndex((a) => a.id === id);
-
-  if (index === -1) {
-    throw new Error('Admin not found');
-  }
-
-  const updatedAdmin = { ...admins[index], ...updates };
-  admins[index] = updatedAdmin;
-  setAdmins(admins);
-
-  return updatedAdmin;
+  updates: Partial<Omit<Admin, 'id' | 'createdAt'>> & { password?: string; isActive?: boolean },
+): Promise<Admin> => {
+  return apiRequest<Admin>(`/admin/admins/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(updates),
+  });
 };
 
-export const deleteAdmin = (id: string): void => {
-  const admins = getAdmins();
-  const superAdmins = admins.filter((a) => a.role === 'super_admin');
-  const adminToDelete = admins.find((a) => a.id === id);
-
-  if (adminToDelete?.role === 'super_admin' && superAdmins.length === 1) {
-    throw new Error('Cannot delete the last super admin');
-  }
-
-  setAdmins(admins.filter((a) => a.id !== id));
-
-  if (safeSessionStorage.getItem(CURRENT_ADMIN_KEY) === id) {
-    logoutAdmin();
-  }
+export const deleteAdmin = async (id: string): Promise<void> => {
+  await apiRequest<{ deleted: boolean }>(`/admin/admins/${id}`, {
+    method: 'DELETE',
+  });
 };
 
 export const getRoleBadgeClass = (role: Admin['role']): string => {

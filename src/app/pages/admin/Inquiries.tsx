@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { getInquiries, setInquiries, Inquiry } from '../../utils/mockAdminData';
+import { apiRequest } from '../../utils/api';
+import type { Inquiry } from '../../utils/mockAdminData';
 import { canUpdateStatus, canDelete, canExport } from '../../utils/adminAuth';
 import { Search, X, Eye, Trash2 } from 'lucide-react';
 
@@ -10,6 +11,9 @@ export default function AdminInquiries() {
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // Filters
   const [typeFilter, setTypeFilter] = useState('all');
@@ -24,9 +28,16 @@ export default function AdminInquiries() {
     applyFilters();
   }, [inquiries, typeFilter, statusFilter, searchQuery]);
 
-  const loadInquiries = () => {
-    const inqs = getInquiries();
-    setInquiriesState(inqs);
+  const loadInquiries = async () => {
+    setLoading(true);
+    try {
+      const data = await apiRequest<{ items: Inquiry[] }>('/admin/inquiries?limit=200');
+      setInquiriesState(data.items);
+    } catch (error) {
+      console.error('Failed to load inquiries:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const applyFilters = () => {
@@ -63,23 +74,39 @@ export default function AdminInquiries() {
     setShowModal(true);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this inquiry?')) {
-      const updated = inquiries.filter(i => i.id !== id);
-      setInquiries(updated);
-      setInquiriesState(updated);
+      try {
+        setDeletingId(id);
+        await apiRequest(`/admin/inquiries/${id}`, { method: 'DELETE' });
+        await loadInquiries();
+      } catch (error) {
+        console.error('Failed to delete inquiry:', error);
+      } finally {
+        setDeletingId(null);
+      }
     }
   };
 
-  const handleSaveInquiry = () => {
+  const handleSaveInquiry = async () => {
     if (selectedInquiry) {
-      const updated = inquiries.map(i =>
-        i.id === selectedInquiry.id ? selectedInquiry : i
-      );
-      setInquiries(updated);
-      setInquiriesState(updated);
-      setShowModal(false);
-      setSelectedInquiry(null);
+      try {
+        setSaving(true);
+        await apiRequest(`/admin/inquiries/${selectedInquiry.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            status: selectedInquiry.status,
+            internalNotes: selectedInquiry.notes || '',
+          }),
+        });
+        setShowModal(false);
+        setSelectedInquiry(null);
+        await loadInquiries();
+      } catch (error) {
+        console.error('Failed to save inquiry:', error);
+      } finally {
+        setSaving(false);
+      }
     }
   };
 
@@ -102,7 +129,7 @@ export default function AdminInquiries() {
       new: 'bg-[#F71C56] text-white',
       reviewed: 'bg-[#F59E0B] text-white',
       contacted: 'bg-[#3B82F6] text-white',
-      partnership: 'bg-[#10B981] text-white',
+      partnered: 'bg-[#10B981] text-white',
       closed: 'bg-[#6B7280] text-white'
     };
     return badges[status as keyof typeof badges] || 'bg-gray-200 text-gray-800';
@@ -161,7 +188,7 @@ export default function AdminInquiries() {
               <option value="new">New</option>
               <option value="reviewed">Reviewed</option>
               <option value="contacted">Contacted</option>
-              <option value="partnership">Partnership</option>
+              <option value="partnered">Partnered</option>
               <option value="closed">Closed</option>
             </select>
           </div>
@@ -237,7 +264,20 @@ export default function AdminInquiries() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#e6bcbf]">
-              {filteredInquiries.map((inquiry) => (
+              {loading ? (
+                Array.from({ length: 6 }).map((_, index) => (
+                  <tr key={index} className="animate-pulse">
+                    <td className="px-6 py-4"><div className="h-4 w-4 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-32 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-32 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-40 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-28 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-24 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-20 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-24 bg-slate-200 rounded" /></td>
+                  </tr>
+                ))
+              ) : filteredInquiries.map((inquiry) => (
                 <tr key={inquiry.id} className="hover:bg-[#f7fafd] transition-colors">
                   <td className="px-6 py-4">
                     <input
@@ -267,9 +307,10 @@ export default function AdminInquiries() {
                     {canDelete() && (
                       <button
                         onClick={() => handleDelete(inquiry.id)}
-                        className="text-[#737576] hover:text-red-600 inline-flex items-center gap-1"
+                        className="text-[#737576] hover:text-red-600 inline-flex items-center gap-1 disabled:opacity-60"
+                        disabled={deletingId === inquiry.id}
                       >
-                        <Trash2 className="w-4 h-4" /> Delete
+                        <Trash2 className="w-4 h-4" /> {deletingId === inquiry.id ? 'Deleting...' : 'Delete'}
                       </button>
                     )}
                   </td>
@@ -279,7 +320,7 @@ export default function AdminInquiries() {
           </table>
         </div>
 
-        {filteredInquiries.length === 0 && (
+        {!loading && filteredInquiries.length === 0 && (
           <div className="p-12 text-center text-[#737576]">
             <p className="font-bold mb-2">No inquiries found</p>
             <p className="text-sm">Try adjusting your filters</p>
@@ -387,7 +428,7 @@ export default function AdminInquiries() {
                   <option value="new">New</option>
                   <option value="reviewed">Reviewed</option>
                   <option value="contacted">Contacted</option>
-                  <option value="partnership">Partnership</option>
+                  <option value="partnered">Partnered</option>
                   <option value="closed">Closed</option>
                 </select>
                 {!canUpdateStatus() && (
@@ -422,9 +463,10 @@ export default function AdminInquiries() {
               {canUpdateStatus() && (
                 <button
                   onClick={handleSaveInquiry}
-                  className="bg-[#F71C56] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider"
+                  className="bg-[#F71C56] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider disabled:opacity-60"
+                  disabled={saving}
                 >
-                  Save Changes
+                  {saving ? 'Saving...' : 'Save Changes'}
                 </button>
               )}
             </div>

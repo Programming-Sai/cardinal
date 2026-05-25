@@ -23,12 +23,15 @@ export default function AdminManagement() {
   const [error, setError] = useState('');
   const [confirmationText, setConfirmationText] = useState('');
   const [requiredConfirmation, setRequiredConfirmation] = useState('');
+  const [loadingAdmins, setLoadingAdmins] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
   const [pendingMutation, setPendingMutation] = useState<{
     title: string;
     summary: string;
     details: string[];
     confirmLabel: string;
-    run: () => void;
+    run: () => void | Promise<void>;
     reopenFormOnCancel: boolean;
   } | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -53,7 +56,7 @@ export default function AdminManagement() {
 
     const current = getCurrentAdmin();
     setCurrentAdmin(current);
-    loadAdmins();
+    void loadAdmins();
   }, [navigate]);
 
   useEffect(() => {
@@ -71,10 +74,17 @@ export default function AdminManagement() {
     }
   }, [showDropdown]);
 
-  const loadAdmins = () => {
-    // TODO: Replace with API call to GET /api/admins
-    const adminsList = getAdmins();
-    setAdmins(adminsList);
+  const loadAdmins = async () => {
+    setLoadingAdmins(true);
+    try {
+      const adminsList = await getAdmins();
+      setAdmins(adminsList);
+    } catch (error) {
+      console.error('Failed to load admins:', error);
+      showToast(error instanceof Error ? error.message : 'Failed to load admins', 'error');
+    } finally {
+      setLoadingAdmins(false);
+    }
   };
 
   const showToast = (message: string, type: ToastType) => {
@@ -147,13 +157,13 @@ export default function AdminManagement() {
       [
         `Email: ${admin.email}`,
         `Role: ${getRoleDisplayName(admin.role)}`,
-        'This action will remove the admin account from local storage.'
+        'This action will remove the admin account from the backend.'
       ],
       'Confirm Delete',
-      () => {
-        deleteAdmin(admin.id);
+      async () => {
+        await deleteAdmin(admin.id);
         showToast(`Admin ${admin.fullName} deleted successfully`, 'success');
-        loadAdmins();
+        await loadAdmins();
       }
     );
   };
@@ -163,6 +173,17 @@ export default function AdminManagement() {
 
     if (!formData.email || !formData.fullName || !formData.role) {
       setError('Please fill in all required fields');
+      return;
+    }
+
+    const trimmedPassword = formData.password.trim();
+    if (!editingAdmin && trimmedPassword.length < 8) {
+      setError('Password must be at least 8 characters');
+      return;
+    }
+
+    if (editingAdmin && trimmedPassword && trimmedPassword.length < 8) {
+      setError('New password must be at least 8 characters');
       return;
     }
 
@@ -181,26 +202,23 @@ export default function AdminManagement() {
     );
   };
 
-  const proceedWithSave = () => {
+  const proceedWithSave = async () => {
+    setIsSubmitting(true);
     try {
       if (editingAdmin) {
-        // Update existing
-        // TODO: Replace with API call to PUT /api/admins/:id
-        updateAdmin(editingAdmin.id, {
+        await updateAdmin(editingAdmin.id, {
           email: formData.email,
           fullName: formData.fullName,
-          role: formData.role
+          role: formData.role,
+          password: formData.password.trim() || undefined,
         });
         showToast(`Admin ${formData.fullName} updated successfully`, 'success');
       } else {
-        // Add new
-        // TODO: Replace with API call to POST /api/admins + optionally send invite via Resend
-        addAdmin(formData.email, formData.fullName, formData.role);
+        await addAdmin(formData.email, formData.fullName, formData.role, formData.password.trim(), shouldInvite);
 
         if (shouldInvite) {
-          // TODO: Send invite email via Resend
           showToast(
-            `Admin created and invite sent to ${formData.email}. In production, this will use Resend.`,
+            `Admin created and invite sent to ${formData.email}. The email includes the temporary password.`,
             'success'
           );
         } else {
@@ -211,7 +229,7 @@ export default function AdminManagement() {
         }
       }
 
-      loadAdmins();
+      await loadAdmins();
       setShowModal(false);
       setFormData(emptyForm);
       setEditingAdmin(null);
@@ -221,22 +239,27 @@ export default function AdminManagement() {
     } catch (err) {
       setError((err as Error).message);
       showToast((err as Error).message, 'error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleRoleConfirmation = () => {
+  const handleRoleConfirmation = async () => {
     if (confirmationText !== requiredConfirmation) {
       showToast('Confirmation code does not match. Please try again.', 'error');
       return;
     }
+    setIsConfirming(true);
     try {
-      pendingMutation?.run();
+      await Promise.resolve(pendingMutation?.run());
       setPendingMutation(null);
       setConfirmationText('');
       setShowModal(false);
     } catch (err) {
       showToast((err as Error).message, 'error');
       setPendingMutation(null);
+    } finally {
+      setIsConfirming(false);
     }
   };
 
@@ -250,9 +273,9 @@ export default function AdminManagement() {
         'This will trigger an invitation email for the selected admin.'
       ],
       'Confirm Invite',
-      () => {
+      async () => {
         showToast(
-          `Invite will be sent to ${admin.email}. In production, this will use Resend email service.`,
+          `Invite flow acknowledged for ${admin.email}.`,
           'info'
         );
       }
@@ -337,64 +360,75 @@ export default function AdminManagement() {
       {/* Admins Table */}
       <div className="bg-white border border-[#e6bcbf]" style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}>
         <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-[#f7fafd] border-b border-[#e6bcbf]">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Full Name</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Role</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Created At</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Last Login</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#e6bcbf]">
-              {admins.map((admin) => (
-                <tr key={admin.id} className="hover:bg-[#f7fafd] transition-colors">
-                  <td className="px-6 py-4 text-sm font-medium text-[#0A1C3A]">{admin.fullName}</td>
-                  <td className="px-6 py-4 text-sm text-[#737576]">{admin.email}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded ${getRoleBadgeClass(admin.role)}`}>
-                      {getRoleDisplayName(admin.role)}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[#737576]">
-                    {formatDate(admin.createdAt)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[#737576]">
-                    {formatDate(admin.lastLogin)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <button
-                      onClick={() => handleEdit(admin)}
-                      className="text-[#F71C56] hover:underline mr-3 inline-flex items-center gap-1"
-                    >
-                      <Edit className="w-4 h-4" /> Edit
-                    </button>
-                    {currentAdmin?.id !== admin.id && (
-                      <button
-                        onClick={() => handleSendInvite(admin)}
-                        className="text-[#0A1C3A] hover:underline mr-3 inline-flex items-center gap-1"
-                      >
-                        <Plus className="w-4 h-4" /> Invite
-                      </button>
-                    )}
-                    {currentAdmin?.id !== admin.id && (
-                      <button
-                        onClick={() => handleDeleteClick(admin)}
-                        className="text-[#737576] hover:text-red-600 inline-flex items-center gap-1"
-                      >
-                        <Trash2 className="w-4 h-4" /> Delete
-                      </button>
-                    )}
-                  </td>
+          {loadingAdmins ? (
+            <div className="p-8">
+              <div className="space-y-4 animate-pulse">
+                <div className="h-4 w-40 bg-slate-200 rounded" />
+                <div className="h-12 bg-slate-100 rounded" />
+                <div className="h-12 bg-slate-100 rounded" />
+                <div className="h-12 bg-slate-100 rounded" />
+              </div>
+            </div>
+          ) : (
+            <table className="w-full">
+              <thead className="bg-[#f7fafd] border-b border-[#e6bcbf]">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Full Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Role</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Created At</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Last Login</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-[#e6bcbf]">
+                {admins.map((admin) => (
+                  <tr key={admin.id} className="hover:bg-[#f7fafd] transition-colors">
+                    <td className="px-6 py-4 text-sm font-medium text-[#0A1C3A]">{admin.fullName}</td>
+                    <td className="px-6 py-4 text-sm text-[#737576]">{admin.email}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded ${getRoleBadgeClass(admin.role)}`}>
+                        {getRoleDisplayName(admin.role)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#737576]">
+                      {formatDate(admin.createdAt)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#737576]">
+                      {formatDate(admin.lastLogin)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <button
+                        onClick={() => handleEdit(admin)}
+                        className="text-[#F71C56] hover:underline mr-3 inline-flex items-center gap-1"
+                      >
+                        <Edit className="w-4 h-4" /> Edit
+                      </button>
+                      {currentAdmin?.id !== admin.id && (
+                        <button
+                          onClick={() => handleSendInvite(admin)}
+                          className="text-[#0A1C3A] hover:underline mr-3 inline-flex items-center gap-1"
+                        >
+                          <Plus className="w-4 h-4" /> Invite
+                        </button>
+                      )}
+                      {currentAdmin?.id !== admin.id && (
+                        <button
+                          onClick={() => handleDeleteClick(admin)}
+                          className="text-[#737576] hover:text-red-600 inline-flex items-center gap-1"
+                        >
+                          <Trash2 className="w-4 h-4" /> Delete
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
 
-        {admins.length === 0 && (
+        {!loadingAdmins && admins.length === 0 && (
           <div className="p-12 text-center text-[#737576]">
             <p className="font-bold mb-2">No admins found</p>
             <p className="text-sm">Click "Add New Admin" to create one</p>
@@ -537,14 +571,16 @@ export default function AdminManagement() {
               <button
                 onClick={() => setShowModal(false)}
                 className="border-2 border-[#737576] text-[#737576] px-6 py-3 rounded hover:bg-[#737576] hover:text-white transition-all font-bold uppercase tracking-wider"
+                disabled={isSubmitting || isConfirming}
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="bg-[#F71C56] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider"
+                className="bg-[#F71C56] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider disabled:opacity-60"
+                disabled={isSubmitting || isConfirming}
               >
-                {editingAdmin ? 'Save Changes' : 'Create Admin'}
+                {isSubmitting ? 'Saving...' : editingAdmin ? 'Save Changes' : 'Create Admin'}
               </button>
             </div>
           </div>
@@ -603,10 +639,10 @@ export default function AdminManagement() {
               </button>
               <button
                 onClick={handleRoleConfirmation}
-                disabled={confirmationText !== requiredConfirmation}
+                disabled={confirmationText !== requiredConfirmation || isConfirming}
                 className="bg-[#F71C56] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {pendingMutation.confirmLabel}
+                {isConfirming ? 'Working...' : pendingMutation.confirmLabel}
               </button>
             </div>
           </div>

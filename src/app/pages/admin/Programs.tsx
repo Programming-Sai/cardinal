@@ -1,18 +1,23 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { getPrograms, setPrograms, Program } from '../../utils/mockAdminData';
+import { apiRequest } from '../../utils/api';
+import { type Program as LocalProgram } from '../../utils/mockAdminData';
+import { type Program as BackendProgram } from '../../utils/programApi';
 import { canManagePrograms } from '../../utils/adminAuth';
 import { Plus, Edit, Trash2, X } from 'lucide-react';
 
 export default function AdminPrograms() {
-  const [programs, setProgramsState] = useState<Program[]>([]);
+  const [programs, setProgramsState] = useState<LocalProgram[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [editingProgram, setEditingProgram] = useState<Program | null>(null);
-  const [programToDelete, setProgramToDelete] = useState<Program | null>(null);
+  const [editingProgram, setEditingProgram] = useState<LocalProgram | null>(null);
+  const [programToDelete, setProgramToDelete] = useState<LocalProgram | null>(null);
   const [imagePreview, setImagePreview] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
-  const emptyProgram: Omit<Program, 'id'> = {
+  const emptyProgram: Omit<LocalProgram, 'id'> = {
     name: '',
     category: 'student',
     location: '',
@@ -24,15 +29,37 @@ export default function AdminPrograms() {
     imageUrl: ''
   };
 
-  const [formData, setFormData] = useState<Omit<Program, 'id'>>(emptyProgram);
+  const [formData, setFormData] = useState<Omit<LocalProgram, 'id'>>(emptyProgram);
 
   useEffect(() => {
-    loadPrograms();
+    void loadPrograms();
   }, []);
 
-  const loadPrograms = () => {
-    const progs = getPrograms();
-    setProgramsState(progs);
+  const loadPrograms = async () => {
+    setLoading(true);
+    try {
+      const progs = await apiRequest<BackendProgram[]>('/admin/programs');
+      const mapped = progs.map((program) => ({
+        id: program.id,
+        name: program.title,
+        category: program.category,
+        location: program.location || '',
+        startDate: program.deadline || '',
+        endDate: program.deadline || '',
+        status:
+          program.status === 'coming_soon'
+            ? 'coming-soon'
+            : program.status,
+        deadline: program.deadline || '',
+        description: program.summary || '',
+        imageUrl: program.image || '',
+      })) as LocalProgram[];
+      setProgramsState(mapped);
+    } catch (error) {
+      console.error('Failed to load programs:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleAdd = () => {
@@ -42,56 +69,76 @@ export default function AdminPrograms() {
     setShowModal(true);
   };
 
-  const handleEdit = (program: Program) => {
+  const handleEdit = (program: LocalProgram) => {
     setFormData(program);
     setEditingProgram(program);
     setImagePreview(program.imageUrl || '');
     setShowModal(true);
   };
 
-  const handleDeleteClick = (program: Program) => {
+  const handleDeleteClick = (program: LocalProgram) => {
     setProgramToDelete(program);
     setShowDeleteConfirm(true);
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (programToDelete) {
-      const updated = programs.filter(p => p.id !== programToDelete.id);
-      setPrograms(updated);
-      setProgramsState(updated);
-      setShowDeleteConfirm(false);
-      setProgramToDelete(null);
+      try {
+        setDeleting(true);
+        await apiRequest(`/admin/programs/${programToDelete.id}`, { method: 'DELETE' });
+        await loadPrograms();
+        setShowDeleteConfirm(false);
+        setProgramToDelete(null);
+      } catch (error) {
+        console.error('Failed to delete program:', error);
+      } finally {
+        setDeleting(false);
+      }
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formData.name || !formData.location || !formData.startDate || !formData.endDate || !formData.deadline) {
       alert('Please fill in all required fields');
       return;
     }
 
-    if (editingProgram) {
-      // Update existing
-      const updated = programs.map(p =>
-        p.id === editingProgram.id ? { ...formData, id: editingProgram.id } : p
-      );
-      setPrograms(updated);
-      setProgramsState(updated);
-    } else {
-      // Add new
-      const newProgram = {
-        ...formData,
-        id: Date.now().toString()
-      };
-      const updated = [...programs, newProgram];
-      setPrograms(updated);
-      setProgramsState(updated);
-    }
+    const payload = {
+      slug: formData.name.toLowerCase().replace(/\s+/g, '-'),
+      category: formData.category,
+      title: formData.name,
+      location: formData.location,
+      deadline: formData.deadline,
+      status: formData.status === 'coming-soon' ? 'coming_soon' : formData.status,
+      summary: formData.description || '',
+      image: formData.imageUrl || '',
+      availability: 'By request',
+    };
 
-    setShowModal(false);
-    setFormData(emptyProgram);
-    setEditingProgram(null);
-    setImagePreview('');
+    try {
+      setSaving(true);
+      if (editingProgram) {
+        await apiRequest(`/admin/programs/${editingProgram.id}`, {
+          method: 'PUT',
+          body: JSON.stringify(payload),
+        });
+      } else {
+        await apiRequest('/admin/programs', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+      }
+
+      await loadPrograms();
+      setShowModal(false);
+      setFormData(emptyProgram);
+      setEditingProgram(null);
+      setImagePreview('');
+    } catch (error) {
+      console.error('Failed to save program:', error);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -170,7 +217,17 @@ export default function AdminPrograms() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#e6bcbf]">
-              {programs.map((program) => (
+              {loading ? (
+                <tr>
+                  <td colSpan={8} className="px-6 py-10">
+                    <div className="space-y-4 animate-pulse">
+                      <div className="h-4 w-40 bg-slate-200 rounded" />
+                      <div className="h-12 bg-slate-100 rounded" />
+                      <div className="h-12 bg-slate-100 rounded" />
+                    </div>
+                  </td>
+                </tr>
+              ) : programs.map((program) => (
                 <tr key={program.id} className="hover:bg-[#f7fafd] transition-colors">
                   <td className="px-6 py-4 text-sm font-medium text-[#0A1C3A]">{program.name}</td>
                   <td className="px-6 py-4 text-sm text-[#737576] capitalize">{program.category}</td>
@@ -186,11 +243,11 @@ export default function AdminPrograms() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     {canManagePrograms() ? (
                       <>
-                        <button
-                          onClick={() => handleEdit(program)}
-                          className="text-[#F71C56] hover:underline mr-3 inline-flex items-center gap-1"
-                        >
-                          <Edit className="w-4 h-4" /> Edit
+                    <button
+                      onClick={() => handleEdit(program)}
+                      className="text-[#F71C56] hover:underline mr-3 inline-flex items-center gap-1"
+                    >
+                      <Edit className="w-4 h-4" /> Edit
                         </button>
                         <button
                           onClick={() => handleDeleteClick(program)}
@@ -209,7 +266,7 @@ export default function AdminPrograms() {
           </table>
         </div>
 
-        {programs.length === 0 && (
+        {!loading && programs.length === 0 && (
           <div className="p-12 text-center text-[#737576]">
             <p className="font-bold mb-2">No programs found</p>
             <p className="text-sm">Click "Add New Program" to create one</p>
@@ -258,6 +315,7 @@ export default function AdminPrograms() {
                   >
                     <option value="student">Student Mobility</option>
                     <option value="professional">Professional Fellowship</option>
+                    <option value="institutional">Institutional Partnership</option>
                   </select>
                 </div>
 
@@ -404,18 +462,20 @@ export default function AdminPrograms() {
                 )}
               </div>
               <div className="flex gap-3">
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="border-2 border-[#737576] text-[#737576] px-6 py-3 rounded hover:bg-[#737576] hover:text-white transition-all font-bold uppercase tracking-wider"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSave}
-                  className="bg-[#F71C56] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider"
-                >
-                  {editingProgram ? 'Save Changes' : 'Create Program'}
-                </button>
+              <button
+                onClick={() => setShowModal(false)}
+                className="border-2 border-[#737576] text-[#737576] px-6 py-3 rounded hover:bg-[#737576] hover:text-white transition-all font-bold uppercase tracking-wider"
+                disabled={saving || deleting}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                className="bg-[#F71C56] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider disabled:opacity-60"
+                disabled={saving || deleting}
+              >
+                  {saving ? 'Saving...' : editingProgram ? 'Save Changes' : 'Create Program'}
+              </button>
               </div>
             </div>
           </div>
@@ -434,14 +494,16 @@ export default function AdminPrograms() {
               <button
                 onClick={() => setShowDeleteConfirm(false)}
                 className="border-2 border-[#737576] text-[#737576] px-6 py-3 rounded hover:bg-[#737576] hover:text-white transition-all font-bold uppercase tracking-wider"
+                disabled={saving || deleting}
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteConfirm}
-                className="bg-red-600 text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider"
+                className="bg-red-600 text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider disabled:opacity-60"
+                disabled={deleting}
               >
-                Delete
+                {deleting ? 'Deleting...' : 'Delete'}
               </button>
             </div>
           </div>

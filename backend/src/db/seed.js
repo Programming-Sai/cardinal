@@ -1,35 +1,11 @@
-export type ProgramCategory = 'student' | 'professional' | 'institutional';
+import 'dotenv/config';
+import bcrypt from 'bcryptjs';
+import { pool } from '../config/database.js';
+import { countAdmins, createAdmin } from '../models/Admin.js';
+import { countPrograms, createProgram } from '../models/Program.js';
+import { pathToFileURL } from 'node:url';
 
-export interface ProgramData {
-  slug: string;
-  category: ProgramCategory;
-  title: string;
-  tagline: string;
-  summary: string;
-  target: string;
-  eligibility: string;
-  duration: string;
-  location: string;
-  deadline: string;
-  fee: string;
-  availability: string;
-  status: 'Accepting Applications' | 'Coming Soon' | 'Details TBA';
-  outcome: string;
-  includes: string[];
-  excludes: string[];
-  timeline: {
-    label: string;
-    description: string;
-  }[];
-  nextSteps: string[];
-  colors: {
-    accent: string;
-    ink: string;
-  };
-  image: string;
-}
-
-export const programs: ProgramData[] = [
+const demoPrograms = [
   {
     slug: 'student-mobility',
     category: 'student',
@@ -41,10 +17,10 @@ export const programs: ProgramData[] = [
     eligibility: 'Current undergraduate or postgraduate students in good academic standing.',
     duration: '2-6 weeks',
     location: 'Multi-country placements',
-    deadline: 'Rolling applications',
+    deadline: null,
     fee: 'Fees shared after screening',
     availability: 'Limited spots available',
-    status: 'Accepting Applications',
+    status: 'accepting',
     outcome: 'Cultural intelligence + academic credit pathways',
     includes: [
       'Pre-departure orientation',
@@ -68,10 +44,7 @@ export const programs: ProgramData[] = [
       'Submit your application with a clear motivation statement.',
       'Wait for our review and next-step email.',
     ],
-    colors: {
-      accent: '#F71C56',
-      ink: '#0A1C3A',
-    },
+    colors: { accent: '#F71C56', ink: '#0A1C3A' },
     image: 'https://images.unsplash.com/photo-1758270705290-62b6294dd044?w=1080&q=80',
   },
   {
@@ -85,10 +58,10 @@ export const programs: ProgramData[] = [
     eligibility: 'Mid-career professionals seeking practical international exposure and network building.',
     duration: '1-3 months',
     location: 'Cross-border cohorts',
-    deadline: 'Seasonal intake',
+    deadline: null,
     fee: 'Fee shared during enquiry',
     availability: 'Coming soon',
-    status: 'Coming Soon',
+    status: 'coming_soon',
     outcome: 'Capability development + cross-border project experience',
     includes: [
       'Project-based learning',
@@ -96,11 +69,7 @@ export const programs: ProgramData[] = [
       'Professional networking sessions',
       'Post-program impact summary',
     ],
-    excludes: [
-      'Vacation-style scheduling',
-      'Open-ended travel',
-      'Programs without deliverables',
-    ],
+    excludes: ['Vacation-style scheduling', 'Open-ended travel', 'Programs without deliverables'],
     timeline: [
       { label: 'Enquire', description: 'Tell us the capability area you want to develop.' },
       { label: 'Scope', description: 'We shape the fellowship around your team and goals.' },
@@ -112,10 +81,7 @@ export const programs: ProgramData[] = [
       'We will suggest a suitable cohort or custom pathway.',
       'We will follow up with scheduling and scope details.',
     ],
-    colors: {
-      accent: '#0A1C3A',
-      ink: '#0A1C3A',
-    },
+    colors: { accent: '#0A1C3A', ink: '#0A1C3A' },
     image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1080&q=80',
   },
   {
@@ -124,15 +90,15 @@ export const programs: ProgramData[] = [
     title: 'Institutional Partnerships',
     tagline: 'Capacity building for universities, teams, and organizations.',
     summary:
-      'Partnerships are co-designed with institutions that want to host, send, or jointly build learning mobility frameworks with andylcc.',
+      'Partnerships are co-designed with institutions that want to host, send, or jointly build learning mobility frameworks with Cardinal Immersions.',
     target: 'Universities / Organizations',
     eligibility: 'Institutions, departments, and professional bodies with an interest in structured exchange.',
     duration: 'Custom',
     location: 'On-site or hybrid',
-    deadline: 'By arrangement',
+    deadline: null,
     fee: 'Custom pricing based on scope',
     availability: 'By request',
-    status: 'Details TBA',
+    status: 'closed',
     outcome: 'Capacity building + faculty exchange + program design',
     includes: [
       'Co-design workshops',
@@ -156,12 +122,74 @@ export const programs: ProgramData[] = [
       'We will respond with a partnership conversation.',
       'Together we define scope, participants, and delivery approach.',
     ],
-    colors: {
-      accent: '#F71C56',
-      ink: '#0A1C3A',
-    },
+    colors: { accent: '#F71C56', ink: '#0A1C3A' },
     image: 'https://images.unsplash.com/photo-1777202740019-5340f67184f8?w=1080&q=80',
   },
 ];
 
-export const findProgramBySlug = (slug: string) => programs.find((program) => program.slug === slug);
+const seedSuperAdmin = async () => {
+  const existingAdmins = await countAdmins();
+  if (existingAdmins > 0) return;
+
+  const isProduction = process.env.NODE_ENV === 'production';
+  const email = process.env.FIRST_ADMIN_EMAIL || (isProduction ? '' : 'admin@example.com');
+  const password = process.env.FIRST_ADMIN_PASSWORD || (isProduction ? '' : 'admin123');
+  const fullName = process.env.FIRST_ADMIN_FULL_NAME || (isProduction ? '' : 'System Administrator');
+
+  if (!email || !password || !fullName) {
+    throw new Error(
+      'No admins exist yet. Set FIRST_ADMIN_EMAIL, FIRST_ADMIN_PASSWORD, and FIRST_ADMIN_FULL_NAME before starting in production.'
+    );
+  }
+
+  const passwordHash = await bcrypt.hash(password, 10);
+  await createAdmin(
+    {
+      email,
+      fullName,
+      role: 'super_admin',
+      passwordHash,
+      isActive: true,
+    },
+    pool
+  );
+
+  console.log(`Seeded initial super admin: ${email}`);
+};
+
+const seedPrograms = async () => {
+  if (String(process.env.SEED_DEMO_PROGRAMS || 'true').toLowerCase() !== 'true') {
+    return;
+  }
+
+  const existingCount = await countPrograms();
+  if (existingCount > 0) return;
+
+  for (const program of demoPrograms) {
+    await createProgram(program);
+  }
+
+  console.log(`Seeded ${demoPrograms.length} programs.`);
+};
+
+export const seedDatabase = async () => {
+  await seedSuperAdmin();
+  await seedPrograms();
+};
+
+const run = async () => {
+  try {
+    await seedDatabase();
+  } catch (error) {
+    console.error('Seed failed:', error.message);
+    process.exitCode = 1;
+  } finally {
+    await pool.end();
+  }
+};
+
+const entryPath = process.argv[1] ? pathToFileURL(process.argv[1]).href : '';
+
+if (import.meta.url === entryPath) {
+  run();
+}

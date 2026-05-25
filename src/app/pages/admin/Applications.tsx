@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { getApplications, setApplications, Application } from '../../utils/mockAdminData';
+import { apiRequest } from '../../utils/api';
+import type { Application } from '../../utils/mockAdminData';
 import { canUpdateStatus, canDelete, canExport } from '../../utils/adminAuth';
 import { Search, X, Eye, Trash2 } from 'lucide-react';
 
@@ -10,6 +11,9 @@ export default function AdminApplications() {
   const [selectedApp, setSelectedApp] = useState<Application | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // Filters
   const [programFilter, setProgramFilter] = useState('all');
@@ -24,9 +28,16 @@ export default function AdminApplications() {
     applyFilters();
   }, [applications, programFilter, statusFilter, searchQuery]);
 
-  const loadApplications = () => {
-    const apps = getApplications();
-    setApplicationsState(apps);
+  const loadApplications = async () => {
+    setLoading(true);
+    try {
+      const data = await apiRequest<{ items: Application[] }>('/admin/applications?limit=200');
+      setApplicationsState(data.items);
+    } catch (error) {
+      console.error('Failed to load applications:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const applyFilters = () => {
@@ -62,26 +73,43 @@ export default function AdminApplications() {
     setShowModal(true);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this application?')) {
-      const updated = applications.filter(a => a.id !== id);
-      setApplications(updated);
-      setApplicationsState(updated);
+      try {
+        setDeletingId(id);
+        await apiRequest(`/admin/applications/${id}`, { method: 'DELETE' });
+        await loadApplications();
+      } catch (error) {
+        console.error('Failed to delete application:', error);
+      } finally {
+        setDeletingId(null);
+      }
     }
   };
 
-  const handleBulkUpdate = () => {
+  const handleBulkUpdate = async () => {
     if (selectedIds.length === 0) {
       return;
     }
     const newStatus = prompt('Enter new status (new, reviewed, accepted, rejected):');
     if (newStatus && ['new', 'reviewed', 'accepted', 'rejected'].includes(newStatus)) {
-      const updated = applications.map(a =>
-        selectedIds.includes(a.id) ? { ...a, status: newStatus as any } : a
-      );
-      setApplications(updated);
-      setApplicationsState(updated);
-      setSelectedIds([]);
+      try {
+        setSaving(true);
+        await Promise.all(
+          selectedIds.map((id) =>
+            apiRequest(`/admin/applications/${id}`, {
+              method: 'PATCH',
+              body: JSON.stringify({ status: newStatus }),
+            }),
+          )
+        );
+        setSelectedIds([]);
+        await loadApplications();
+      } catch (error) {
+        console.error('Failed to bulk update applications:', error);
+      } finally {
+        setSaving(false);
+      }
     }
   };
 
@@ -93,15 +121,25 @@ export default function AdminApplications() {
     // Toast handled in component
   };
 
-  const handleSaveApplication = () => {
+  const handleSaveApplication = async () => {
     if (selectedApp) {
-      const updated = applications.map(a =>
-        a.id === selectedApp.id ? selectedApp : a
-      );
-      setApplications(updated);
-      setApplicationsState(updated);
-      setShowModal(false);
-      setSelectedApp(null);
+      try {
+        setSaving(true);
+        await apiRequest(`/admin/applications/${selectedApp.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            status: selectedApp.status,
+            internalNotes: selectedApp.notes || '',
+          }),
+        });
+        setShowModal(false);
+        setSelectedApp(null);
+        await loadApplications();
+      } catch (error) {
+        console.error('Failed to save application:', error);
+      } finally {
+        setSaving(false);
+      }
     }
   };
 
@@ -219,7 +257,7 @@ export default function AdminApplications() {
               disabled={selectedIds.length === 0}
               className="border-2 border-[#0A1C3A] text-[#0A1C3A] px-4 py-2 rounded hover:bg-[#0A1C3A] hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm font-bold uppercase tracking-wider"
             >
-              Bulk Update Status
+              {saving ? 'Updating...' : 'Bulk Update Status'}
             </button>
           )}
           {canExport() && (
@@ -257,7 +295,19 @@ export default function AdminApplications() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#e6bcbf]">
-              {filteredApplications.map((app) => (
+              {loading ? (
+                Array.from({ length: 6 }).map((_, index) => (
+                  <tr key={index} className="animate-pulse">
+                    <td className="px-6 py-4"><div className="h-4 w-4 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-32 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-40 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-40 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-24 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-20 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-28 bg-slate-200 rounded" /></td>
+                  </tr>
+                ))
+              ) : filteredApplications.map((app) => (
                 <tr key={app.id} className="hover:bg-[#f7fafd] transition-colors">
                   <td className="px-6 py-4">
                     <input
@@ -286,9 +336,10 @@ export default function AdminApplications() {
                     {canDelete() && (
                       <button
                         onClick={() => handleDelete(app.id)}
-                        className="text-[#737576] hover:text-red-600 inline-flex items-center gap-1"
+                        className="text-[#737576] hover:text-red-600 inline-flex items-center gap-1 disabled:opacity-60"
+                        disabled={deletingId === app.id}
                       >
-                        <Trash2 className="w-4 h-4" /> Delete
+                        <Trash2 className="w-4 h-4" /> {deletingId === app.id ? 'Deleting...' : 'Delete'}
                       </button>
                     )}
                   </td>
@@ -298,7 +349,7 @@ export default function AdminApplications() {
           </table>
         </div>
 
-        {filteredApplications.length === 0 && (
+        {!loading && filteredApplications.length === 0 && (
           <div className="p-12 text-center text-[#737576]">
             <p className="font-bold mb-2">No applications found</p>
             <p className="text-sm">Try adjusting your filters</p>
@@ -404,9 +455,10 @@ export default function AdminApplications() {
               {canUpdateStatus() && (
                 <button
                   onClick={handleSaveApplication}
-                  className="bg-[#F71C56] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider"
+                  className="bg-[#F71C56] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider disabled:opacity-60"
+                  disabled={saving}
                 >
-                  Save Changes
+                  {saving ? 'Saving...' : 'Save Changes'}
                 </button>
               )}
             </div>

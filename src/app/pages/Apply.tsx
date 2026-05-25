@@ -2,7 +2,8 @@
 import { Link, useSearchParams } from 'react-router';
 import { ImageWithFallback } from '../components/media/ImageWithFallback';
 import { FileText, Users, CheckCircle, Globe, ChevronDown } from 'lucide-react';
-import { findProgramBySlug } from '../data/programs';
+import { apiRequest } from '../utils/api';
+import { fetchPrograms, type Program } from '../utils/programApi';
 
 type TabType = 'individual' | 'institutional';
 type ToastType = 'success' | 'error' | 'warning';
@@ -45,8 +46,11 @@ const defaultInstitutionalForm = {
 };
 
 export default function Apply() {
+  const currentYear = new Date().getFullYear();
   const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState<TabType>('individual');
+  const [availablePrograms, setAvailablePrograms] = useState<Program[]>([]);
+  const [isLoadingPrograms, setIsLoadingPrograms] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<'individual' | 'institutional'>('individual');
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -81,6 +85,32 @@ export default function Apply() {
     });
 
     return () => revealObserver.disconnect();
+  }, [availablePrograms]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadPrograms = async () => {
+      try {
+        setIsLoadingPrograms(true);
+        const data = await fetchPrograms();
+        if (!cancelled) {
+          setAvailablePrograms(data);
+        }
+      } catch (error) {
+        console.error('Failed to load programs:', error);
+      } finally {
+        if (!cancelled) {
+          setIsLoadingPrograms(false);
+        }
+      }
+    };
+
+    loadPrograms();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -131,9 +161,9 @@ export default function Apply() {
 
   useEffect(() => {
     const programSlug = searchParams.get('program');
-    if (!programSlug) return;
+    if (!programSlug || availablePrograms.length === 0) return;
 
-    const matchedProgram = findProgramBySlug(programSlug);
+    const matchedProgram = availablePrograms.find((program) => program.slug === programSlug);
     if (!matchedProgram) return;
 
     setActiveTab(matchedProgram.category === 'institutional' ? 'institutional' : 'individual');
@@ -141,17 +171,17 @@ export default function Apply() {
       setIndividualForm(prev => ({
         ...prev,
         programInterest: 'student',
-        specificProgram: matchedProgram.slug === 'student-mobility' ? 'urban-nairobi' : prev.specificProgram
+        specificProgram: matchedProgram.slug
       }));
     }
     if (matchedProgram.category === 'professional') {
       setIndividualForm(prev => ({
         ...prev,
         programInterest: 'professional',
-        specificProgram: matchedProgram.slug === 'professional-fellowships' ? 'leadership-london' : prev.specificProgram
+        specificProgram: matchedProgram.slug
       }));
     }
-  }, [searchParams]);
+  }, [searchParams, availablePrograms]);
 
   const showToast = (message: string, type: ToastType) => {
     const newToast: Toast = {
@@ -271,7 +301,7 @@ export default function Apply() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleIndividualSubmit = (e: React.FormEvent) => {
+  const handleIndividualSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const duplicateKey = `andylcc-application-${individualForm.email.toLowerCase()}-${individualForm.specificProgram}`;
@@ -281,32 +311,72 @@ export default function Apply() {
     }
 
     if (validateIndividualForm()) {
-      console.log('Individual form submitted:', individualForm);
-      const ref = createSubmissionRef('APP');
-      setSubmissionRef(ref);
-      window.localStorage.setItem(duplicateKey, ref);
-      showToast(`Application submitted successfully. Reference ${ref}. We will respond within 3-5 business days.`, 'success');
-      setModalType('individual');
-      setShowModal(true);
-      resetDraft();
-      setIndividualForm(defaultIndividualForm);
+      try {
+        const result = await apiRequest<{ referenceNumber: string }>('/applications', {
+          method: 'POST',
+          body: JSON.stringify({
+            programInterest: individualForm.programInterest,
+            specificProgram: individualForm.specificProgram,
+            fullName: individualForm.fullName,
+            email: individualForm.email,
+            phone: individualForm.phone,
+            dateOfBirth: individualForm.dateOfBirth || null,
+            institution: individualForm.institution,
+            country: individualForm.country,
+            motivationStatement: individualForm.motivation,
+            heardFrom: individualForm.heardAbout,
+          }),
+        });
+
+        const ref = result.referenceNumber || createSubmissionRef('APP');
+        setSubmissionRef(ref);
+        window.localStorage.setItem(duplicateKey, ref);
+        showToast(`Application submitted successfully. Reference ${ref}. We will respond within 3-5 business days.`, 'success');
+        setModalType('individual');
+        setShowModal(true);
+        resetDraft();
+        setIndividualForm(defaultIndividualForm);
+      } catch (error) {
+        showToast(error instanceof Error ? error.message : 'Application submission failed.', 'error');
+      }
     } else {
       showToast('Please fill in all required fields.', 'error');
     }
   };
 
-  const handleInstitutionalSubmit = (e: React.FormEvent) => {
+  const handleInstitutionalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (validateInstitutionalForm()) {
-      console.log('Institutional form submitted:', institutionalForm);
-      const ref = createSubmissionRef('PART');
-      setSubmissionRef(ref);
-      showToast(`Inquiry sent successfully. Reference ${ref}. A partnerships team member will contact you within 5 business days.`, 'success');
-      setModalType('institutional');
-      setShowModal(true);
-      resetDraft();
-      setInstitutionalForm(defaultInstitutionalForm);
+      try {
+        const result = await apiRequest<{ referenceNumber: string }>('/inquiries', {
+          method: 'POST',
+          body: JSON.stringify({
+            organizationName: institutionalForm.organizationName,
+            organizationType: institutionalForm.organizationType,
+            country: institutionalForm.organizationCountry,
+            website: institutionalForm.website,
+            contactName: institutionalForm.contactName,
+            contactTitle: institutionalForm.contactTitle,
+            contactEmail: institutionalForm.contactEmail,
+            contactPhone: institutionalForm.contactPhone,
+            interestTypes: institutionalForm.interests,
+            cohortSize: institutionalForm.cohortSize,
+            timeline: institutionalForm.timeline,
+            additionalInfo: institutionalForm.additionalInfo,
+          }),
+        });
+
+        const ref = result.referenceNumber || createSubmissionRef('PART');
+        setSubmissionRef(ref);
+        showToast(`Inquiry sent successfully. Reference ${ref}. A partnerships team member will contact you within 5 business days.`, 'success');
+        setModalType('institutional');
+        setShowModal(true);
+        resetDraft();
+        setInstitutionalForm(defaultInstitutionalForm);
+      } catch (error) {
+        showToast(error instanceof Error ? error.message : 'Inquiry submission failed.', 'error');
+      }
     } else {
       showToast('Please fill in all required fields.', 'error');
     }
@@ -316,23 +386,17 @@ export default function Apply() {
     showToast('CV upload is coming soon. For now, please email your CV to applications@andylcc.com', 'warning');
   };
 
-  const programs = {
-    student: [
-      { id: 'urban-nairobi', name: 'Urban Innovation Lab â€“ Nairobi, May 2026' },
-      { id: 'social-capetown', name: 'Social Enterprise Fellowship â€“ Cape Town, June 2026' },
-      { id: 'tech-accra', name: 'Tech & Development â€“ Accra, July 2026' }
-    ],
-    professional: [
-      { id: 'leadership-london', name: 'Global Leadership Program â€“ London, August 2026' },
-      { id: 'education-nairobi', name: 'Education Policy Fellowship â€“ Nairobi, September 2026' },
-      { id: 'health-accra', name: 'Public Health Innovation â€“ Accra, October 2026' }
-    ]
-  };
-
   const getAvailablePrograms = () => {
-    if (individualForm.programInterest === 'student') return programs.student;
-    if (individualForm.programInterest === 'professional') return programs.professional;
-    return [];
+    const filtered = availablePrograms.filter((program) => {
+      if (individualForm.programInterest === 'student') return program.category === 'student';
+      if (individualForm.programInterest === 'professional') return program.category === 'professional';
+      return false;
+    });
+
+    return filtered.map((program) => ({
+      id: program.slug,
+      name: `${program.title} – ${program.location || ''}`.replace(/\s+–\s*$/, ''),
+    }));
   };
 
   return (
@@ -1081,34 +1145,64 @@ export default function Apply() {
           <div className="text-center mb-16 reveal">
             <span className="font-bold text-[#F71C56] uppercase tracking-[0.2em] mb-4 block">Upcoming Programs</span>
             <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A]">
-              2026 Program Calendar
+              {currentYear} Program Calendar
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-            {[
-              { name: 'Urban Innovation Lab', location: 'Nairobi, Kenya', dates: 'May 12-26, 2026', status: 'Accepting Applications' },
-              { name: 'Social Enterprise Fellowship', location: 'Cape Town, South Africa', dates: 'June 8-22, 2026', status: 'Accepting Applications' },
-              { name: 'Tech & Development', location: 'Accra, Ghana', dates: 'July 15-29, 2026', status: 'Coming Soon' }
-            ].map((program, index) => (
-              <div
-                key={index}
-                className="bg-[#f7fafd] p-6 border border-[#e6bcbf] hover:border-[#F71C56] transition-all reveal"
-                style={{
-                  transitionDelay: `${index * 100}ms`,
-                  clipPath: 'polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)'
-                }}
-              >
-                <h3 className="font-bold text-xl text-[#0A1C3A] mb-2">{program.name}</h3>
-                <p className="text-[#F71C56] mb-3">{program.location}</p>
-                <p className="text-[#737576] text-sm mb-4">{program.dates}</p>
-                <span className={`inline-block px-3 py-1 text-sm font-bold uppercase tracking-widest ${
-                  program.status === 'Accepting Applications' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                }`}>
-                  {program.status}
-                </span>
+            {isLoadingPrograms ? (
+              Array.from({ length: 3 }).map((_, index) => (
+                <div
+                  key={`upcoming-skeleton-${index}`}
+                  className="bg-[#f7fafd] p-6 border border-[#e6bcbf] animate-pulse"
+                  style={{ clipPath: 'polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)' }}
+                >
+                  <div className="h-6 w-2/3 bg-[#e6bcbf] mb-4" />
+                  <div className="h-4 w-1/2 bg-[#eef1f4] mb-3" />
+                  <div className="h-4 w-32 bg-[#eef1f4] mb-4" />
+                  <div className="h-8 w-32 bg-[#e6bcbf]" />
+                </div>
+              ))
+            ) : availablePrograms.slice(0, 3).length > 0 ? (
+              availablePrograms.slice(0, 3).map((program, index) => {
+                const statusLabel =
+                  program.status === 'accepting'
+                    ? 'Accepting Applications'
+                    : program.status === 'coming_soon'
+                      ? 'Coming Soon'
+                      : program.status === 'full'
+                        ? 'Full'
+                        : 'Closed';
+
+                return (
+                  <div
+                    key={program.slug}
+                    className="bg-[#f7fafd] p-6 border border-[#e6bcbf] hover:border-[#F71C56] transition-all reveal"
+                    style={{
+                      transitionDelay: `${index * 100}ms`,
+                      clipPath: 'polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)'
+                    }}
+                  >
+                    <h3 className="font-bold text-xl text-[#0A1C3A] mb-2">{program.title}</h3>
+                    <p className="text-[#F71C56] mb-3">{program.location || 'Location TBA'}</p>
+                    <p className="text-[#737576] text-sm mb-4">
+                      Deadline: {program.deadline || 'TBA'}
+                    </p>
+                    <span className={`inline-block px-3 py-1 text-sm font-bold uppercase tracking-widest ${
+                      program.status === 'accepting'
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-yellow-100 text-yellow-700'
+                    }`}>
+                      {statusLabel}
+                    </span>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="md:col-span-3 bg-[#f7fafd] border border-[#e6bcbf] p-8 text-center text-[#737576]">
+                No upcoming programs are currently available.
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>

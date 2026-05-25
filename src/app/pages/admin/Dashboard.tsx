@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { getApplications, getInquiries, initializeMockData, type Application } from '../../utils/mockAdminData';
+import { apiRequest } from '../../utils/api';
 import { canDelete, canExport } from '../../utils/adminAuth';
+import type { Application } from '../../utils/mockAdminData';
 
 type ToastType = 'success' | 'error' | 'info';
 
@@ -14,6 +15,8 @@ interface Toast {
 
 export default function AdminDashboard() {
   const [applications, setApplications] = useState<Application[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [stats, setStats] = useState({
     newApplications: 0,
     pendingReview: 0,
@@ -24,7 +27,6 @@ export default function AdminDashboard() {
   const [toastIdCounter, setToastIdCounter] = useState(0);
 
   useEffect(() => {
-    initializeMockData();
     loadData();
   }, []);
 
@@ -43,18 +45,28 @@ export default function AdminDashboard() {
     }, 4000);
   };
 
-  const loadData = () => {
-    const apps = getApplications();
-    const inquiries = getInquiries();
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const [applicationData, statsData] = await Promise.all([
+        apiRequest<{ items: Application[] }>('/admin/applications?limit=5'),
+        apiRequest<{
+          summary: {
+            newApplications: number;
+            pendingReview: number;
+            acceptedThisWeek: number;
+            totalPartnerships: number;
+          };
+        }>('/admin/stats'),
+      ]);
 
-    setApplications(apps.slice(0, 5));
-
-    setStats({
-      newApplications: apps.filter((a) => a.status === 'new').length,
-      pendingReview: apps.filter((a) => a.status === 'reviewed').length,
-      acceptedThisWeek: apps.filter((a) => a.status === 'accepted').length,
-      totalPartnerships: inquiries.filter((i) => i.status === 'partnership').length,
-    });
+      setApplications(applicationData.items);
+      setStats(statsData.summary);
+    } catch (error) {
+      console.error('Failed to load dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getStatusBadge = (status: string) => {
@@ -81,14 +93,19 @@ export default function AdminDashboard() {
     return `${x},${y}`;
   });
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this application?')) return;
 
-    const apps = getApplications();
-    const updated = apps.filter((app) => app.id !== id);
-    localStorage.setItem('adminApplications', JSON.stringify(updated));
-    loadData();
-    showToast('Application deleted.', 'info');
+    try {
+      setDeletingId(id);
+      await apiRequest(`/admin/applications/${id}`, { method: 'DELETE' });
+      await loadData();
+      showToast('Application deleted.', 'info');
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : 'Delete failed.', 'error');
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   return (
@@ -149,7 +166,17 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#e6bcbf]">
-              {applications.map((app) => (
+              {loading ? (
+                Array.from({ length: 5 }).map((_, index) => (
+                  <tr key={index} className="animate-pulse">
+                    <td className="px-6 py-4"><div className="h-4 w-4 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-32 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-40 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-24 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-16 bg-slate-200 rounded" /></td>
+                  </tr>
+                ))
+              ) : applications.map((app) => (
                 <tr key={app.id} className="hover:bg-[#f7fafd] transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#0A1C3A]">
                     {app.name}
@@ -170,8 +197,12 @@ export default function AdminDashboard() {
                       View
                     </Link>
                     {canDelete() && (
-                      <button onClick={() => handleDelete(app.id)} className="text-[#737576] hover:text-red-600">
-                        Delete
+                      <button
+                        onClick={() => handleDelete(app.id)}
+                        className="text-[#737576] hover:text-red-600 disabled:opacity-60"
+                        disabled={deletingId === app.id}
+                      >
+                        {deletingId === app.id ? 'Deleting...' : 'Delete'}
                       </button>
                     )}
                   </td>

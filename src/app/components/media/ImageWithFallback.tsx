@@ -21,7 +21,7 @@ export function ImageWithFallback(props: React.ImgHTMLAttributes<HTMLImageElemen
 
   return didError ? (
     <div
-      className={`relative inline-block overflow-hidden bg-gray-100 text-center align-middle ${className ?? ''}`}
+      className={`relative inline-block overflow-hidden bg-[var(--brand-surface-alt)] text-center align-middle ${className ?? ''}`}
       style={style}
     >
       <div className="flex items-center justify-center w-full h-full">
@@ -30,7 +30,7 @@ export function ImageWithFallback(props: React.ImgHTMLAttributes<HTMLImageElemen
     </div>
   ) : (
     <div
-      className={`relative inline-block overflow-hidden bg-[#f1f4f7] ${className ?? ''}`}
+      className={`relative inline-block overflow-hidden bg-brand-surface-alt ${className ?? ''}`}
       style={style}
     >
       {!isLoaded && <Skeleton className="absolute inset-0 rounded-none" />}

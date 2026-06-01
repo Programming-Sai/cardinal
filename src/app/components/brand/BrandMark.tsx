@@ -22,9 +22,9 @@ export default function BrandMark({
       role="img"
       aria-label={ariaLabel}
     >
-      <circle cx="32" cy="32" r="21" fill="none" stroke="#0A1C3A" strokeWidth="5" />
-      <circle cx="32" cy="32" r="11.5" fill="none" stroke="#0A1C3A" strokeWidth="5" opacity="0.9" />
-      <circle cx="47" cy="17" r="6.5" fill="#F71C56" />
+      <circle cx="32" cy="32" r="21" fill="none" stroke="var(--brand-navy)" strokeWidth="5" />
+      <circle cx="32" cy="32" r="11.5" fill="none" stroke="var(--brand-navy)" strokeWidth="5" opacity="0.9" />
+      <circle cx="47" cy="17" r="6.5" fill="var(--brand-red)" />
     </svg>
   );
 }

@@ -36,16 +36,16 @@ export default function About() {
         {/* Animated Connectivity Background */}
         <div className="absolute inset-0 z-0 opacity-[0.18] pointer-events-none">
           <svg className="w-full h-full animate-drift" viewBox="0 0 1440 800">
-            <circle cx="100" cy="100" fill="#F71C56" r="3" />
-            <circle cx="400" cy="300" fill="#0A1C3A" r="4" />
-            <circle cx="900" cy="150" fill="#F71C56" r="3" />
-            <circle cx="1200" cy="400" fill="#0A1C3A" r="5" />
-            <circle cx="600" cy="600" fill="#F71C56" r="3" />
+            <circle cx="100" cy="100" fill="var(--brand-blue)" r="3" />
+            <circle cx="400" cy="300" fill="var(--brand-navy)" r="4" />
+            <circle cx="900" cy="150" fill="var(--brand-cyan)" r="3" />
+            <circle cx="1200" cy="400" fill="var(--brand-navy)" r="5" />
+            <circle cx="600" cy="600" fill="var(--brand-blue)" r="3" />
             <path
               className="animate-pulse-slow"
               d="M100 100 L400 300 M400 300 L900 150 M900 150 L1200 400 M1200 400 L600 600 M600 600 L100 100 M400 300 L600 600"
               fill="none"
-              stroke="#0A1C3A"
+              stroke="var(--brand-navy)"
               strokeWidth="1"
             />
           </svg>
@@ -53,14 +53,14 @@ export default function About() {
 
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-6 sm:space-y-8 reveal active">
-            <span className="font-bold text-[#F71C56] uppercase tracking-[0.2em] text-sm">
+            <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] text-sm">
               About Cardinal Immersions
             </span>
-            <h1 className="font-extrabold text-[36px] sm:text-[48px] md:text-[64px] leading-[42px] sm:leading-[56px] md:leading-[72px] tracking-[-0.02em] text-[#0A1C3A]">
+            <h1 className="font-extrabold text-[36px] sm:text-[48px] md:text-[64px] leading-[42px] sm:leading-[56px] md:leading-[72px] tracking-[-0.02em] text-[var(--brand-navy)]">
               Building Bridges Between{" "}
-              <span className="text-[#F71C56]">Education and Experience</span>
+              <span className="text-[var(--brand-red)]">Education and Experience</span>
             </h1>
-            <p className="text-xl leading-8 text-[#737576] max-w-3xl mx-auto">
+            <p className="text-xl leading-8 text-[var(--brand-muted)] max-w-3xl mx-auto">
               We are an African-founded organization dedicated to reimagining
               international learning mobility as a rigorous, outcomes-driven
               practice that transforms students, professionals, and
@@ -72,13 +72,13 @@ export default function About() {
 
       {/* Our Story */}
       <section
-        className="py-[120px] bg-[#0A1C3A] text-white relative -mt-16 z-20"
+        className="py-[120px] bg-[var(--brand-navy)] text-white relative -mt-16 z-20"
         style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div className="space-y-6 reveal">
-              <span className="font-bold text-[#ffb2b8] uppercase tracking-[0.2em]">
+              <span className="font-bold text-[var(--brand-red-soft)] uppercase tracking-[0.2em]">
                 Our Story
               </span>
               <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em]">
@@ -127,15 +127,15 @@ export default function About() {
       {/* Our Approach */}
       {/* Added slanted divider for section rhythm; remove the clipPath to revert. */}
       <section
-        className="py-[120px] bg-[#f7fafd] relative -mt-20 pt-40"
+        className="py-[120px] bg-[var(--brand-surface)] relative -mt-20 pt-40"
         style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
-            <span className="font-bold text-[#F71C56] uppercase tracking-[0.2em] mb-4 block">
+            <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-4 block">
               Our Approach
             </span>
-            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A]">
+            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
               How We Design for Impact
             </h2>
           </div>
@@ -163,18 +163,23 @@ export default function About() {
             ].map((item, index) => (
               <div
                 key={index}
-                className="bg-white p-8 border border-[#e6bcbf] hover:border-[#F71C56] transition-all reveal"
+                className="bg-white p-8 border border-[var(--brand-border)] hover:border-[var(--brand-red)] transition-all reveal"
                 style={{
                   transitionDelay: `${index * 100}ms`,
                   clipPath:
                     "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
                 }}
               >
-                <BrandIcon icon={item.icon} size="lg" className="mb-6" />
-                <h3 className="font-bold text-[24px] mb-4 text-[#0A1C3A]">
+                <BrandIcon
+                  icon={item.icon}
+                  size="lg"
+                  accent={index === 0 ? "blue" : index === 1 ? "cyan" : "red"}
+                  className="mb-6"
+                />
+                <h3 className="font-bold text-[24px] mb-4 text-[var(--brand-navy)]">
                   {item.title}
                 </h3>
-                <p className="text-[#737576] leading-7">{item.description}</p>
+                <p className="text-[var(--brand-muted)] leading-7">{item.description}</p>
               </div>
             ))}
           </div>
@@ -183,7 +188,7 @@ export default function About() {
 
       {/* Team & Expertise */}
       <section
-        className="py-[120px] bg-[#f1f4f7] relative z-10"
+        className="py-[120px] bg-[var(--brand-surface-alt)] relative z-10"
         style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         {/* Background decoration - teamwork */}
@@ -197,13 +202,13 @@ export default function About() {
 
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
-            <span className="font-bold text-[#F71C56] uppercase tracking-[0.2em] mb-4 block">
+            <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-4 block">
               Our Team
             </span>
-            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A]">
+            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
               Built by Experts in Education & Exchange
             </h2>
-            <p className="text-lg text-[#737576] max-w-3xl mx-auto mt-6">
+            <p className="text-lg text-[var(--brand-muted)] max-w-3xl mx-auto mt-6">
               Our team brings together expertise in curriculum design,
               international education policy, institutional partnerships, and
               cross-border program management.
@@ -252,10 +257,10 @@ export default function About() {
                     }}
                   />
                   <div className="p-6">
-                    <h4 className="font-bold text-xl text-[#0A1C3A] mb-2">
+                    <h4 className="font-bold text-xl text-[var(--brand-navy)] mb-2">
                       {member.name}
                     </h4>
-                    <p className="text-[#F71C56] text-sm uppercase tracking-widest">
+                    <p className="text-[var(--brand-red)] text-sm uppercase tracking-widest">
                       {member.role}
                     </p>
                   </div>
@@ -269,7 +274,7 @@ export default function About() {
       {/* Values */}
       {/* Added slanted divider for section rhythm; remove the clipPath to revert. */}
       <section
-        className="py-[120px] bg-[#f7fafd] relative -mt-16 pt-40"
+        className="py-[120px] bg-[var(--brand-surface)] relative -mt-16 pt-40"
         style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
@@ -299,10 +304,10 @@ export default function About() {
 
             <div className="space-y-8 reveal">
               <div>
-                <span className="font-bold text-[#F71C56] uppercase tracking-[0.2em]">
+                <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em]">
                   Our Values
                 </span>
-                <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A] mt-4">
+                <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)] mt-4">
                   Principles That Guide Us
                 </h2>
               </div>
@@ -336,12 +341,20 @@ export default function About() {
                   },
                 ].map((value, index) => (
                   <div key={index} className="flex gap-4">
-                    <div className="flex-shrink-0 w-2 h-2 bg-[#F71C56] rounded-full mt-2"></div>
+                    <div
+                      className={`flex-shrink-0 w-2 h-2 rounded-full mt-2 ${
+                        index % 3 === 0
+                          ? "bg-[var(--brand-red)]"
+                          : index % 3 === 1
+                            ? "bg-[var(--brand-blue)]"
+                            : "bg-[var(--brand-cyan)]"
+                      }`}
+                    ></div>
                     <div>
-                      <h4 className="font-bold text-xl text-[#0A1C3A] mb-2">
+                      <h4 className="font-bold text-xl text-[var(--brand-navy)] mb-2">
                         {value.title}
                       </h4>
-                      <p className="text-[#737576]">{value.description}</p>
+                      <p className="text-[var(--brand-muted)]">{value.description}</p>
                     </div>
                   </div>
                 ))}
@@ -353,7 +366,7 @@ export default function About() {
 
       {/* Call to Action */}
       <section
-        className="py-[120px] bg-[#0A1C3A] text-white relative z-10 -mb-10"
+        className="py-[120px] bg-[var(--brand-navy)] text-white relative z-10 -mb-10"
         style={{ clipPath: "polygon(0 10%, 100% 0, 100% 100%, 0 100%)" }}
       >
         {/* Background decoration - study workspace */}
@@ -377,10 +390,10 @@ export default function About() {
               programsâ€”we're here to collaborate.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-              <button className="bg-[#F71C56] text-white font-bold px-8 py-4 rounded transition-all hover:brightness-110 uppercase tracking-widest text-sm">
+              <button className="bg-[var(--brand-red)] text-white font-bold px-8 py-4 rounded transition-all hover:brightness-110 uppercase tracking-widest text-sm">
                 Contact Us
               </button>
-              <button className="border-2 border-white text-white font-bold px-8 py-4 rounded hover:bg-white hover:text-[#0A1C3A] transition-all uppercase tracking-widest text-sm">
+              <button className="border-2 border-white text-white font-bold px-8 py-4 rounded hover:bg-white hover:text-[var(--brand-navy)] transition-all uppercase tracking-widest text-sm">
                 View Programs
               </button>
             </div>
@@ -390,6 +403,7 @@ export default function About() {
     </>
   );
 }
+
 
 
 

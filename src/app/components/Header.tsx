@@ -15,7 +15,7 @@ export default function Header() {
 
   return (
     <header
-      className="w-full top-0 left-0 fixed z-50 border-b border-[#e6bcbf]/70 bg-white/72 backdrop-blur-md shadow-sm"
+      className="w-full top-0 left-0 fixed z-50 border-b border-brand-border/70 bg-white/78 backdrop-blur-md shadow-sm"
       style={{ WebkitBackdropFilter: 'blur(16px)', backdropFilter: 'blur(16px)' }}
     >
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 flex justify-between items-center h-20 gap-3">
@@ -25,8 +25,8 @@ export default function Header() {
             to="/"
             className={`font-bold text-sm uppercase tracking-wider transition-colors ${
               isActive('/')
-                ? 'text-[#F71C56] border-b-2 border-[#F71C56] pb-1'
-                : 'text-[#0A1C3A] hover:text-[#F71C56]'
+                ? 'text-brand-red border-b-2 border-brand-red pb-1'
+                : 'text-brand-navy hover:text-brand-red'
             }`}
           >
             Home
@@ -35,8 +35,8 @@ export default function Header() {
             to="/about"
             className={`font-bold text-sm uppercase tracking-wider transition-colors ${
               isActive('/about')
-                ? 'text-[#F71C56] border-b-2 border-[#F71C56] pb-1'
-                : 'text-[#0A1C3A] hover:text-[#F71C56]'
+                ? 'text-brand-red border-b-2 border-brand-red pb-1'
+                : 'text-brand-navy hover:text-brand-red'
             }`}
           >
             About
@@ -45,8 +45,8 @@ export default function Header() {
             to="/programs"
             className={`font-bold text-sm uppercase tracking-wider transition-colors ${
               isActive('/programs')
-                ? 'text-[#F71C56] border-b-2 border-[#F71C56] pb-1'
-                : 'text-[#0A1C3A] hover:text-[#F71C56]'
+                ? 'text-brand-red border-b-2 border-brand-red pb-1'
+                : 'text-brand-navy hover:text-brand-red'
             }`}
           >
             Programs
@@ -55,8 +55,8 @@ export default function Header() {
             to="/partners"
             className={`font-bold text-sm uppercase tracking-wider transition-colors ${
               isActive('/partners')
-                ? 'text-[#F71C56] border-b-2 border-[#F71C56] pb-1'
-                : 'text-[#0A1C3A] hover:text-[#F71C56]'
+                ? 'text-brand-red border-b-2 border-brand-red pb-1'
+                : 'text-brand-navy hover:text-brand-red'
             }`}
           >
             Partners
@@ -65,8 +65,8 @@ export default function Header() {
             to="/contact"
             className={`font-bold text-sm uppercase tracking-wider transition-colors ${
               isActive('/contact')
-                ? 'text-[#F71C56] border-b-2 border-[#F71C56] pb-1'
-                : 'text-[#0A1C3A] hover:text-[#F71C56]'
+                ? 'text-brand-red border-b-2 border-brand-red pb-1'
+                : 'text-brand-navy hover:text-brand-red'
             }`}
           >
             Contact
@@ -75,8 +75,8 @@ export default function Header() {
             to="/apply"
             className={`font-bold text-sm uppercase tracking-wider transition-all px-4 py-2 rounded border-2 ${
               isActive('/apply')
-                ? 'bg-[#F71C56] text-white border-[#F71C56]'
-                : 'text-[#F71C56] border-[#F71C56] hover:bg-[#F71C56] hover:text-white'
+                ? 'bg-brand-red text-white border-brand-red'
+                : 'text-brand-red border-brand-red hover:bg-brand-red hover:text-white'
             }`}
           >
             Apply
@@ -84,7 +84,7 @@ export default function Header() {
         </nav>
         <button
           type="button"
-          className="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-full border border-[#e6bcbf] bg-white/80 text-[#0A1C3A] hover:border-[#F71C56] hover:text-[#F71C56] transition-colors"
+          className="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-full border border-brand-border bg-white/80 text-brand-navy hover:border-brand-red hover:text-brand-red transition-colors"
           onClick={() => setMenuOpen((value) => !value)}
           aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
           aria-expanded={menuOpen}
@@ -95,7 +95,7 @@ export default function Header() {
       </div>
       <div
         id="mobile-navigation"
-        className={`md:hidden border-t border-[#e6bcbf]/70 bg-white/92 backdrop-blur-xl transition-all duration-300 ease-out overflow-hidden ${
+        className={`md:hidden border-t border-brand-border/70 bg-white/92 backdrop-blur-xl transition-all duration-300 ease-out overflow-hidden ${
           menuOpen ? 'max-h-[80vh] opacity-100' : 'max-h-0 opacity-0'
         }`}
         style={{ WebkitBackdropFilter: 'blur(18px)', backdropFilter: 'blur(18px)' }}
@@ -116,8 +116,8 @@ export default function Header() {
                 to={path}
                 className={`flex items-center justify-between px-4 py-3 rounded-lg font-bold uppercase tracking-wider text-sm transition-colors ${
                   active
-                    ? 'bg-[#F71C56] text-white'
-                    : 'bg-[#f7fafd] text-[#0A1C3A] hover:bg-[#ebeef1] hover:text-[#F71C56]'
+                    ? 'bg-brand-red text-white'
+                    : 'bg-brand-surface text-brand-navy hover:bg-brand-surface-hover hover:text-brand-red'
                 }`}
               >
                 <span>{label}</span>

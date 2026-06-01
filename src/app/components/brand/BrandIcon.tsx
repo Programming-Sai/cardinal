@@ -6,6 +6,7 @@ type BrandIconProps = {
   className?: string;
   iconClassName?: string;
   tone?: 'light' | 'dark';
+  accent?: 'red' | 'blue' | 'cyan' | 'navy';
   size?: 'sm' | 'md' | 'lg' | 'xl';
 };
 
@@ -22,12 +23,20 @@ export default function BrandIcon({
   className = '',
   iconClassName = '',
   tone = 'light',
+  accent = 'red',
   size = 'md',
 }: BrandIconProps) {
+  const accentMap = {
+    red: 'bg-brand-red text-white border-brand-red',
+    blue: 'bg-brand-blue text-white border-brand-blue',
+    cyan: 'bg-brand-cyan text-brand-navy border-brand-cyan',
+    navy: 'bg-brand-navy text-white border-brand-navy',
+  };
+
   const base =
     tone === 'dark'
       ? 'bg-white/10 text-white border-white/15'
-      : 'bg-white text-[#F71C56] border-[#e6bcbf]';
+      : accentMap[accent];
 
   return (
     <div

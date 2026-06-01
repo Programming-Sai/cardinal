@@ -30,11 +30,9 @@ export default function BrandLogo({
     <span className={`inline-flex items-center gap-3 ${className}`.trim()}>
       {compact ? (
         <>
-          <BrandMark
-            size={size === "sm" ? "sm" : size === "lg" ? "lg" : "md"}
-          />
+          <BrandMark size={size === "sm" ? "sm" : size === "lg" ? "lg" : "md"} />
           {showWordmark && (
-            <span className="font-extrabold tracking-[-0.03em] text-[#0A1C3A] text-lg sm:text-xl">
+            <span className="font-extrabold tracking-[-0.03em] text-brand-navy text-lg sm:text-xl">
               Cardinal Immersions
             </span>
           )}

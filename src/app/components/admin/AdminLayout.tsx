@@ -52,8 +52,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   if (!admin) return null;
 
   return (
-    <div className="min-h-screen bg-[#f7fafd] text-[#181c1e]">
-      <header className="bg-[#0A1C3A] text-white shadow-lg sticky top-0 z-50">
+    <div className="min-h-screen bg-brand-surface text-brand-ink">
+      <header className="bg-brand-navy text-white shadow-lg sticky top-0 z-50">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-3">
           <div className="flex items-center justify-between h-16 gap-4">
             <BrandLogo to="/admin/dashboard" size="md" mode="light" />
@@ -69,7 +69,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               </div>
               <button
                 onClick={handleLogout}
-                className="hidden sm:inline-flex border-2 border-[#F71C56] text-[#F71C56] font-bold px-4 py-2 rounded hover:bg-[#F71C56] hover:text-white transition-all text-sm uppercase tracking-wider"
+                className="hidden sm:inline-flex border-2 border-brand-red text-brand-red font-bold px-4 py-2 rounded hover:bg-brand-red hover:text-white transition-all text-sm uppercase tracking-wider"
               >
                 Logout
               </button>
@@ -105,9 +105,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   <Link
                     key={item.href}
                     to={item.href}
-                    className={`text-sm font-bold uppercase tracking-wider transition-colors hover:text-[#F71C56] ${
+                    className={`text-sm font-bold uppercase tracking-wider transition-colors hover:text-brand-red ${
                       active
-                        ? "text-[#F71C56] border-b-2 border-[#F71C56] pb-1"
+                        ? "text-brand-cyan border-b-2 border-brand-cyan pb-1"
                         : "text-white/80"
                     }`}
                   >
@@ -118,9 +118,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               {isSuperAdmin() && (
                 <Link
                   to="/admin/admin-management"
-                  className={`text-sm font-bold uppercase tracking-wider transition-colors hover:text-[#F71C56] ${
+                  className={`text-sm font-bold uppercase tracking-wider transition-colors hover:text-brand-red ${
                     currentPath === "/admin/admin-management"
-                      ? "text-[#F71C56] border-b-2 border-[#F71C56] pb-1"
+                      ? "text-brand-cyan border-b-2 border-brand-cyan pb-1"
                       : "text-white/80"
                   }`}
                 >
@@ -129,7 +129,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               )}
               <button
                 onClick={handleLogout}
-                className="sm:hidden inline-flex items-center justify-center border-2 border-[#F71C56] text-[#F71C56] font-bold px-4 py-2 rounded hover:bg-[#F71C56] hover:text-white transition-all text-sm uppercase tracking-wider w-full"
+                className="sm:hidden inline-flex items-center justify-center border-2 border-brand-red text-brand-red font-bold px-4 py-2 rounded hover:bg-brand-red hover:text-white transition-all text-sm uppercase tracking-wider w-full"
               >
                 Logout
               </button>
@@ -142,8 +142,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {children}
       </main>
 
-      <footer className="bg-white border-t border-[#e6bcbf] py-4 mt-12">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-[#737576]">
+      <footer className="bg-white border-t border-brand-border py-4 mt-12">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-brand-muted">
           <p>
             Cardinal Immersions Admin Panel · Logged in as{" "}
             <span className="font-bold">{admin.email}</span>
@@ -153,4 +153,5 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     </div>
   );
 }
+
 

@@ -4,11 +4,13 @@ import BrandLogo from "./brand/BrandLogo";
 export default function Footer() {
   return (
     <footer
-      className="w-full bg-gradient-to-b from-[#0A1C3A] to-[#071425] text-white relative -mt-16 pt-32 pb-16 z-0 overflow-hidden"
+      className="w-full bg-gradient-to-b from-brand-navy to-brand-navy-deep text-white relative -mt-16 pt-32 pb-16 z-0 overflow-hidden"
       style={{ clipPath: "polygon(0 14%, 100% 0, 100% 100%, 0 100%)" }}
     >
       <div className="absolute inset-0 pointer-events-none opacity-20">
-        <div className="absolute -top-24 right-8 h-72 w-72 rounded-full bg-[#F71C56]/20 blur-3xl" />
+        <div className="absolute -top-24 right-8 h-72 w-72 rounded-full bg-brand-red/20 blur-3xl" />
+        <div className="absolute top-24 left-1/4 h-64 w-64 rounded-full bg-brand-blue/15 blur-3xl" />
+        <div className="absolute bottom-8 right-1/3 h-48 w-48 rounded-full bg-brand-cyan/10 blur-3xl" />
         <div className="absolute bottom-0 left-[-4rem] h-80 w-80 rounded-full bg-white/10 blur-3xl" />
       </div>
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
@@ -20,9 +22,9 @@ export default function Footer() {
           </p>
           <div className="flex gap-4">
             <a
-              className="text-white hover:text-[#F71C56] transition-colors flex items-center gap-2"
-              href="mailto:hello@andylcc.com"
-            >
+            className="text-white hover:text-brand-cyan transition-colors flex items-center gap-2"
+            href="mailto:hello@andylcc.com"
+          >
               <Mail className="h-4 w-4" />
               hello@andylcc.com
             </a>
@@ -34,7 +36,7 @@ export default function Footer() {
           <ul className="flex flex-col gap-3">
             <li>
               <a
-                className="text-white/80 hover:text-white hover:underline decoration-[#F71C56] decoration-2 underline-offset-4 transition-all"
+                className="text-white/80 hover:text-white hover:underline decoration-brand-cyan decoration-2 underline-offset-4 transition-all"
                 href="/programs"
               >
                 Programs
@@ -42,7 +44,7 @@ export default function Footer() {
             </li>
             <li>
               <a
-                className="text-white/80 hover:text-white hover:underline decoration-[#F71C56] decoration-2 underline-offset-4 transition-all"
+                className="text-white/80 hover:text-white hover:underline decoration-brand-cyan decoration-2 underline-offset-4 transition-all"
                 href="/partners"
               >
                 Case Studies
@@ -50,7 +52,7 @@ export default function Footer() {
             </li>
             <li>
               <a
-                className="text-white/80 hover:text-white hover:underline decoration-[#F71C56] decoration-2 underline-offset-4 transition-all"
+                className="text-white/80 hover:text-white hover:underline decoration-brand-cyan decoration-2 underline-offset-4 transition-all"
                 href="/programs/institutional-partnerships"
               >
                 Institutional Services
@@ -58,7 +60,7 @@ export default function Footer() {
             </li>
             <li>
               <a
-                className="text-white/80 hover:text-white hover:underline decoration-[#F71C56] decoration-2 underline-offset-4 transition-all"
+                className="text-white/80 hover:text-white hover:underline decoration-brand-cyan decoration-2 underline-offset-4 transition-all"
                 href="/contact"
               >
                 Alumni Portal
@@ -72,7 +74,7 @@ export default function Footer() {
           <ul className="flex flex-col gap-3">
             <li>
               <a
-                className="text-white/80 hover:text-white hover:underline decoration-[#F71C56] decoration-2 underline-offset-4 transition-all"
+                className="text-white/80 hover:text-white hover:underline decoration-brand-blue decoration-2 underline-offset-4 transition-all"
                 href="/contact"
               >
                 Privacy Policy
@@ -80,7 +82,7 @@ export default function Footer() {
             </li>
             <li>
               <a
-                className="text-white/80 hover:text-white hover:underline decoration-[#F71C56] decoration-2 underline-offset-4 transition-all"
+                className="text-white/80 hover:text-white hover:underline decoration-brand-blue decoration-2 underline-offset-4 transition-all"
                 href="/contact"
               >
                 Terms of Service
@@ -88,7 +90,7 @@ export default function Footer() {
             </li>
             <li>
               <a
-                className="text-white/80 hover:text-white hover:underline decoration-[#F71C56] decoration-2 underline-offset-4 transition-all"
+                className="text-white/80 hover:text-white hover:underline decoration-brand-blue decoration-2 underline-offset-4 transition-all"
                 href="/contact"
               >
                 Cookie Policy
@@ -96,7 +98,7 @@ export default function Footer() {
             </li>
             <li>
               <a
-                className="text-white/80 hover:text-white hover:underline decoration-[#F71C56] decoration-2 underline-offset-4 transition-all"
+                className="text-white/80 hover:text-white hover:underline decoration-brand-blue decoration-2 underline-offset-4 transition-all"
                 href="/"
               >
                 Sitemap
@@ -109,7 +111,7 @@ export default function Footer() {
           <h4 className="font-bold uppercase tracking-widest">Connect</h4>
           <div className="flex flex-col gap-4">
             <input
-              className="bg-transparent border border-white/30 p-3 text-white text-sm font-bold focus:border-[#F71C56] outline-none transition-all placeholder:text-white/50"
+              className="bg-transparent border border-white/30 p-3 text-white text-sm font-bold focus:border-brand-cyan outline-none transition-all placeholder:text-white/50"
               style={{
                 clipPath:
                   "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
@@ -118,7 +120,7 @@ export default function Footer() {
               type="email"
             />
             <button
-              className="bg-[#F71C56] text-white py-3 font-bold uppercase tracking-widest text-xs hover:brightness-110 transition-colors"
+              className="bg-brand-red text-white py-3 font-bold uppercase tracking-widest text-xs hover:brightness-110 transition-colors"
               style={{
                 clipPath:
                   "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",

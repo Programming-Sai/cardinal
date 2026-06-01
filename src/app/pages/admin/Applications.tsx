@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { apiRequest } from '../../utils/api';
 import type { Application } from '../../utils/mockAdminData';
@@ -159,12 +159,12 @@ export default function AdminApplications() {
 
   const getStatusBadge = (status: string) => {
     const badges = {
-      new: 'bg-[#F71C56] text-white',
-      reviewed: 'bg-[#F59E0B] text-white',
-      accepted: 'bg-[#10B981] text-white',
-      rejected: 'bg-[#6B7280] text-white'
+      new: 'bg-[var(--brand-red)] text-white',
+      reviewed: 'bg-[var(--brand-blue)] text-white',
+      accepted: 'bg-[var(--brand-cyan)] text-[var(--brand-navy)]',
+      rejected: 'bg-[var(--brand-navy)] text-white'
     };
-    return badges[status as keyof typeof badges] || 'bg-gray-200 text-gray-800';
+    return badges[status as keyof typeof badges] || 'bg-[var(--brand-surface-alt)] text-[var(--brand-navy)]';
   };
 
   return (
@@ -172,22 +172,22 @@ export default function AdminApplications() {
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center gap-4">
-          <h1 className="font-bold text-[32px] text-[#0A1C3A]">Individual Applications</h1>
-          <span className="bg-[#F71C56] text-white px-3 py-1 rounded font-bold">
+          <h1 className="font-bold text-[32px] text-[var(--brand-navy)]">Individual Applications</h1>
+          <span className="bg-[var(--brand-red)] text-white px-3 py-1 rounded font-bold">
             {filteredApplications.length}
           </span>
         </div>
       </div>
 
       {/* Filters Bar */}
-      <div className="bg-white p-6 border border-[#e6bcbf] mb-6" style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}>
+      <div className="bg-white p-6 border border-[var(--brand-border)] mb-6" style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
-            <label className="block text-sm font-bold text-[#0A1C3A] mb-2">Program Type</label>
+            <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">Program Type</label>
             <select
               value={programFilter}
               onChange={(e) => setProgramFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-[#cbcdd1] rounded focus:outline-none focus:border-[#F71C56]"
+              className="w-full px-4 py-2 border border-[var(--brand-border-strong)] rounded focus:outline-none focus:border-[var(--brand-red)]"
             >
               <option value="all">All Programs</option>
               <option value="student">Student Mobility</option>
@@ -196,11 +196,11 @@ export default function AdminApplications() {
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-[#0A1C3A] mb-2">Status</label>
+            <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">Status</label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-[#cbcdd1] rounded focus:outline-none focus:border-[#F71C56]"
+              className="w-full px-4 py-2 border border-[var(--brand-border-strong)] rounded focus:outline-none focus:border-[var(--brand-red)]"
             >
               <option value="all">All Status</option>
               <option value="new">New</option>
@@ -211,15 +211,15 @@ export default function AdminApplications() {
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-[#0A1C3A] mb-2">Search</label>
+            <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">Search</label>
             <div className="relative">
-              <Search className="absolute left-3 top-2.5 w-5 h-5 text-[#737576]" />
+              <Search className="absolute left-3 top-2.5 w-5 h-5 text-[var(--brand-muted)]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Name or email"
-                className="w-full pl-10 pr-4 py-2 border border-[#cbcdd1] rounded focus:outline-none focus:border-[#F71C56]"
+                className="w-full pl-10 pr-4 py-2 border border-[var(--brand-border-strong)] rounded focus:outline-none focus:border-[var(--brand-red)]"
               />
             </div>
           </div>
@@ -227,7 +227,7 @@ export default function AdminApplications() {
           <div className="flex items-end">
             <button
               onClick={clearFilters}
-              className="w-full text-[#F71C56] hover:underline font-bold"
+              className="w-full text-[var(--brand-red)] hover:underline font-bold"
             >
               Clear Filters
             </button>
@@ -236,7 +236,7 @@ export default function AdminApplications() {
       </div>
 
       {/* Bulk Actions Bar */}
-      <div className="bg-[#f7fafd] p-4 border border-[#e6bcbf] mb-6 flex items-center justify-between">
+      <div className="bg-[var(--brand-surface)] p-4 border border-[var(--brand-border)] mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -245,7 +245,7 @@ export default function AdminApplications() {
               onChange={toggleSelectAll}
               className="w-4 h-4"
             />
-            <span className="text-sm font-bold text-[#0A1C3A]">
+            <span className="text-sm font-bold text-[var(--brand-navy)]">
               Select All ({selectedIds.length} selected)
             </span>
           </label>
@@ -255,7 +255,7 @@ export default function AdminApplications() {
             <button
               onClick={handleBulkUpdate}
               disabled={selectedIds.length === 0}
-              className="border-2 border-[#0A1C3A] text-[#0A1C3A] px-4 py-2 rounded hover:bg-[#0A1C3A] hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm font-bold uppercase tracking-wider"
+              className="border-2 border-[var(--brand-navy)] text-[var(--brand-navy)] px-4 py-2 rounded hover:bg-[var(--brand-navy)] hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm font-bold uppercase tracking-wider"
             >
               {saving ? 'Updating...' : 'Bulk Update Status'}
             </button>
@@ -269,7 +269,7 @@ export default function AdminApplications() {
                   : filteredApplications;
                 alert(`Export: ${data.length} applications exported to console`);
               }}
-              className="border-2 border-[#F71C56] text-[#F71C56] px-4 py-2 rounded hover:bg-[#F71C56] hover:text-white transition-all text-sm font-bold uppercase tracking-wider"
+              className="border-2 border-[var(--brand-red)] text-[var(--brand-red)] px-4 py-2 rounded hover:bg-[var(--brand-red)] hover:text-white transition-all text-sm font-bold uppercase tracking-wider"
             >
               Export {selectedIds.length > 0 ? 'Selected' : 'All'}
             </button>
@@ -278,37 +278,37 @@ export default function AdminApplications() {
       </div>
 
       {/* Data Table */}
-      <div className="bg-white border border-[#e6bcbf]" style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}>
+      <div className="bg-white border border-[var(--brand-border)]" style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-[#f7fafd] border-b border-[#e6bcbf]">
+            <thead className="bg-[var(--brand-surface)] border-b border-[var(--brand-border)]">
               <tr>
                 <th className="px-6 py-3 text-left">
                   <input type="checkbox" className="w-4 h-4" onChange={toggleSelectAll} checked={selectedIds.length === filteredApplications.length && filteredApplications.length > 0} />
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Program</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-[var(--brand-navy)] uppercase tracking-wider">Name</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-[var(--brand-navy)] uppercase tracking-wider">Email</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-[var(--brand-navy)] uppercase tracking-wider">Program</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-[var(--brand-navy)] uppercase tracking-wider">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-[var(--brand-navy)] uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-[var(--brand-navy)] uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#e6bcbf]">
+            <tbody className="divide-y divide-[var(--brand-border)]">
               {loading ? (
                 Array.from({ length: 6 }).map((_, index) => (
                   <tr key={index} className="animate-pulse">
-                    <td className="px-6 py-4"><div className="h-4 w-4 bg-slate-200 rounded" /></td>
-                    <td className="px-6 py-4"><div className="h-4 w-32 bg-slate-200 rounded" /></td>
-                    <td className="px-6 py-4"><div className="h-4 w-40 bg-slate-200 rounded" /></td>
-                    <td className="px-6 py-4"><div className="h-4 w-40 bg-slate-200 rounded" /></td>
-                    <td className="px-6 py-4"><div className="h-4 w-24 bg-slate-200 rounded" /></td>
-                    <td className="px-6 py-4"><div className="h-4 w-20 bg-slate-200 rounded" /></td>
-                    <td className="px-6 py-4"><div className="h-4 w-28 bg-slate-200 rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-4 bg-[var(--brand-surface-alt)] rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-32 bg-[var(--brand-surface-alt)] rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-40 bg-[var(--brand-surface-alt)] rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-40 bg-[var(--brand-surface-alt)] rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-24 bg-[var(--brand-surface-alt)] rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-20 bg-[var(--brand-surface-alt)] rounded" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-28 bg-[var(--brand-surface-alt)] rounded" /></td>
                   </tr>
                 ))
               ) : filteredApplications.map((app) => (
-                <tr key={app.id} className="hover:bg-[#f7fafd] transition-colors">
+                <tr key={app.id} className="hover:bg-[var(--brand-surface)] transition-colors">
                   <td className="px-6 py-4">
                     <input
                       type="checkbox"
@@ -317,10 +317,10 @@ export default function AdminApplications() {
                       className="w-4 h-4"
                     />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#0A1C3A]">{app.name}</td>
-                  <td className="px-6 py-4 text-sm text-[#737576]">{app.email}</td>
-                  <td className="px-6 py-4 text-sm text-[#737576]">{app.program}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[#737576]">{app.submittedDate}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[var(--brand-navy)]">{app.name}</td>
+                  <td className="px-6 py-4 text-sm text-[var(--brand-muted)]">{app.email}</td>
+                  <td className="px-6 py-4 text-sm text-[var(--brand-muted)]">{app.program}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--brand-muted)]">{app.submittedDate}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded ${getStatusBadge(app.status)}`}>
                       {app.status}
@@ -329,14 +329,14 @@ export default function AdminApplications() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <button
                       onClick={() => handleView(app)}
-                      className="text-[#F71C56] hover:underline mr-3 inline-flex items-center gap-1"
+                      className="text-[var(--brand-red)] hover:underline mr-3 inline-flex items-center gap-1"
                     >
                       <Eye className="w-4 h-4" /> View
                     </button>
                     {canDelete() && (
                       <button
                         onClick={() => handleDelete(app.id)}
-                        className="text-[#737576] hover:text-red-600 inline-flex items-center gap-1 disabled:opacity-60"
+                        className="text-[var(--brand-muted)] hover:text-[var(--brand-red)] inline-flex items-center gap-1 disabled:opacity-60"
                         disabled={deletingId === app.id}
                       >
                         <Trash2 className="w-4 h-4" /> {deletingId === app.id ? 'Deleting...' : 'Delete'}
@@ -350,7 +350,7 @@ export default function AdminApplications() {
         </div>
 
         {!loading && filteredApplications.length === 0 && (
-          <div className="p-12 text-center text-[#737576]">
+          <div className="p-12 text-center text-[var(--brand-muted)]">
             <p className="font-bold mb-2">No applications found</p>
             <p className="text-sm">Try adjusting your filters</p>
           </div>
@@ -359,10 +359,10 @@ export default function AdminApplications() {
 
       {/* View/Edit Modal */}
       {showModal && selectedApp && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0A1C3A]/55 backdrop-blur-sm px-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--brand-navy)]/55 backdrop-blur-sm px-4">
           <div className="bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl" style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}>
             {/* Modal Header */}
-            <div className="bg-[#F71C56] text-white p-6 flex justify-between items-center sticky top-0 z-10">
+            <div className="bg-[var(--brand-red)] text-white p-6 flex justify-between items-center sticky top-0 z-10">
               <h2 className="font-bold text-xl">Application Details</h2>
               <button onClick={() => setShowModal(false)} className="hover:opacity-80">
                 <X className="w-6 h-6" />
@@ -373,50 +373,50 @@ export default function AdminApplications() {
             <div className="p-8 space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-[#0A1C3A] mb-2">Full Name</label>
-                  <p className="text-[#737576]">{selectedApp.name}</p>
+                  <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">Full Name</label>
+                  <p className="text-[var(--brand-muted)]">{selectedApp.name}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-[#0A1C3A] mb-2">Email</label>
-                  <p className="text-[#737576]">{selectedApp.email}</p>
+                  <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">Email</label>
+                  <p className="text-[var(--brand-muted)]">{selectedApp.email}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-[#0A1C3A] mb-2">Institution/Employer</label>
-                  <p className="text-[#737576]">{selectedApp.institution}</p>
+                  <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">Institution/Employer</label>
+                  <p className="text-[var(--brand-muted)]">{selectedApp.institution}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-[#0A1C3A] mb-2">Country</label>
-                  <p className="text-[#737576]">{selectedApp.country}</p>
+                  <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">Country</label>
+                  <p className="text-[var(--brand-muted)]">{selectedApp.country}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-[#0A1C3A] mb-2">Phone</label>
-                  <p className="text-[#737576]">{selectedApp.phone || 'Not provided'}</p>
+                  <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">Phone</label>
+                  <p className="text-[var(--brand-muted)]">{selectedApp.phone || 'Not provided'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-[#0A1C3A] mb-2">Submitted Date</label>
-                  <p className="text-[#737576]">{selectedApp.submittedDate}</p>
+                  <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">Submitted Date</label>
+                  <p className="text-[var(--brand-muted)]">{selectedApp.submittedDate}</p>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-[#0A1C3A] mb-2">Program</label>
-                <p className="text-[#737576]">{selectedApp.program}</p>
+                <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">Program</label>
+                <p className="text-[var(--brand-muted)]">{selectedApp.program}</p>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-[#0A1C3A] mb-2">Motivation Statement</label>
-                <p className="text-[#737576] leading-7 bg-[#f7fafd] p-4 border border-[#e6bcbf]">
+                <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">Motivation Statement</label>
+                <p className="text-[var(--brand-muted)] leading-7 bg-[var(--brand-surface)] p-4 border border-[var(--brand-border)]">
                   {selectedApp.motivation}
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-[#0A1C3A] mb-2">Status</label>
+                <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">Status</label>
                 <select
                   value={selectedApp.status}
                   onChange={(e) => setSelectedApp({ ...selectedApp, status: e.target.value as any })}
                   disabled={!canUpdateStatus()}
-                  className="w-full px-4 py-2 border border-[#cbcdd1] rounded focus:outline-none focus:border-[#F71C56] disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-2 border border-[var(--brand-border-strong)] rounded focus:outline-none focus:border-[var(--brand-red)] disabled:bg-[var(--brand-surface-alt)] disabled:cursor-not-allowed"
                 >
                   <option value="new">New</option>
                   <option value="reviewed">Reviewed</option>
@@ -424,38 +424,38 @@ export default function AdminApplications() {
                   <option value="rejected">Rejected</option>
                 </select>
                 {!canUpdateStatus() && (
-                  <p className="text-xs text-[#737576] mt-1">Viewers cannot update status</p>
+                  <p className="text-xs text-[var(--brand-muted)] mt-1">Viewers cannot update status</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-[#0A1C3A] mb-2">Internal Notes</label>
+                <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">Internal Notes</label>
                 <textarea
                   value={selectedApp.notes || ''}
                   onChange={(e) => setSelectedApp({ ...selectedApp, notes: e.target.value })}
                   disabled={!canUpdateStatus()}
                   rows={4}
-                  className="w-full px-4 py-3 border border-[#cbcdd1] rounded focus:outline-none focus:border-[#F71C56] resize-none disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 border border-[var(--brand-border-strong)] rounded focus:outline-none focus:border-[var(--brand-red)] resize-none disabled:bg-[var(--brand-surface-alt)] disabled:cursor-not-allowed"
                   placeholder="Add internal notes about this application..."
                 />
                 {!canUpdateStatus() && (
-                  <p className="text-xs text-[#737576] mt-1">Viewers cannot add notes</p>
+                  <p className="text-xs text-[var(--brand-muted)] mt-1">Viewers cannot add notes</p>
                 )}
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="p-6 border-t border-[#e6bcbf] flex justify-end gap-3">
+            <div className="p-6 border-t border-[var(--brand-border)] flex justify-end gap-3">
               <button
                 onClick={() => setShowModal(false)}
-                className="border-2 border-[#737576] text-[#737576] px-6 py-3 rounded hover:bg-[#737576] hover:text-white transition-all font-bold uppercase tracking-wider"
+                className="border-2 border-[var(--brand-muted)] text-[var(--brand-muted)] px-6 py-3 rounded hover:bg-[var(--brand-muted)] hover:text-white transition-all font-bold uppercase tracking-wider"
               >
                 {canUpdateStatus() ? 'Cancel' : 'Close'}
               </button>
               {canUpdateStatus() && (
                 <button
                   onClick={handleSaveApplication}
-                  className="bg-[#F71C56] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider disabled:opacity-60"
+                  className="bg-[var(--brand-red)] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider disabled:opacity-60"
                   disabled={saving}
                 >
                   {saving ? 'Saving...' : 'Save Changes'}
@@ -468,3 +468,4 @@ export default function AdminApplications() {
     </AdminLayout>
   );
 }
+

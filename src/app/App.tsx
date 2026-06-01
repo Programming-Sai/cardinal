@@ -35,7 +35,7 @@ function AppShell() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f7fafd] text-[#181c1e] overflow-x-hidden flex flex-col">
+    <div className="min-h-screen bg-brand-surface text-brand-ink overflow-x-hidden flex flex-col">
       <Header />
       <main className="flex-1 pt-20">
         <Routes>

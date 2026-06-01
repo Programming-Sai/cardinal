@@ -1,19 +1,24 @@
 :root {
-  --scrollbar-track: #edf1f5;
-  --scrollbar-thumb: #F71C56;
-  --scrollbar-thumb-hover: #d8184a;
-  --scrollbar-thumb-active: #b91540;
-  --scrollbar-border: #f7fafd;
-  --scrollbar-shadow: rgba(10, 28, 58, 0.18);
+  --scrollbar-track: var(--brand-surface-alt);
+  --scrollbar-thumb: var(--brand-red);
+  --scrollbar-thumb-hover: var(--brand-blue);
+  --scrollbar-thumb-active: var(--brand-navy);
+  --scrollbar-border: var(--brand-surface);
+  --scrollbar-shadow: rgba(12, 15, 63, 0.18);
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  scroll-padding-top: 5.5rem;
 }
 
 body {
   overflow-x: hidden;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--brand-red) 20%, white);
+  color: var(--brand-navy-deep);
 }
 
 html,
@@ -47,11 +52,11 @@ summary {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--scrollbar-thumb-hover) 0%, var(--scrollbar-thumb) 100%);
+  background: linear-gradient(180deg, var(--scrollbar-thumb-hover) 0%, var(--brand-cyan) 100%);
 }
 
 ::-webkit-scrollbar-thumb:active {
-  background: linear-gradient(180deg, var(--scrollbar-thumb-active) 0%, #9c1336 100%);
+  background: linear-gradient(180deg, var(--scrollbar-thumb-active) 0%, var(--brand-red-deep) 100%);
 }
 
 ::-webkit-scrollbar-corner {

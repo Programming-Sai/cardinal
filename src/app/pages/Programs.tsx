@@ -174,16 +174,16 @@ export default function Programs() {
     <>
       {/* I. Hero Section */}
       <section
-        className="pt-[120px] pb-16 bg-[#0A1C3A] text-white relative overflow-hidden"
+        className="pt-[120px] pb-16 bg-[var(--brand-navy)] text-white relative overflow-hidden"
         style={{ clipPath: 'polygon(0 0, 100% 0, 100% 85%, 0% 100%)' }}
       >
-        <div className="absolute inset-0 z-0 opacity-[0.22] pointer-events-none">
-          <ImageWithFallback
-            src="https://images.unsplash.com/photo-1674027444485-cec3da58eef4?w=1080&q=80"
-            alt="Abstract network connections"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0A1C3A]/35 via-transparent to-[#F71C56]/15" />
+          <div className="absolute inset-0 z-0 opacity-[0.22] pointer-events-none">
+            <ImageWithFallback
+              src="https://images.unsplash.com/photo-1674027444485-cec3da58eef4?w=1080&q=80"
+              alt="Abstract network connections"
+              className="w-full h-full object-cover"
+            />
+          <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-navy)]/35 via-[var(--brand-blue)]/10 to-[var(--brand-cyan)]/20" />
         </div>
 
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 relative z-10">
@@ -194,7 +194,7 @@ export default function Programs() {
             <p className="text-2xl leading-relaxed text-white/90">
               Structured, cross-border learning experiences designed for tangible outcomes.
             </p>
-            <p className="text-lg text-white/80 border-l-4 border-[#F71C56] pl-6">
+            <p className="text-lg text-white/80 border-l-4 border-[var(--brand-red)] pl-6">
               Travel and logistics exist to support learning, not the other way around.
             </p>
           </div>
@@ -203,7 +203,7 @@ export default function Programs() {
 
       {/* II. Core Program Categories */}
       <section
-        className="py-[120px] bg-[#f7fafd] relative -mt-8 z-10"
+        className="py-[120px] bg-[var(--brand-surface)] relative -mt-8 z-10"
         style={{ clipPath: 'polygon(0 10%, 100% 0, 100% 90%, 0 100%)' }}
       >
         <div className="absolute bottom-16 left-[3%] opacity-[0.18] pointer-events-none">
@@ -220,16 +220,16 @@ export default function Programs() {
               Array.from({ length: 3 }).map((_, index) => (
                 <div
                   key={`category-skeleton-${index}`}
-                  className="bg-white overflow-hidden border border-[#e6bcbf] animate-pulse"
+                  className="bg-white overflow-hidden border border-[var(--brand-border)] animate-pulse"
                   style={{
-                    borderTop: '6px solid #e6bcbf',
+                    borderTop: '6px solid var(--brand-border)',
                     clipPath: 'polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)',
                   }}
                 >
                   <div className="w-full h-52 bg-[#eef1f4]" />
                   <div className="p-8 space-y-5">
-                    <div className="h-4 w-28 bg-[#e6bcbf]" />
-                    <div className="h-8 w-2/3 bg-[#e6bcbf]" />
+                    <div className="h-4 w-28 bg-[var(--brand-border)]" />
+                    <div className="h-8 w-2/3 bg-[var(--brand-border)]" />
                     <div className="h-4 w-full bg-[#eef1f4]" />
                     <div className="h-4 w-4/5 bg-[#eef1f4]" />
                   </div>
@@ -237,13 +237,13 @@ export default function Programs() {
               ))
             ) : programs.length > 0 ? (
               programs.map((program, index) => {
-                const accentColor = program.colors?.accent || '#F71C56';
+                const accentColor = program.colors?.accent || (program.category === 'student' ? 'var(--brand-blue)' : program.category === 'professional' ? 'var(--brand-cyan)' : 'var(--brand-red)');
                 const programImage = program.image || 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1080&q=80';
 
                 return (
                   <div
                     key={program.slug}
-                    className="group bg-white overflow-hidden border border-[#e6bcbf] hover:shadow-2xl transition-all duration-500 reveal"
+                    className="group bg-white overflow-hidden border border-[var(--brand-border)] hover:shadow-2xl transition-all duration-500 reveal"
                     style={{
                       borderTop: `6px solid ${accentColor}`,
                       clipPath: 'polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)',
@@ -258,10 +258,10 @@ export default function Programs() {
                     <div className="p-8 space-y-5">
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#F71C56] mb-2">
+                          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--brand-red)] mb-2">
                             {getProgramStatusLabel(program.status)}
                           </p>
-                          <h3 className="font-bold text-[28px] leading-[34px] text-[#0A1C3A]">
+                          <h3 className="font-bold text-[28px] leading-[34px] text-[var(--brand-navy)]">
                             {program.title}
                           </h3>
                         </div>
@@ -274,26 +274,33 @@ export default function Programs() {
                                 : Landmark
                           }
                           size="md"
+                          accent={
+                            program.category === 'student'
+                              ? 'cyan'
+                              : program.category === 'professional'
+                                ? 'blue'
+                                : 'red'
+                          }
                         />
                       </div>
 
-                      <p className="text-[#737576] leading-7">{program.summary || program.description || ''}</p>
+                      <p className="text-[var(--brand-muted)] leading-7">{program.summary || program.description || ''}</p>
 
-                      <div className="space-y-3 text-[#737576]">
+                      <div className="space-y-3 text-[var(--brand-muted)]">
                         <p>
-                          <span className="font-bold text-[#0A1C3A]">Target:</span> {program.target}
+                          <span className="font-bold text-[var(--brand-navy)]">Target:</span> {program.target}
                         </p>
                         <p>
-                          <span className="font-bold text-[#0A1C3A]">Duration:</span> {program.duration}
+                          <span className="font-bold text-[var(--brand-navy)]">Duration:</span> {program.duration}
                         </p>
                         <p>
-                          <span className="font-bold text-[#0A1C3A]">Outcome:</span> {program.outcome}
+                          <span className="font-bold text-[var(--brand-navy)]">Outcome:</span> {program.outcome}
                         </p>
                       </div>
 
                       <Link
                         to={`/programs/${program.slug}`}
-                        className="inline-flex items-center gap-2 font-bold text-[#F71C56] uppercase text-xs tracking-widest group-hover:gap-4 transition-all"
+                        className="inline-flex items-center gap-2 font-bold text-[var(--brand-red)] uppercase text-xs tracking-widest group-hover:gap-4 transition-all decoration-[var(--brand-cyan)]"
                       >
                         View details <ArrowRight className="h-4 w-4" />
                       </Link>
@@ -302,7 +309,7 @@ export default function Programs() {
                 );
               })
             ) : (
-              <div className="md:col-span-3 bg-white border border-[#e6bcbf] p-8 text-center text-[#737576]">
+              <div className="md:col-span-3 bg-white border border-[var(--brand-border)] p-8 text-center text-[var(--brand-muted)]">
                 No programs are currently available. Please check back soon.
               </div>
             )}
@@ -325,7 +332,7 @@ export default function Programs() {
 
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
-            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A] mb-8">
+            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)] mb-8">
               What Makes Our Programs Different
             </h2>
           </div>
@@ -337,10 +344,15 @@ export default function Programs() {
                 className="flex gap-6 items-start reveal"
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <BrandIcon icon={item.icon} size="lg" className="flex-shrink-0" />
+                <BrandIcon
+                  icon={item.icon}
+                  size="lg"
+                  accent={index % 3 === 0 ? 'red' : index % 3 === 1 ? 'blue' : 'cyan'}
+                  className="flex-shrink-0"
+                />
                 <div>
-                  <h3 className="font-bold text-[24px] mb-3 text-[#0A1C3A]">{item.title}</h3>
-                  <p className="text-lg text-[#737576] leading-7">{item.description}</p>
+                  <h3 className="font-bold text-[24px] mb-3 text-[var(--brand-navy)]">{item.title}</h3>
+                  <p className="text-lg text-[var(--brand-muted)] leading-7">{item.description}</p>
                 </div>
               </div>
             ))}
@@ -350,37 +362,42 @@ export default function Programs() {
 
       {/* IV. Find Your Fit */}
       <section
-        className="py-[120px] bg-[#f7fafd] relative -mt-8 z-10"
+        className="py-[120px] bg-[var(--brand-surface)] relative -mt-8 z-10"
         style={{ clipPath: 'polygon(0 10%, 100% 0, 100% 90%, 0 100%)' }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 items-stretch">
-            <div className="bg-white border border-[#e6bcbf] shadow-xl p-8 md:p-10 reveal">
-              <p className="font-bold uppercase tracking-[0.2em] text-[#F71C56] mb-4">
+            <div className="bg-white border border-[var(--brand-border)] shadow-xl p-8 md:p-10 reveal">
+              <p className="font-bold uppercase tracking-[0.2em] text-[var(--brand-red)] mb-4">
                 Find your fit
               </p>
-              <h2 className="font-bold text-[32px] sm:text-[36px] md:text-[40px] leading-[40px] sm:leading-[44px] md:leading-[48px] tracking-[-0.01em] text-[#0A1C3A] mb-6">
+              <h2 className="font-bold text-[32px] sm:text-[36px] md:text-[40px] leading-[40px] sm:leading-[44px] md:leading-[48px] tracking-[-0.01em] text-[var(--brand-navy)] mb-6">
                 A quick guide before you choose a program
               </h2>
               <div className="space-y-5">
                 {studentGuidance.map((item) => (
                   <div
                     key={item.title}
-                    className="flex gap-4 items-start p-4 bg-[#f7fafd] border border-[#e6bcbf]"
+                    className="flex gap-4 items-start p-4 bg-[var(--brand-surface)] border border-[var(--brand-border)]"
                     style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}
                   >
-                    <BrandIcon icon={item.icon} size="md" className="flex-shrink-0" />
+                    <BrandIcon
+                      icon={item.icon}
+                      size="md"
+                      accent={item.title.includes('guide') ? 'blue' : 'cyan'}
+                      className="flex-shrink-0"
+                    />
                     <div>
-                      <h3 className="font-bold text-[#0A1C3A] text-xl mb-2">{item.title}</h3>
-                      <p className="text-[#737576] leading-7">{item.description}</p>
+                      <h3 className="font-bold text-[var(--brand-navy)] text-xl mb-2">{item.title}</h3>
+                      <p className="text-[var(--brand-muted)] leading-7">{item.description}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-[#0A1C3A] text-white shadow-2xl p-8 md:p-10 reveal">
-              <p className="font-bold uppercase tracking-[0.2em] text-[#ffb2b8] mb-4">
+            <div className="bg-[var(--brand-navy)] text-white shadow-2xl p-8 md:p-10 reveal">
+              <p className="font-bold uppercase tracking-[0.2em] text-[var(--brand-red-soft)] mb-4">
                 Before you apply
               </p>
               <h2 className="font-bold text-[32px] sm:text-[36px] md:text-[40px] leading-[40px] sm:leading-[44px] md:leading-[48px] tracking-[-0.01em] mb-6">
@@ -389,18 +406,18 @@ export default function Programs() {
               <ul className="space-y-4 mb-8">
                 {studentChecklist.map((item) => (
                   <li key={item} className="flex items-start gap-3 text-white/85 leading-7">
-                    <BrandIcon icon={Check} size="sm" tone="dark" className="flex-shrink-0 mt-1" />
+                  <BrandIcon icon={Check} size="sm" tone="dark" accent="cyan" className="flex-shrink-0 mt-1" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="bg-white/10 p-4">
-                  <p className="text-[#ffb2b8] text-sm uppercase tracking-widest mb-1">Need help</p>
+                  <p className="text-[var(--brand-red-soft)] text-sm uppercase tracking-widest mb-1">Need help</p>
                   <p className="font-bold">Ask for the brochure or contact our team directly.</p>
                 </div>
                 <div className="bg-white/10 p-4">
-                  <p className="text-[#ffb2b8] text-sm uppercase tracking-widest mb-1">Good to know</p>
+                  <p className="text-[var(--brand-red-soft)] text-sm uppercase tracking-widest mb-1">Good to know</p>
                   <p className="font-bold">You can save your application draft while deciding.</p>
                 </div>
               </div>
@@ -411,12 +428,12 @@ export default function Programs() {
 
       {/* V. We Are Not a Travel Agency */}
       <section
-        className="py-[120px] bg-[#f1f4f7] relative -mt-16 pt-32"
+        className="py-[120px] bg-[var(--brand-surface-alt)] relative -mt-16 pt-32"
         style={{ clipPath: 'polygon(0 10%, 100% 0, 100% 90%, 0 100%)' }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
-          <div className="bg-white border-2 border-[#e6bcbf] p-12 shadow-xl reveal">
-            <p className="text-2xl leading-relaxed text-[#0A1C3A] italic mb-12 text-center max-w-4xl mx-auto border-l-4 border-[#F71C56] pl-8">
+          <div className="bg-white border-2 border-[var(--brand-border)] p-12 shadow-xl reveal">
+            <p className="text-2xl leading-relaxed text-[var(--brand-navy)] italic mb-12 text-center max-w-4xl mx-auto border-l-4 border-[var(--brand-red)] pl-8">
               Cardinal Immersions programs include travel logistics only as a support function.
               You will not find sightseeing itineraries, leisure activities, or tour packages here.
               Every day of a program is structured around learning outcomes.
@@ -424,7 +441,7 @@ export default function Programs() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
               <div className="space-y-4">
-                <h3 className="font-bold text-[24px] text-[#0A1C3A] mb-6 flex items-center gap-3">
+                <h3 className="font-bold text-[24px] text-[var(--brand-navy)] mb-6 flex items-center gap-3">
                   <BrandIcon icon={Check} size="sm" />
                   What We Include
                 </h3>
@@ -432,14 +449,14 @@ export default function Programs() {
                   {compareItems.include.map((item) => (
                     <li key={item} className="flex items-start gap-4">
                       <BrandIcon icon={Check} size="sm" className="flex-shrink-0 mt-1" />
-                      <span className="text-lg leading-7 text-[#737576]">{item}</span>
+                      <span className="text-lg leading-7 text-[var(--brand-muted)]">{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
               <div className="space-y-4">
-                <h3 className="font-bold text-[24px] text-[#0A1C3A] mb-6 flex items-center gap-3">
+                <h3 className="font-bold text-[24px] text-[var(--brand-navy)] mb-6 flex items-center gap-3">
                   <BrandIcon icon={X} size="sm" tone="dark" />
                   What We Do Not Include
                 </h3>
@@ -447,7 +464,7 @@ export default function Programs() {
                   {compareItems.exclude.map((item) => (
                     <li key={item} className="flex items-start gap-4">
                       <BrandIcon icon={X} size="sm" tone="dark" className="flex-shrink-0 mt-1" />
-                      <span className="text-lg leading-7 text-[#737576]">{item}</span>
+                      <span className="text-lg leading-7 text-[var(--brand-muted)]">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -459,7 +476,7 @@ export default function Programs() {
 
       {/* VI. Program Openings */}
       <section
-        className="py-[120px] bg-[#f7fafd] relative -mt-8"
+        className="py-[120px] bg-[var(--brand-surface)] relative -mt-8"
         style={{ clipPath: 'polygon(0 10%, 100% 0, 100% 90%, 0 100%)' }}
       >
         <div className="absolute top-32 right-[5%] opacity-[0.18] pointer-events-none">
@@ -472,13 +489,13 @@ export default function Programs() {
 
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
-            <span className="font-bold text-[#F71C56] uppercase tracking-[0.2em] mb-4 block">
+            <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-4 block">
               Program Openings
             </span>
-            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A]">
+            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
               {currentYear} Program Calendar
             </h2>
-            <p className="text-[#737576] mt-4 max-w-2xl mx-auto">
+            <p className="text-[var(--brand-muted)] mt-4 max-w-2xl mx-auto">
               These openings update as cohorts are confirmed. Each listing shows the current
               status, location, duration, fee guidance, and next step.
             </p>
@@ -489,19 +506,19 @@ export default function Programs() {
               Array.from({ length: 3 }).map((_, index) => (
                 <div
                   key={`opening-skeleton-${index}`}
-                  className="bg-white border border-[#e6bcbf] p-6 animate-pulse"
+                  className="bg-white border border-[var(--brand-border)] p-6 animate-pulse"
                   style={{
                     clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)',
                   }}
                 >
                   <div className="h-56 w-full bg-[#eef1f4] mb-5" />
-                  <div className="h-4 w-28 bg-[#e6bcbf] mb-3" />
-                  <div className="h-7 w-3/4 bg-[#e6bcbf] mb-5" />
+                  <div className="h-4 w-28 bg-[var(--brand-border)] mb-3" />
+                  <div className="h-7 w-3/4 bg-[var(--brand-border)] mb-5" />
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="h-16 bg-[#f7fafd] border border-[#e6bcbf]" />
-                    <div className="h-16 bg-[#f7fafd] border border-[#e6bcbf]" />
-                    <div className="h-16 bg-[#f7fafd] border border-[#e6bcbf]" />
-                    <div className="h-16 bg-[#f7fafd] border border-[#e6bcbf]" />
+                    <div className="h-16 bg-[var(--brand-surface)] border border-[var(--brand-border)]" />
+                    <div className="h-16 bg-[var(--brand-surface)] border border-[var(--brand-border)]" />
+                    <div className="h-16 bg-[var(--brand-surface)] border border-[var(--brand-border)]" />
+                    <div className="h-16 bg-[var(--brand-surface)] border border-[var(--brand-border)]" />
                   </div>
                 </div>
               ))
@@ -514,7 +531,7 @@ export default function Programs() {
               return (
                 <div
                   key={program.slug}
-                  className="bg-white border border-[#e6bcbf] hover:border-[#F71C56] hover:shadow-2xl transition-all duration-300 overflow-hidden h-full flex flex-col"
+                  className="bg-white border border-[var(--brand-border)] hover:border-[var(--brand-red)] hover:shadow-2xl transition-all duration-300 overflow-hidden h-full flex flex-col"
                   style={{
                     clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)',
                     transitionDelay: `${index * 100}ms`,
@@ -528,10 +545,10 @@ export default function Programs() {
                   <div className="p-6 space-y-5 flex-1 flex flex-col">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#F71C56] mb-2">
+                        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--brand-red)] mb-2">
                           {getProgramCategoryLabel(program.category)}
                         </p>
-                        <h3 className="font-bold text-[24px] leading-[30px] text-[#0A1C3A]">
+                        <h3 className="font-bold text-[24px] leading-[30px] text-[var(--brand-navy)]">
                           {program.title}
                         </h3>
                       </div>
@@ -547,46 +564,46 @@ export default function Programs() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[#737576] text-sm">
-                      <div className="rounded-xl bg-[#f7fafd] p-3 border border-[#e6bcbf]">
-                        <p className="uppercase tracking-widest text-[11px] text-[#F71C56] mb-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[var(--brand-muted)] text-sm">
+                      <div className="rounded-xl bg-[var(--brand-surface)] p-3 border border-[var(--brand-border)]">
+                        <p className="uppercase tracking-widest text-[11px] text-[var(--brand-blue)] mb-1">
                           Deadline
                         </p>
-                        <p className="font-bold text-[#0A1C3A]">{program.deadline}</p>
+                        <p className="font-bold text-[var(--brand-navy)]">{program.deadline}</p>
                       </div>
-                      <div className="rounded-xl bg-[#f7fafd] p-3 border border-[#e6bcbf]">
-                        <p className="uppercase tracking-widest text-[11px] text-[#F71C56] mb-1">
+                      <div className="rounded-xl bg-[var(--brand-surface)] p-3 border border-[var(--brand-border)]">
+                        <p className="uppercase tracking-widest text-[11px] text-[var(--brand-cyan)] mb-1">
                           Availability
                         </p>
-                        <p className="font-bold text-[#0A1C3A]">{program.availability}</p>
+                        <p className="font-bold text-[var(--brand-navy)]">{program.availability}</p>
                       </div>
-                      <div className="rounded-xl bg-[#f7fafd] p-3 border border-[#e6bcbf]">
-                        <p className="uppercase tracking-widest text-[11px] text-[#F71C56] mb-1">
+                      <div className="rounded-xl bg-[var(--brand-surface)] p-3 border border-[var(--brand-border)]">
+                        <p className="uppercase tracking-widest text-[11px] text-[var(--brand-blue)] mb-1">
                           Fee
                         </p>
-                        <p className="font-bold text-[#0A1C3A]">{program.fee}</p>
+                        <p className="font-bold text-[var(--brand-navy)]">{program.fee}</p>
                       </div>
-                      <div className="rounded-xl bg-[#f7fafd] p-3 border border-[#e6bcbf]">
-                        <p className="uppercase tracking-widest text-[11px] text-[#F71C56] mb-1">
+                      <div className="rounded-xl bg-[var(--brand-surface)] p-3 border border-[var(--brand-border)]">
+                        <p className="uppercase tracking-widest text-[11px] text-[var(--brand-cyan)] mb-1">
                           Duration
                         </p>
-                        <p className="font-bold text-[#0A1C3A]">{program.duration}</p>
+                        <p className="font-bold text-[var(--brand-navy)]">{program.duration}</p>
                       </div>
                     </div>
 
-                    <p className="text-[#737576] leading-7">{program.summary || ''}</p>
+                    <p className="text-[var(--brand-muted)] leading-7">{program.summary || ''}</p>
 
                     <div className="space-y-2">
-                      <p className="text-sm font-bold uppercase tracking-widest text-[#0A1C3A] flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-[#F71C56]" />
+                      <p className="text-sm font-bold uppercase tracking-widest text-[var(--brand-navy)] flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-[var(--brand-cyan)]" />
                         Location
                       </p>
-                      <p className="text-[#737576]">{program.location}</p>
+                      <p className="text-[var(--brand-muted)]">{program.location}</p>
                     </div>
 
                     <Link
                       to={isOpen ? `/apply?program=${program.slug}` : `/programs/${program.slug}`}
-                      className="inline-flex w-full items-center justify-center gap-2 bg-[#F71C56] text-white font-bold px-5 py-3 rounded transition-all hover:brightness-110 uppercase tracking-widest text-sm"
+                      className="inline-flex w-full items-center justify-center gap-2 bg-[var(--brand-red)] text-white font-bold px-5 py-3 rounded transition-all hover:brightness-110 uppercase tracking-widest text-sm"
                     >
                       {ctaLabel}
                       <ArrowRight className="h-4 w-4" />
@@ -596,7 +613,7 @@ export default function Programs() {
               );
               })
             ) : (
-              <div className="md:col-span-3 bg-white border border-[#e6bcbf] p-8 text-center text-[#737576]">
+              <div className="md:col-span-3 bg-white border border-[var(--brand-border)] p-8 text-center text-[var(--brand-muted)]">
                 No program openings are published yet.
               </div>
             )}
@@ -611,13 +628,13 @@ export default function Programs() {
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
-            <span className="font-bold text-[#F71C56] uppercase tracking-[0.2em] mb-4 block">
+            <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-4 block">
               Compare at a glance
             </span>
-            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A]">
+            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
               See which program matches your situation
             </h2>
-            <p className="text-[#737576] mt-4 max-w-2xl mx-auto">
+            <p className="text-[var(--brand-muted)] mt-4 max-w-2xl mx-auto">
               These quick comparisons help you decide by budget, time commitment, and outcome.
             </p>
           </div>
@@ -626,15 +643,15 @@ export default function Programs() {
             {programs.map((program) => (
               <div
                 key={`compare-${program.slug}`}
-                className="bg-[#f7fafd] border border-[#e6bcbf] p-7 shadow-lg h-full flex flex-col justify-between"
+                className="bg-[var(--brand-surface)] border border-[var(--brand-border)] p-7 shadow-lg h-full flex flex-col justify-between"
                 style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}
               >
                 <div className="flex items-start justify-between gap-4 mb-5">
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#F71C56] mb-2">
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--brand-red)] mb-2">
                       {getProgramCategoryLabel(program.category)}
                     </p>
-                    <h3 className="font-bold text-[26px] leading-[32px] text-[#0A1C3A]">
+                    <h3 className="font-bold text-[26px] leading-[32px] text-[var(--brand-navy)]">
                       {program.title}
                     </h3>
                   </div>
@@ -650,21 +667,21 @@ export default function Programs() {
                   />
                 </div>
 
-                <div className="space-y-4 text-[#737576]">
+                <div className="space-y-4 text-[var(--brand-muted)]">
                   <div>
-                    <p className="text-xs uppercase tracking-widest text-[#F71C56] mb-1">Best for</p>
-                    <p className="font-bold text-[#0A1C3A]">{program.target}</p>
+                    <p className="text-xs uppercase tracking-widest text-[var(--brand-red)] mb-1">Best for</p>
+                    <p className="font-bold text-[var(--brand-navy)]">{program.target}</p>
                   </div>
                   <div>
-                    <p className="text-xs uppercase tracking-widest text-[#F71C56] mb-1">Timeframe</p>
-                    <p className="font-bold text-[#0A1C3A]">{program.duration}</p>
+                    <p className="text-xs uppercase tracking-widest text-[var(--brand-red)] mb-1">Timeframe</p>
+                    <p className="font-bold text-[var(--brand-navy)]">{program.duration}</p>
                   </div>
                   <div>
-                    <p className="text-xs uppercase tracking-widest text-[#F71C56] mb-1">Cost signal</p>
-                    <p className="font-bold text-[#0A1C3A]">{program.fee}</p>
+                    <p className="text-xs uppercase tracking-widest text-[var(--brand-red)] mb-1">Cost signal</p>
+                    <p className="font-bold text-[var(--brand-navy)]">{program.fee}</p>
                   </div>
                   <div>
-                    <p className="text-xs uppercase tracking-widest text-[#F71C56] mb-1">What you get</p>
+                    <p className="text-xs uppercase tracking-widest text-[var(--brand-red)] mb-1">What you get</p>
                     <p className="leading-7">{program.outcome || program.summary || ''}</p>
                   </div>
                 </div>
@@ -682,25 +699,25 @@ export default function Programs() {
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div className="space-y-6 reveal">
-              <span className="font-bold text-[#F71C56] uppercase tracking-[0.2em]">
+              <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em]">
                 For Institutions
               </span>
-              <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A]">
+              <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
                 Partner with Cardinal Immersions
               </h2>
-              <p className="text-xl leading-8 text-[#737576]">
+              <p className="text-xl leading-8 text-[var(--brand-muted)]">
                 Design custom mobility programs for your students or staff. We handle program
                 structure, logistics, and learning outcomes, while you bring the participants.
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[#737576]">
-                <div className="rounded-2xl border border-[#e6bcbf] bg-[#f7fafd] p-4">
-                  <p className="font-bold text-[#0A1C3A] mb-1">Custom cohorts</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[var(--brand-muted)]">
+                <div className="rounded-2xl border border-[var(--brand-border)] bg-[var(--brand-surface)] p-4">
+                  <p className="font-bold text-[var(--brand-navy)] mb-1">Custom cohorts</p>
                   <p className="text-sm leading-6">
                     Designed around your academic calendar, audience, and learning goals.
                   </p>
                 </div>
-                <div className="rounded-2xl border border-[#e6bcbf] bg-[#f7fafd] p-4">
-                  <p className="font-bold text-[#0A1C3A] mb-1">Program support</p>
+                <div className="rounded-2xl border border-[var(--brand-border)] bg-[var(--brand-surface)] p-4">
+                  <p className="font-bold text-[var(--brand-navy)] mb-1">Program support</p>
                   <p className="text-sm leading-6">
                     We coordinate logistics so your team can focus on outcomes.
                   </p>
@@ -709,13 +726,13 @@ export default function Programs() {
               <div className="flex flex-col sm:flex-row gap-4 pt-2">
                 <Link
                   to="/partners"
-                  className="inline-flex items-center justify-center gap-2 bg-[#F71C56] text-white font-bold px-8 py-4 rounded transition-all hover:brightness-110 uppercase tracking-widest text-sm"
+                  className="inline-flex items-center justify-center gap-2 bg-[var(--brand-red)] text-white font-bold px-8 py-4 rounded transition-all hover:brightness-110 uppercase tracking-widest text-sm"
                 >
                   Explore partnerships
                 </Link>
                 <Link
                   to="/apply?tab=institutional"
-                  className="inline-flex items-center justify-center gap-2 border-2 border-[#0A1C3A] text-[#0A1C3A] font-bold px-8 py-4 rounded hover:bg-[#0A1C3A] hover:text-white transition-all uppercase tracking-widest text-sm"
+                  className="inline-flex items-center justify-center gap-2 border-2 border-[var(--brand-navy)] text-[var(--brand-navy)] font-bold px-8 py-4 rounded hover:bg-[var(--brand-navy)] hover:text-white transition-all uppercase tracking-widest text-sm"
                 >
                   Start inquiry
                 </Link>
@@ -738,12 +755,12 @@ export default function Programs() {
 
       {/* IX. FAQ Section */}
       <section
-        className="py-[120px] bg-[#f1f4f7] relative -mt-16 pt-32"
+        className="py-[120px] bg-[var(--brand-surface-alt)] relative -mt-16 pt-32"
         style={{ clipPath: 'polygon(0 10%, 100% 0, 100% 90%, 0 100%)' }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
-            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A]">
+            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
               Frequently Asked Questions
             </h2>
           </div>
@@ -752,23 +769,23 @@ export default function Programs() {
             {faqItems.map((faq, index) => (
               <div
                 key={faq.question}
-                className="bg-white border border-[#e6bcbf] overflow-hidden transition-all"
+                className="bg-white border border-[var(--brand-border)] overflow-hidden transition-all"
                 style={{
                   clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)',
                 }}
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                  className="w-full px-8 py-6 flex justify-between items-center gap-6 hover:bg-[#f7fafd] transition-colors"
+                  className="w-full px-8 py-6 flex justify-between items-center gap-6 hover:bg-[var(--brand-surface)] transition-colors"
                 >
-                  <span className="font-bold text-lg text-[#0A1C3A] text-left">{faq.question}</span>
-                  <span className="text-[#F71C56] text-2xl">
+                  <span className="font-bold text-lg text-[var(--brand-navy)] text-left">{faq.question}</span>
+                  <span className="text-[var(--brand-red)] text-2xl">
                     {openFaq === index ? '−' : '+'}
                   </span>
                 </button>
                 {openFaq === index && (
                   <div className="px-8 pb-6">
-                    <p className="text-[#737576] leading-7">{faq.answer}</p>
+                    <p className="text-[var(--brand-muted)] leading-7">{faq.answer}</p>
                   </div>
                 )}
               </div>
@@ -779,7 +796,7 @@ export default function Programs() {
 
       {/* X. Call to Action */}
       <section
-        className="py-[120px] bg-[#0A1C3A] text-white relative z-10 -mb-10"
+        className="py-[120px] bg-[var(--brand-navy)] text-white relative z-10 -mb-10"
         style={{ clipPath: 'polygon(0 10%, 100% 0, 100% 100%, 0 100%)' }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 text-center">
@@ -795,13 +812,13 @@ export default function Programs() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
               <Link
                 to="/contact"
-                className="bg-[#F71C56] text-white font-bold px-8 py-4 rounded transition-all hover:brightness-110 uppercase tracking-widest text-sm"
+                className="bg-[var(--brand-red)] text-white font-bold px-8 py-4 rounded transition-all hover:brightness-110 uppercase tracking-widest text-sm"
               >
                 Contact Us
               </Link>
               <Link
                 to="/contact"
-                className="border-2 border-white text-white font-bold px-8 py-4 rounded hover:bg-white hover:text-[#0A1C3A] transition-all uppercase tracking-widest text-sm"
+                className="border-2 border-white text-white font-bold px-8 py-4 rounded hover:bg-white hover:text-[var(--brand-navy)] transition-all uppercase tracking-widest text-sm"
               >
                 Request Program Brochure
               </Link>
@@ -812,6 +829,7 @@ export default function Programs() {
     </>
   );
 }
+
 
 
 

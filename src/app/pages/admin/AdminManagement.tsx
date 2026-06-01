@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { getAdmins, addAdmin, updateAdmin, deleteAdmin, isSuperAdmin, getCurrentAdmin, Admin, getRoleBadgeClass, getRoleDisplayName } from '../../utils/adminAuth';
 import { Plus, Edit, Trash2, X, ChevronDown, Eye, EyeOff } from 'lucide-react';
@@ -308,10 +308,12 @@ export default function AdminManagement() {
           <div
             key={toast.id}
             className={`px-6 py-4 rounded shadow-lg min-w-[300px] animate-slide-in ${
-              toast.type === 'success' ? 'bg-green-600' :
-              toast.type === 'error' ? 'bg-red-600' :
-              'bg-blue-600'
-            } text-white`}
+              toast.type === 'success'
+                ? 'bg-[var(--brand-blue)] text-white'
+                : toast.type === 'error'
+                  ? 'bg-[var(--brand-red)] text-white'
+                  : 'bg-[var(--brand-cyan)] text-[var(--brand-navy)]'
+            }`}
           >
             {toast.message}
           </div>
@@ -321,36 +323,36 @@ export default function AdminManagement() {
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="font-bold text-[32px] text-[#0A1C3A] mb-2">Admin Management</h1>
-          <p className="text-[#737576]">Manage admin accounts and permissions</p>
+          <h1 className="font-bold text-[32px] text-[var(--brand-navy)] mb-2">Admin Management</h1>
+          <p className="text-[var(--brand-muted)]">Manage admin accounts and permissions</p>
         </div>
 
         {/* Dropdown Button */}
         <div className="relative dropdown-container">
           <button
             onClick={() => setShowDropdown(!showDropdown)}
-            className="bg-[#F71C56] text-white font-bold px-6 py-3 rounded hover:brightness-110 transition-all inline-flex items-center gap-2 uppercase tracking-wider"
+            className="bg-[var(--brand-red)] text-white font-bold px-6 py-3 rounded hover:brightness-110 transition-all inline-flex items-center gap-2 uppercase tracking-wider"
           >
             <Plus className="w-5 h-5" /> Add New Admin
             <ChevronDown className="w-4 h-4" />
           </button>
 
           {showDropdown && (
-            <div className="absolute right-0 mt-2 w-64 bg-white border border-[#e6bcbf] shadow-lg z-10" style={{ clipPath: 'polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)' }}>
+            <div className="absolute right-0 mt-2 w-64 bg-white border border-[var(--brand-border)] shadow-lg z-10" style={{ clipPath: 'polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)' }}>
               <button
                 onClick={() => handleAdd(false)}
-                className="w-full text-left px-4 py-3 hover:bg-[#f7fafd] transition-colors text-[#0A1C3A] font-medium"
+                className="w-full text-left px-4 py-3 hover:bg-[var(--brand-surface)] transition-colors text-[var(--brand-navy)] font-medium"
               >
                 <div className="font-bold">Create Admin</div>
-                <div className="text-xs text-[#737576]">Create without sending invite</div>
+                <div className="text-xs text-[var(--brand-muted)]">Create without sending invite</div>
               </button>
-              <div className="border-t border-[#e6bcbf]"></div>
+              <div className="border-t border-[var(--brand-border)]"></div>
               <button
                 onClick={() => handleAdd(true)}
-                className="w-full text-left px-4 py-3 hover:bg-[#f7fafd] transition-colors text-[#0A1C3A] font-medium"
+                className="w-full text-left px-4 py-3 hover:bg-[var(--brand-surface)] transition-colors text-[var(--brand-navy)] font-medium"
               >
                 <div className="font-bold">Create and Invite Admin</div>
-                <div className="text-xs text-[#737576]">Create and send email invite</div>
+                <div className="text-xs text-[var(--brand-muted)]">Create and send email invite</div>
               </button>
             </div>
           )}
@@ -358,56 +360,56 @@ export default function AdminManagement() {
       </div>
 
       {/* Admins Table */}
-      <div className="bg-white border border-[#e6bcbf]" style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}>
+      <div className="bg-white border border-[var(--brand-border)]" style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}>
         <div className="overflow-x-auto">
           {loadingAdmins ? (
             <div className="p-8">
               <div className="space-y-4 animate-pulse">
-                <div className="h-4 w-40 bg-slate-200 rounded" />
-                <div className="h-12 bg-slate-100 rounded" />
-                <div className="h-12 bg-slate-100 rounded" />
-                <div className="h-12 bg-slate-100 rounded" />
+                <div className="h-4 w-40 bg-[var(--brand-surface-alt)] rounded" />
+                <div className="h-12 bg-[var(--brand-surface-alt)] rounded" />
+                <div className="h-12 bg-[var(--brand-surface-alt)] rounded" />
+                <div className="h-12 bg-[var(--brand-surface-alt)] rounded" />
               </div>
             </div>
           ) : (
             <table className="w-full">
-              <thead className="bg-[#f7fafd] border-b border-[#e6bcbf]">
+              <thead className="bg-[var(--brand-surface)] border-b border-[var(--brand-border)]">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Full Name</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Email</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Role</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Created At</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Last Login</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-[#0A1C3A] uppercase tracking-wider">Actions</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-[var(--brand-navy)] uppercase tracking-wider">Full Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-[var(--brand-navy)] uppercase tracking-wider">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-[var(--brand-navy)] uppercase tracking-wider">Role</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-[var(--brand-navy)] uppercase tracking-wider">Created At</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-[var(--brand-navy)] uppercase tracking-wider">Last Login</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-[var(--brand-navy)] uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#e6bcbf]">
+              <tbody className="divide-y divide-[var(--brand-border)]">
                 {admins.map((admin) => (
-                  <tr key={admin.id} className="hover:bg-[#f7fafd] transition-colors">
-                    <td className="px-6 py-4 text-sm font-medium text-[#0A1C3A]">{admin.fullName}</td>
-                    <td className="px-6 py-4 text-sm text-[#737576]">{admin.email}</td>
+                  <tr key={admin.id} className="hover:bg-[var(--brand-surface)] transition-colors">
+                    <td className="px-6 py-4 text-sm font-medium text-[var(--brand-navy)]">{admin.fullName}</td>
+                    <td className="px-6 py-4 text-sm text-[var(--brand-muted)]">{admin.email}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded ${getRoleBadgeClass(admin.role)}`}>
                         {getRoleDisplayName(admin.role)}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#737576]">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--brand-muted)]">
                       {formatDate(admin.createdAt)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#737576]">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--brand-muted)]">
                       {formatDate(admin.lastLogin)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <button
                         onClick={() => handleEdit(admin)}
-                        className="text-[#F71C56] hover:underline mr-3 inline-flex items-center gap-1"
+                        className="text-[var(--brand-red)] hover:underline mr-3 inline-flex items-center gap-1"
                       >
                         <Edit className="w-4 h-4" /> Edit
                       </button>
                       {currentAdmin?.id !== admin.id && (
                         <button
                           onClick={() => handleSendInvite(admin)}
-                          className="text-[#0A1C3A] hover:underline mr-3 inline-flex items-center gap-1"
+                          className="text-[var(--brand-navy)] hover:underline mr-3 inline-flex items-center gap-1"
                         >
                           <Plus className="w-4 h-4" /> Invite
                         </button>
@@ -415,7 +417,7 @@ export default function AdminManagement() {
                       {currentAdmin?.id !== admin.id && (
                         <button
                           onClick={() => handleDeleteClick(admin)}
-                          className="text-[#737576] hover:text-red-600 inline-flex items-center gap-1"
+                          className="text-[var(--brand-muted)] hover:text-[var(--brand-red)] inline-flex items-center gap-1"
                         >
                           <Trash2 className="w-4 h-4" /> Delete
                         </button>
@@ -429,7 +431,7 @@ export default function AdminManagement() {
         </div>
 
         {!loadingAdmins && admins.length === 0 && (
-          <div className="p-12 text-center text-[#737576]">
+          <div className="p-12 text-center text-[var(--brand-muted)]">
             <p className="font-bold mb-2">No admins found</p>
             <p className="text-sm">Click "Add New Admin" to create one</p>
           </div>
@@ -437,9 +439,9 @@ export default function AdminManagement() {
       </div>
 
       {/* Info Box */}
-      <div className="mt-8 bg-blue-50 border border-blue-200 p-6" style={{ clipPath: 'polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)' }}>
-        <h3 className="font-bold text-[#0A1C3A] mb-3">Admin Roles & Permissions</h3>
-        <div className="space-y-2 text-sm text-[#737576]">
+      <div className="mt-8 bg-[var(--brand-surface)] border border-[var(--brand-border)] p-6" style={{ clipPath: 'polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)' }}>
+        <h3 className="font-bold text-[var(--brand-navy)] mb-3">Admin Roles & Permissions</h3>
+        <div className="space-y-2 text-sm text-[var(--brand-muted)]">
           <div className="flex gap-3">
             <span className={`px-2 py-1 text-xs font-bold uppercase tracking-wider rounded ${getRoleBadgeClass('super_admin')}`}>
               Super Admin
@@ -463,10 +465,10 @@ export default function AdminManagement() {
 
       {/* Add/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0A1C3A]/55 backdrop-blur-sm px-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--brand-navy)]/55 backdrop-blur-sm px-4">
           <div className="bg-white max-w-2xl w-full shadow-2xl" style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}>
             {/* Modal Header */}
-            <div className="bg-[#F71C56] text-white p-6 flex justify-between items-center">
+            <div className="bg-[var(--brand-red)] text-white p-6 flex justify-between items-center">
               <h2 className="font-bold text-xl">{editingAdmin ? 'Edit Admin' : 'Add New Admin'}</h2>
               <button onClick={() => setShowModal(false)} className="hover:opacity-80">
                 <X className="w-6 h-6" />
@@ -477,59 +479,59 @@ export default function AdminManagement() {
             <div className="p-8 space-y-6">
               <div className="grid grid-cols-1 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-[#0A1C3A] mb-2">
-                    Full Name <span className="text-[#F71C56]">*</span>
+                  <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">
+                    Full Name <span className="text-[var(--brand-red)]">*</span>
                   </label>
                   <input
                     type="text"
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-[#cbcdd1] rounded focus:outline-none focus:border-[#F71C56]"
+                    className="w-full px-4 py-2 border border-[var(--brand-border-strong)] rounded focus:outline-none focus:border-[var(--brand-red)]"
                     placeholder="e.g., Dr. Sarah Mensah"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-[#0A1C3A] mb-2">
-                    Email Address <span className="text-[#F71C56]">*</span>
+                  <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">
+                    Email Address <span className="text-[var(--brand-red)]">*</span>
                   </label>
                   <input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-[#cbcdd1] rounded focus:outline-none focus:border-[#F71C56]"
+                    className="w-full px-4 py-2 border border-[var(--brand-border-strong)] rounded focus:outline-none focus:border-[var(--brand-red)]"
                     placeholder="email@andylcc.com"
                     disabled={!!editingAdmin}
                   />
                   {editingAdmin && (
-                    <p className="text-xs text-[#737576] mt-1">Email cannot be changed after creation</p>
+                    <p className="text-xs text-[var(--brand-muted)] mt-1">Email cannot be changed after creation</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-[#0A1C3A] mb-2">
-                    Role <span className="text-[#F71C56]">*</span>
+                  <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">
+                    Role <span className="text-[var(--brand-red)]">*</span>
                   </label>
                   <select
                     name="role"
                     value={formData.role}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-[#cbcdd1] rounded focus:outline-none focus:border-[#F71C56]"
+                    className="w-full px-4 py-2 border border-[var(--brand-border-strong)] rounded focus:outline-none focus:border-[var(--brand-red)]"
                   >
                     <option value="super_admin">Super Admin</option>
                     <option value="admin">Admin</option>
                     <option value="viewer">Viewer</option>
                   </select>
                   {!editingAdmin && (formData.role === 'super_admin' || formData.role === 'admin') && (
-                    <p className="text-xs text-[#F59E0B] mt-1">This role will require confirmation before creation</p>
+                    <p className="text-xs text-[var(--brand-cyan)] mt-1">This role will require confirmation before creation</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-[#0A1C3A] mb-2">
-                    {editingAdmin ? 'New Password (leave blank to keep current)' : 'Password'} {!editingAdmin && <span className="text-[#F71C56]">*</span>}
+                  <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">
+                    {editingAdmin ? 'New Password (leave blank to keep current)' : 'Password'} {!editingAdmin && <span className="text-[var(--brand-red)]">*</span>}
                   </label>
                   <div className="relative">
                     <input
@@ -537,18 +539,18 @@ export default function AdminManagement() {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 pr-12 border border-[#cbcdd1] rounded focus:outline-none focus:border-[#F71C56]"
+                      className="w-full px-4 py-2 pr-12 border border-[var(--brand-border-strong)] rounded focus:outline-none focus:border-[var(--brand-red)]"
                       placeholder={editingAdmin ? 'Leave blank to keep current' : 'Enter password'}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#737576] hover:text-[#0A1C3A] transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--brand-muted)] hover:text-[var(--brand-navy)] transition-colors"
                     >
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
-                  <p className="text-xs text-[#737576] mt-1">
+                  <p className="text-xs text-[var(--brand-muted)] mt-1">
                     {editingAdmin
                       ? 'Change password only if needed. Production will use secure reset flow.'
                       : shouldInvite
@@ -560,24 +562,24 @@ export default function AdminManagement() {
               </div>
 
               {error && (
-                <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded text-sm">
+                <div className="bg-[var(--brand-surface)] border border-[var(--brand-red)] text-[var(--brand-red)] px-4 py-3 rounded text-sm">
                   {error}
                 </div>
               )}
             </div>
 
             {/* Modal Footer */}
-            <div className="p-6 border-t border-[#e6bcbf] flex justify-end gap-3">
+            <div className="p-6 border-t border-[var(--brand-border)] flex justify-end gap-3">
               <button
                 onClick={() => setShowModal(false)}
-                className="border-2 border-[#737576] text-[#737576] px-6 py-3 rounded hover:bg-[#737576] hover:text-white transition-all font-bold uppercase tracking-wider"
+                className="border-2 border-[var(--brand-muted)] text-[var(--brand-muted)] px-6 py-3 rounded hover:bg-[var(--brand-muted)] hover:text-white transition-all font-bold uppercase tracking-wider"
                 disabled={isSubmitting || isConfirming}
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="bg-[#F71C56] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider disabled:opacity-60"
+                className="bg-[var(--brand-red)] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider disabled:opacity-60"
                 disabled={isSubmitting || isConfirming}
               >
                 {isSubmitting ? 'Saving...' : editingAdmin ? 'Save Changes' : 'Create Admin'}
@@ -589,25 +591,25 @@ export default function AdminManagement() {
 
       {/* Mutation Confirmation Modal */}
       {pendingMutation && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0A1C3A]/55 backdrop-blur-sm px-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--brand-navy)]/55 backdrop-blur-sm px-4">
           <div className="bg-white max-w-lg w-full p-8 shadow-2xl" style={{ clipPath: 'polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)' }}>
-            <h3 className="font-bold text-xl text-[#0A1C3A] mb-4">{pendingMutation.title}</h3>
+            <h3 className="font-bold text-xl text-[var(--brand-navy)] mb-4">{pendingMutation.title}</h3>
 
-            <div className="bg-[#f7fafd] border border-[#e6bcbf] p-4 mb-6 text-sm text-[#0A1C3A]">
+            <div className="bg-[var(--brand-surface)] border border-[var(--brand-border)] p-4 mb-6 text-sm text-[var(--brand-navy)]">
               <p className="font-bold mb-2">{pendingMutation.summary}</p>
-              <div className="space-y-1 text-[#737576]">
+              <div className="space-y-1 text-[var(--brand-muted)]">
                 {pendingMutation.details.map((detail) => (
                   <p key={detail}>{detail}</p>
                 ))}
               </div>
             </div>
 
-            <p className="text-[#737576] mb-4">
+            <p className="text-[var(--brand-muted)] mb-4">
               To confirm, type the code below exactly as shown. Copying is disabled for this token.
             </p>
 
             <div
-              className="bg-[#f7fafd] border border-[#e6bcbf] p-3 mb-4 font-mono text-sm text-center select-none break-all"
+              className="bg-[var(--brand-surface)] border border-[var(--brand-border)] p-3 mb-4 font-mono text-sm text-center select-none break-all"
               onCopy={(event) => event.preventDefault()}
               onContextMenu={(event) => event.preventDefault()}
               onDragStart={(event) => event.preventDefault()}
@@ -619,7 +621,7 @@ export default function AdminManagement() {
               type="text"
               value={confirmationText}
               onChange={(e) => setConfirmationText(e.target.value)}
-              className="w-full px-4 py-3 border border-[#cbcdd1] rounded focus:outline-none focus:border-[#F71C56] font-mono mb-6"
+              className="w-full px-4 py-3 border border-[var(--brand-border-strong)] rounded focus:outline-none focus:border-[var(--brand-red)] font-mono mb-6"
               placeholder="Type confirmation code here"
               autoFocus
             />
@@ -633,14 +635,14 @@ export default function AdminManagement() {
                   setPendingMutation(null);
                   setConfirmationText('');
                 }}
-                className="border-2 border-[#737576] text-[#737576] px-6 py-3 rounded hover:bg-[#737576] hover:text-white transition-all font-bold uppercase tracking-wider"
+                className="border-2 border-[var(--brand-muted)] text-[var(--brand-muted)] px-6 py-3 rounded hover:bg-[var(--brand-muted)] hover:text-white transition-all font-bold uppercase tracking-wider"
               >
                 Cancel
               </button>
               <button
                 onClick={handleRoleConfirmation}
                 disabled={confirmationText !== requiredConfirmation || isConfirming}
-                className="bg-[#F71C56] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-[var(--brand-red)] text-white px-6 py-3 rounded hover:brightness-110 transition-all font-bold uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isConfirming ? 'Working...' : pendingMutation.confirmLabel}
               </button>
@@ -666,3 +668,4 @@ export default function AdminManagement() {
     </AdminLayout>
   );
 }
+

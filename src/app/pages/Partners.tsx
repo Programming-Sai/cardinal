@@ -98,7 +98,7 @@ export default function Partners() {
     <>
       {/* I. Hero */}
       <section
-        className="pt-[120px] pb-16 bg-[#0A1C3A] text-white relative overflow-hidden"
+        className="pt-[120px] pb-16 bg-[var(--brand-navy)] text-white relative overflow-hidden"
         style={{ clipPath: 'polygon(0 0, 100% 0, 100% 85%, 0% 100%)' }}
       >
         <div className="absolute inset-0 z-0 opacity-[0.22] pointer-events-none">
@@ -107,7 +107,7 @@ export default function Partners() {
             alt="Abstract network connections"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0A1C3A]/35 via-transparent to-[#F71C56]/15" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-navy)]/35 via-[var(--brand-blue)]/10 to-[var(--brand-cyan)]/20" />
         </div>
 
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 relative z-10">
@@ -118,7 +118,7 @@ export default function Partners() {
             <p className="text-2xl leading-relaxed text-white/90">
               Collaborate to design structured, cross-border learning experiences that build institutional capacity and enable knowledge exchange.
             </p>
-            <p className="text-lg text-white/80 border-l-4 border-[#F71C56] pl-6">
+            <p className="text-lg text-white/80 border-l-4 border-[var(--brand-red)] pl-6">
               We work with universities, professional bodies, and organizations worldwide, with a special focus on positioning Africa as a destination for high-quality international learning.
             </p>
           </div>
@@ -127,16 +127,16 @@ export default function Partners() {
 
       {/* II. Why Partner With Us */}
       <section
-        className="py-[120px] bg-[#f7fafd] relative -mt-8 z-10"
+        className="py-[120px] bg-[var(--brand-surface)] relative -mt-8 z-10"
         style={{ clipPath: 'polygon(0 10%, 100% 0, 100% 90%, 0 100%)' }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div className="space-y-6 reveal">
-              <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A]">
+              <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
                 Why Partner With Us
               </h2>
-              <p className="text-xl leading-8 text-[#737576]">
+              <p className="text-xl leading-8 text-[var(--brand-muted)]">
                 Cardinal Immersions enables meaningful international learning mobility that contributes
                 to individual growth, institutional capacity, and cross-border knowledge exchange. By
                 partnering with us, your institution gains structured programs, expert facilitation,
@@ -163,11 +163,11 @@ export default function Partners() {
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
-            <span className="font-bold text-[#F71C56] uppercase tracking-[0.2em] mb-4 block">Partnership Models</span>
-            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A]">
+            <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-4 block">Partnership Models</span>
+            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
               How We Collaborate
             </h2>
-            <p className="text-lg text-[#737576] max-w-3xl mx-auto mt-4">
+            <p className="text-lg text-[var(--brand-muted)] max-w-3xl mx-auto mt-4">
               Choose the model that fits your institution, your audience, and the level of support you need.
             </p>
           </div>
@@ -176,7 +176,7 @@ export default function Partners() {
             {collaborationModels.map((model, index) => (
               <div
                 key={model.title}
-                className="group bg-white border border-[#e6bcbf] overflow-hidden hover:shadow-2xl hover:border-[#F71C56] transition-all duration-500 reveal"
+                className="group bg-white border border-[var(--brand-border)] overflow-hidden hover:shadow-2xl hover:border-[var(--brand-red)] transition-all duration-500 reveal"
                 style={{
                   clipPath: 'polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)',
                   transitionDelay: `${index * 100}ms`,
@@ -188,17 +188,21 @@ export default function Partners() {
                   className="w-full h-48 object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                 />
                 <div className="p-8 space-y-4">
-                  <BrandIcon icon={model.icon} size="lg" />
-                  <h3 className="font-bold text-[28px] text-[#0A1C3A]">{model.title}</h3>
-                  <p className="text-[#737576] leading-7">{model.description}</p>
-                  <ul className="space-y-2 text-sm text-[#737576]">
+                  <BrandIcon
+                    icon={model.icon}
+                    size="lg"
+                    accent={index === 0 ? 'blue' : index === 1 ? 'cyan' : 'red'}
+                  />
+                  <h3 className="font-bold text-[28px] text-[var(--brand-navy)]">{model.title}</h3>
+                  <p className="text-[var(--brand-muted)] leading-7">{model.description}</p>
+                  <ul className="space-y-2 text-sm text-[var(--brand-muted)]">
                     {model.bullets.map((bullet) => (
                       <li key={bullet}>{bullet}</li>
                     ))}
                   </ul>
                   <Link
                     to={model.cta.to}
-                    className="inline-flex items-center justify-center w-full bg-[#F71C56] text-white font-bold px-6 py-3 rounded hover:brightness-110 transition-all uppercase tracking-widest text-sm"
+                    className="inline-flex items-center justify-center w-full bg-[var(--brand-red)] text-white font-bold px-6 py-3 rounded hover:brightness-110 transition-all uppercase tracking-widest text-sm"
                   >
                     {model.cta.label}
                   </Link>
@@ -211,15 +215,15 @@ export default function Partners() {
 
       {/* IV. Current Partners */}
       <section
-        className="py-[120px] bg-[#f1f4f7] relative -mt-16 pt-32"
+        className="py-[120px] bg-[var(--brand-surface-alt)] relative -mt-16 pt-32"
         style={{ clipPath: 'polygon(0 10%, 100% 0, 100% 90%, 0 100%)' }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-12 reveal">
-            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A] mb-6">
+            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)] mb-6">
               Trusted by Organizations Worldwide
             </h2>
-            <p className="text-lg text-[#737576] max-w-3xl mx-auto">
+            <p className="text-lg text-[var(--brand-muted)] max-w-3xl mx-auto">
               We are building a network of forward-thinking institutions. Here are some of our current and past collaborators.
             </p>
           </div>
@@ -237,10 +241,10 @@ export default function Partners() {
             ].map((partner) => (
               <div
                 key={partner}
-                className="bg-[#d7dadd] h-32 flex items-center justify-center text-center p-4 opacity-70 hover:opacity-100 hover:bg-white transition-all cursor-default border border-[#e6bcbf]"
+                className="bg-[var(--brand-neutral)] h-32 flex items-center justify-center text-center p-4 opacity-70 hover:opacity-100 hover:bg-white transition-all cursor-default border border-[var(--brand-border)]"
                 style={{ clipPath: 'polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)' }}
               >
-                <span className="font-bold text-sm text-[#0A1C3A] uppercase tracking-wider">{partner}</span>
+                <span className="font-bold text-sm text-[var(--brand-navy)] uppercase tracking-wider">{partner}</span>
               </div>
             ))}
           </div>
@@ -249,20 +253,20 @@ export default function Partners() {
 
       {/* V. What Partners Say */}
       <section
-        className="py-[120px] bg-[#f7fafd] relative -mt-8"
+        className="py-[120px] bg-[var(--brand-surface)] relative -mt-8"
         style={{ clipPath: 'polygon(0 10%, 100% 0, 100% 90%, 0 100%)' }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
-            <span className="font-bold text-[#F71C56] uppercase tracking-[0.2em] mb-4 block">Testimonials</span>
-            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A]">
+            <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-4 block">Testimonials</span>
+            <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
               What Partners Say
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div
-              className="bg-white p-8 border border-[#e6bcbf] hover:border-[#F71C56] transition-all reveal"
+              className="bg-white p-8 border border-[var(--brand-border)] hover:border-[var(--brand-red)] transition-all reveal"
               style={{
                 maskImage: 'radial-gradient(circle 40px at 0 0, transparent 0, transparent 40px, black 41px)',
                 WebkitMaskImage: 'radial-gradient(circle 40px at 0 0, transparent 0, transparent 40px, black 41px)',
@@ -275,12 +279,12 @@ export default function Partners() {
                   className="w-20 h-20 rounded-full object-cover"
                 />
                 <div>
-                  <h4 className="font-bold text-xl text-[#0A1C3A]">Dr. Sarah Omondi</h4>
-                  <p className="text-sm text-[#F71C56]">Director of International Programs</p>
-                  <p className="text-sm text-[#737576]">University of Nairobi</p>
+                  <h4 className="font-bold text-xl text-[var(--brand-navy)]">Dr. Sarah Omondi</h4>
+                  <p className="text-sm text-[var(--brand-red)]">Director of International Programs</p>
+                  <p className="text-sm text-[var(--brand-muted)]">University of Nairobi</p>
                 </div>
               </div>
-              <p className="text-lg italic text-[#737576] leading-7">
+              <p className="text-lg italic text-[var(--brand-muted)] leading-7">
                 Cardinal Immersions brought structure and intentionality to our student mobility
                 program. Their focus on learning outcomes, not tourism, aligned perfectly with our
                 university&apos;s mission.
@@ -288,7 +292,7 @@ export default function Partners() {
             </div>
 
             <div
-              className="bg-white p-8 border border-[#e6bcbf] hover:border-[#F71C56] transition-all reveal"
+              className="bg-white p-8 border border-[var(--brand-border)] hover:border-[var(--brand-red)] transition-all reveal"
               style={{
                 transitionDelay: '100ms',
                 maskImage: 'radial-gradient(circle 40px at 100% 100%, transparent 0, transparent 40px, black 41px)',
@@ -302,12 +306,12 @@ export default function Partners() {
                   className="w-20 h-20 rounded-full object-cover"
                 />
                 <div>
-                  <h4 className="font-bold text-xl text-[#0A1C3A]">Prof. James Mensah</h4>
-                  <p className="text-sm text-[#F71C56]">Dean of Global Engagement</p>
-                  <p className="text-sm text-[#737576]">Accra Technical University</p>
+                  <h4 className="font-bold text-xl text-[var(--brand-navy)]">Prof. James Mensah</h4>
+                  <p className="text-sm text-[var(--brand-red)]">Dean of Global Engagement</p>
+                  <p className="text-sm text-[var(--brand-muted)]">Accra Technical University</p>
                 </div>
               </div>
-              <p className="text-lg italic text-[#737576] leading-7">
+              <p className="text-lg italic text-[var(--brand-muted)] leading-7">
                 The faculty exchange program designed by Cardinal Immersions was rigorous and
                 mutually beneficial. Our staff returned with new teaching methods and cross-cultural
                 competencies.
@@ -324,8 +328,8 @@ export default function Partners() {
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-12 items-start">
-            <div className="bg-[#0A1C3A] text-white p-10 shadow-2xl">
-              <p className="font-bold uppercase tracking-[0.2em] text-[#ffb2b8] mb-4">Case Study</p>
+            <div className="bg-[var(--brand-navy)] text-white p-10 shadow-2xl">
+              <p className="font-bold uppercase tracking-[0.2em] text-[var(--brand-red-soft)] mb-4">Case Study</p>
               <h2 className="font-bold text-[32px] sm:text-[36px] md:text-[40px] leading-[40px] sm:leading-[44px] md:leading-[48px] mb-6">
                 A partnership should feel measurable.
               </h2>
@@ -338,7 +342,7 @@ export default function Partners() {
               <div className="grid grid-cols-2 gap-4">
                 {proofItems.map((item) => (
                   <div key={item.label} className="bg-white/10 p-4">
-                    <p className="text-[#ffb2b8] text-sm uppercase tracking-widest mb-1">{item.label}</p>
+                    <p className="text-[var(--brand-red-soft)] text-sm uppercase tracking-widest mb-1">{item.label}</p>
                     <p className="font-bold">{item.value}</p>
                   </div>
                 ))}
@@ -352,11 +356,16 @@ export default function Partners() {
                   { icon: FileText, title: 'Tangible Outputs', text: 'Outcomes are documented and easy to share internally.' },
                   { icon: Rocket, title: 'Momentum', text: 'We help you launch without overcomplicating the process.' },
                   { icon: MessageSquareQuote, title: 'Clear Communication', text: 'Expect concise updates and a direct point of contact.' },
-                ].map((item) => (
-                  <div key={item.title} className="bg-[#f7fafd] border border-[#e6bcbf] p-6">
-                    <BrandIcon icon={item.icon} size="lg" className="mb-4" />
-                    <h3 className="font-bold text-[#0A1C3A] text-xl mb-2">{item.title}</h3>
-                    <p className="text-[#737576] leading-7">{item.text}</p>
+                ].map((item, index) => (
+                  <div key={item.title} className="bg-[var(--brand-surface)] border border-[var(--brand-border)] p-6">
+                    <BrandIcon
+                      icon={item.icon}
+                      size="lg"
+                      accent={index % 2 === 0 ? 'blue' : 'cyan'}
+                      className="mb-4"
+                    />
+                    <h3 className="font-bold text-[var(--brand-navy)] text-xl mb-2">{item.title}</h3>
+                    <p className="text-[var(--brand-muted)] leading-7">{item.text}</p>
                   </div>
                 ))}
               </div>
@@ -367,13 +376,13 @@ export default function Partners() {
 
       {/* VII. FAQ */}
       <section
-        className="py-[120px] bg-[#f1f4f7] relative -mt-8 pt-32"
+        className="py-[120px] bg-[var(--brand-surface-alt)] relative -mt-8 pt-32"
         style={{ clipPath: 'polygon(0 10%, 100% 0, 100% 90%, 0 100%)' }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
-          <div className="text-center mb-16 reveal">
-            <span className="font-bold text-[#F71C56] uppercase tracking-[0.2em] mb-4 block">FAQ</span>
-              <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[#0A1C3A]">
+            <div className="text-center mb-16 reveal">
+              <span className="font-bold text-[var(--brand-blue)] uppercase tracking-[0.2em] mb-4 block">FAQ</span>
+              <h2 className="font-bold text-[36px] sm:text-[40px] md:text-[48px] leading-[42px] sm:leading-[48px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
               Partnership Questions
             </h2>
           </div>
@@ -382,19 +391,19 @@ export default function Partners() {
             {faqItems.map((faq, index) => (
               <div
                 key={faq.question}
-                className="bg-white border border-[#e6bcbf] overflow-hidden transition-all"
+                className="bg-white border border-[var(--brand-border)] overflow-hidden transition-all"
                 style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                  className="w-full px-8 py-6 flex justify-between items-center gap-6 hover:bg-[#f7fafd] transition-colors"
+                  className="w-full px-8 py-6 flex justify-between items-center gap-6 hover:bg-[var(--brand-surface)] transition-colors"
                 >
-                  <span className="font-bold text-lg text-[#0A1C3A] text-left">{faq.question}</span>
-                  <span className="text-[#F71C56] text-2xl">{openFaq === index ? 'âˆ’' : '+'}</span>
+                  <span className="font-bold text-lg text-[var(--brand-navy)] text-left">{faq.question}</span>
+                  <span className="text-[var(--brand-cyan)] text-2xl">{openFaq === index ? '-' : '+'}</span>
                 </button>
                 {openFaq === index && (
                   <div className="px-8 pb-6">
-                    <p className="text-[#737576] leading-7">{faq.answer}</p>
+                    <p className="text-[var(--brand-muted)] leading-7">{faq.answer}</p>
                   </div>
                 )}
               </div>
@@ -405,7 +414,7 @@ export default function Partners() {
 
       {/* VIII. Call to Action */}
       <section
-        className="py-[120px] bg-[#0A1C3A] text-white relative z-10 -mb-10"
+        className="py-[120px] bg-[var(--brand-navy)] text-white relative z-10 -mb-10"
         style={{ clipPath: 'polygon(0 10%, 100% 0, 100% 100%, 0 100%)' }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 text-center">
@@ -420,13 +429,13 @@ export default function Partners() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
               <Link
                 to="/contact"
-                className="bg-[#F71C56] text-white font-bold px-8 py-4 rounded transition-all hover:brightness-110 uppercase tracking-widest text-sm"
+                className="bg-[var(--brand-red)] text-white font-bold px-8 py-4 rounded transition-all hover:brightness-110 uppercase tracking-widest text-sm"
               >
                 Contact Us
               </Link>
               <Link
                 to="/apply?tab=institutional"
-                className="border-2 border-white text-white font-bold px-8 py-4 rounded hover:bg-white hover:text-[#0A1C3A] transition-all uppercase tracking-widest text-sm"
+                className="border-2 border-white text-white font-bold px-8 py-4 rounded hover:bg-white hover:text-[var(--brand-navy)] transition-all uppercase tracking-widest text-sm"
               >
                 Request Partnership Brief
               </Link>
@@ -437,6 +446,7 @@ export default function Partners() {
     </>
   );
 }
+
 
 
 

@@ -1,4 +1,4 @@
-import { apiRequest, clearAuth, getStoredAdmin, setStoredAdmin, setStoredToken } from './api';
+﻿import { apiRequest, clearAuth, getStoredAdmin, setStoredAdmin, setStoredToken } from './api';
 
 export interface Admin {
   id: string;
@@ -73,9 +73,9 @@ export const deleteAdmin = async (id: string): Promise<void> => {
 
 export const getRoleBadgeClass = (role: Admin['role']): string => {
   const badges = {
-    super_admin: 'bg-[#F71C56] text-white',
-    admin: 'bg-[#0A1C3A] text-white',
-    viewer: 'bg-[#6B7280] text-white',
+    super_admin: 'bg-[var(--brand-red)] text-white',
+    admin: 'bg-[var(--brand-navy)] text-white',
+    viewer: 'bg-[var(--brand-blue)] text-white',
   };
   return badges[role];
 };
@@ -88,3 +88,4 @@ export const getRoleDisplayName = (role: Admin['role']): string => {
   };
   return names[role];
 };
+

@@ -16,6 +16,7 @@ import {
   Users,
 } from "lucide-react";
 import { fetchPrograms, type Program } from "../utils/programApi";
+import { professionalImages, studentImages } from "../utils/localImages";
 import * as THREE from "three";
 import { geoEquirectangular, geoPath } from "d3-geo";
 import { feature } from "topojson-client";
@@ -113,7 +114,8 @@ function GlobeCanvas() {
     if (!el) return;
 
     const W = el.clientWidth || 480;
-    const H = 480;
+    const H = Math.round(Math.max(280, Math.min(W * 0.9, 480)));
+    const globeScale = Math.max(0.72, Math.min(W / 520, 1));
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -137,6 +139,7 @@ function GlobeCanvas() {
       new THREE.MeshBasicMaterial({ color: new THREE.Color(BRAND.navy) }),
     );
     placeholder.rotation.y = Math.PI;
+    placeholder.scale.setScalar(globeScale);
     scene.add(placeholder);
 
     scene.add(
@@ -174,6 +177,7 @@ function GlobeCanvas() {
       velocityX = dx * 0.005;
       velocityY = dy * 0.005;
       const mesh = globeMesh ?? placeholder;
+      mesh.scale.setScalar(globeScale);
       mesh.rotation.y += velocityX;
       rotX = Math.max(-1.4, Math.min(1.4, rotX + velocityY));
       mesh.rotation.x = rotX;
@@ -202,6 +206,7 @@ function GlobeCanvas() {
       velocityX = dx * 0.004;
       velocityY = dy * 0.004;
       const mesh = globeMesh ?? placeholder;
+      mesh.scale.setScalar(globeScale);
       mesh.rotation.y += velocityX;
       rotX = Math.max(-1.4, Math.min(1.4, rotX + velocityY));
       mesh.rotation.x = rotX;
@@ -224,6 +229,7 @@ function GlobeCanvas() {
     const animate = () => {
       frameId = requestAnimationFrame(animate);
       const mesh = globeMesh ?? placeholder;
+      mesh.scale.setScalar(globeScale);
       if (!isDragging) {
         velocityX *= 0.92;
         velocityY *= 0.92;
@@ -242,9 +248,13 @@ function GlobeCanvas() {
     const onResize = () => {
       if (!el) return;
       const w = el.clientWidth;
-      camera.aspect = w / H;
+      const nextH = Math.round(Math.max(280, Math.min(w * 0.9, 480)));
+      const nextScale = Math.max(0.72, Math.min(w / 520, 1));
+      camera.aspect = w / nextH;
       camera.updateProjectionMatrix();
-      renderer.setSize(w, H);
+      renderer.setSize(w, nextH);
+      const mesh = globeMesh ?? placeholder;
+      mesh.scale.setScalar(nextScale);
     };
     window.addEventListener("resize", onResize);
 
@@ -256,6 +266,7 @@ function GlobeCanvas() {
       );
       mesh.rotation.y = placeholder.rotation.y;
       mesh.rotation.x = placeholder.rotation.x;
+      mesh.scale.setScalar(globeScale);
       scene.remove(placeholder);
       scene.add(mesh);
       globeMesh = mesh;
@@ -281,7 +292,7 @@ function GlobeCanvas() {
     <div
       ref={mountRef}
       className="w-full"
-      style={{ height: "480px", cursor: "grab" }}
+      style={{ height: "clamp(280px, 65vw, 480px)", cursor: "grab" }}
     />
   );
 }
@@ -642,7 +653,7 @@ export default function Home() {
             </div>
             <div className="hidden md:block reveal">
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=900&q=80"
+                src={studentImages[0]}
                 alt="Singapore skyline"
                 className="w-full h-[400px] object-cover"
                 style={{
@@ -755,7 +766,7 @@ export default function Home() {
 
             <div className="grid grid-cols-2 gap-4 reveal">
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80"
+                src={studentImages[17]}
                 alt="Students collaborating"
                 className="w-full h-64 object-cover grayscale hover:grayscale-0 transition-all duration-700"
                 style={{
@@ -764,7 +775,7 @@ export default function Home() {
                 }}
               />
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80"
+                src={professionalImages[0]}
                 alt="International meeting"
                 className="w-full h-64 object-cover grayscale hover:grayscale-0 transition-all duration-700 mt-10"
                 style={{
@@ -817,54 +828,43 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 gap-6 reveal">
+            <div className="grid grid-cols-2 gap-4 reveal auto-rows-[110px]">
               {[
                 {
-                  icon: Globe,
-                  label: "Access",
-                  desc: "Opening doors to international learning for ambitious students and professionals",
-                  accent: "cyan",
+                  src: professionalImages[0],
+                  alt: "Students and professionals arriving together",
+                  className: "col-span-2 row-span-2 h-full",
                 },
                 {
-                  icon: Award,
-                  label: "Quality",
-                  desc: "Uncompromising standards across all programmes, partners, and experiences",
-                  accent: "blue",
+                  src: professionalImages[1],
+                  alt: "Facilitated discussion in a bright room",
+                  className: "h-full",
                 },
                 {
-                  icon: Star,
-                  label: "Impact",
-                  desc: "Experiences designed to create lasting change in perspective and capability",
-                  accent: "red",
+                  src: professionalImages[3],
+                  alt: "Collaborative group learning moment",
+                  className: "h-full",
                 },
                 {
-                  icon: Shield,
-                  label: "Trust",
-                  desc: "Delivered through carefully selected global partners with proven credibility and consistency",
-                  accent: "blue",
+                  src: professionalImages[4],
+                  alt: "Roundtable learning experience",
+                  className: "col-span-2 h-full",
                 },
-              ].map((val, i) => (
+              ].map((image, index) => (
                 <div
-                  key={val.label}
-                  className="bg-[var(--brand-surface)] p-6 border border-[var(--brand-border)]"
+                  key={image.alt}
+                  className={`overflow-hidden bg-[var(--brand-surface)] border border-[var(--brand-border)] ${image.className}`}
                   style={{
-                    transitionDelay: `${i * 80}ms`,
+                    transitionDelay: `${index * 80}ms`,
                     clipPath:
                       "polygon(0 0, 92% 0, 100% 8%, 100% 100%, 8% 100%, 0 92%)",
                   }}
                 >
-                  <BrandIcon
-                    icon={val.icon}
-                    size="sm"
-                    accent={val.accent}
-                    className="mb-3"
+                  <ImageWithFallback
+                    src={image.src}
+                    alt={image.alt}
+                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
                   />
-                  <h4 className="font-bold text-[var(--brand-navy)] mb-1">
-                    {val.label}
-                  </h4>
-                  <p className="text-[var(--brand-muted)] text-sm leading-5">
-                    {val.desc}
-                  </p>
                 </div>
               ))}
             </div>
@@ -1022,7 +1022,7 @@ export default function Home() {
 
             <div className="grid grid-cols-2 gap-4 reveal">
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80"
+                src={studentImages[17]}
                 alt="Students collaborating"
                 className="w-full h-64 object-cover grayscale hover:grayscale-0 transition-all duration-700"
                 style={{
@@ -1031,7 +1031,7 @@ export default function Home() {
                 }}
               />
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80"
+                src={professionalImages[0]}
                 alt="International meeting"
                 className="w-full h-64 object-cover grayscale hover:grayscale-0 transition-all duration-700 mt-10"
                 style={{
@@ -1150,7 +1150,7 @@ export default function Home() {
       {/* 9. CTA */}
       <section
         style={{ clipPath: "polygon(0 8%, 100% 0, 100% 92%, 0 100%)" }}
-        className="py-28 bg-[var(--brand-surface-alt)] border-t border-[var(--brand-border)] relative z-10 -mt-16 text-center mb-[10%]"
+        className="py-28 bg-[var(--brand-surface-alt)] border-t border-[var(--brand-border)] relative z-10 -mt-16 text-center mb-[40%] lg:mb-16"
       >
         <div className="max-w-[800px] mx-auto px-4 sm:px-6 lg:px-16 reveal">
           <h2 className="font-extrabold text-[40px] md:text-[64px] leading-[48px] md:leading-[72px] tracking-[-0.02em] text-[var(--brand-navy)] mb-4">

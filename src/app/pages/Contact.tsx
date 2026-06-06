@@ -10,6 +10,7 @@ import {
   Instagram,
   ChevronDown,
 } from "lucide-react";
+import { professionalImages } from "../utils/localImages";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -24,22 +25,22 @@ export default function Contact() {
 
   const buildGmailComposeUrl = () => {
     const subjectParts = [
-      'Cardinal Immersions Contact Form',
-      formData.inquiryType ? `- ${formData.inquiryType}` : '',
+      "Cardinal Immersions Contact Form",
+      formData.inquiryType ? `- ${formData.inquiryType}` : "",
     ].filter(Boolean);
 
     const bodyLines = [
       `Name: ${formData.fullName}`,
       `Email: ${formData.email}`,
-      formData.organization ? `Organization: ${formData.organization}` : '',
-      formData.inquiryType ? `Inquiry Type: ${formData.inquiryType}` : '',
-      '',
-      'Message:',
+      formData.organization ? `Organization: ${formData.organization}` : "",
+      formData.inquiryType ? `Inquiry Type: ${formData.inquiryType}` : "",
+      "",
+      "Message:",
       formData.message,
     ].filter(Boolean);
 
-    const subject = encodeURIComponent(subjectParts.join(' '));
-    const body = encodeURIComponent(bodyLines.join('\n'));
+    const subject = encodeURIComponent(subjectParts.join(" "));
+    const body = encodeURIComponent(bodyLines.join("\n"));
 
     return `https://mail.google.com/mail/?view=cm&fs=1&to=hello@cardinalimmersions.com&su=${subject}&body=${body}`;
   };
@@ -123,7 +124,10 @@ export default function Contact() {
               Get in Touch
             </span>
             <h1 className="font-extrabold text-[36px] sm:text-[48px] md:text-[64px] leading-[42px] sm:leading-[56px] md:leading-[72px] tracking-[-0.02em] text-white">
-              Contact <span className="text-[var(--brand-red)]">Cardinal Immersions</span>
+              Contact{" "}
+              <span className="text-[var(--brand-red)]">
+                Cardinal Immersions
+              </span>
             </h1>
             <p className="text-xl leading-8 text-white/90 max-w-3xl mx-auto">
               Reach out with questions about our programs, partnership
@@ -142,7 +146,7 @@ export default function Contact() {
         className="py-[120px] bg-white relative -mt-16 pt-40"
         style={{ clipPath: "polygon(0 14%, 100% 0, 100% 86%, 0 100%)" }}
       >
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-30">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
             {/* Left Column: Contact Form */}
             <div className="reveal">
@@ -163,7 +167,8 @@ export default function Contact() {
                       htmlFor="fullName"
                       className="block text-[var(--brand-navy)] mb-2"
                     >
-                      Full Name <span className="text-[var(--brand-red)]">*</span>
+                      Full Name{" "}
+                      <span className="text-[var(--brand-red)]">*</span>
                     </label>
                     <input
                       type="text"
@@ -182,7 +187,8 @@ export default function Contact() {
                       htmlFor="email"
                       className="block text-[var(--brand-navy)] mb-2"
                     >
-                      Email Address <span className="text-[var(--brand-red)]">*</span>
+                      Email Address{" "}
+                      <span className="text-[var(--brand-red)]">*</span>
                     </label>
                     <input
                       type="email"
@@ -219,7 +225,8 @@ export default function Contact() {
                       htmlFor="inquiryType"
                       className="block text-[var(--brand-navy)] mb-2"
                     >
-                      Inquiry Type <span className="text-[var(--brand-red)]">*</span>
+                      Inquiry Type{" "}
+                      <span className="text-[var(--brand-red)]">*</span>
                     </label>
                     <select
                       id="inquiryType"
@@ -345,7 +352,10 @@ export default function Contact() {
                       <h4 className="font-bold text-lg text-[var(--brand-navy)] mb-2">
                         Phone
                       </h4>
-                      <a href="tel:+442012345678" className="text-[var(--brand-muted)]">
+                      <a
+                        href="tel:+442012345678"
+                        className="text-[var(--brand-muted)]"
+                      >
                         +44 (0) 20 1234 5678
                       </a>
                     </div>
@@ -394,7 +404,7 @@ export default function Contact() {
               {/* Professional Image */}
               <div className="hidden lg:block">
                 <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1622675363311-3e1904dc1885?w=1080&q=80"
+                  src={professionalImages[5]}
                   alt="Professional team collaboration"
                   className="w-full h-64 object-cover shadow-lg grayscale hover:grayscale-0 transition-all duration-700"
                   style={{
@@ -426,13 +436,17 @@ export default function Contact() {
                 </h2>
               </div>
               <p className="text-[var(--brand-muted)] max-w-xl">
-                This Google Maps view shows our current coordination hub in Accra, Ghana.
+                This Google Maps view shows our current coordination hub in
+                Accra, Ghana.
               </p>
             </div>
 
             <div
               className="bg-white border border-[var(--brand-border-strong)] overflow-hidden shadow-lg"
-              style={{ clipPath: "polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)" }}
+              style={{
+                clipPath:
+                  "polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)",
+              }}
             >
               <iframe
                 title="Google Maps - Accra, Ghana coordination hub"
@@ -444,7 +458,9 @@ export default function Contact() {
               <div className="flex items-center justify-between gap-4 px-5 py-4 bg-[var(--brand-surface)] border-t border-[var(--brand-border)]">
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5 text-[var(--brand-red)]" />
-                  <p className="text-sm text-[var(--brand-navy)] font-bold">Accra, Ghana</p>
+                  <p className="text-sm text-[var(--brand-navy)] font-bold">
+                    Accra, Ghana
+                  </p>
                 </div>
                 <p className="text-xs text-[var(--brand-muted)]">
                   Map shown via Google Maps for the current coordination hub.
@@ -555,7 +571,9 @@ export default function Contact() {
                 </button>
                 {openFaq === index && (
                   <div className="px-8 pb-6">
-                    <p className="text-[var(--brand-muted)] leading-7">{faq.answer}</p>
+                    <p className="text-[var(--brand-muted)] leading-7">
+                      {faq.answer}
+                    </p>
                   </div>
                 )}
               </div>
@@ -563,13 +581,6 @@ export default function Contact() {
           </div>
         </div>
       </section>
-
     </>
   );
 }
-
-
-
-
-
-

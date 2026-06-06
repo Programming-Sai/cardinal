@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { apiRequest } from "../utils/api";
 import { fetchPrograms, type Program } from "../utils/programApi";
+import { studentImages } from "../utils/localImages";
 
 type TabType = "individual" | "institutional";
 type ToastType = "success" | "error" | "warning";
@@ -637,7 +638,7 @@ export default function Apply() {
         {/* Animated Background */}
         <div className="absolute inset-0 z-0 opacity-[0.08] pointer-events-none">
           <ImageWithFallback
-            src="https://images.unsplash.com/photo-1650526087824-163941841b52?w=1080&q=80"
+            src={studentImages[12]}
             alt="World map"
             className="w-full h-full object-cover"
           />
@@ -783,7 +784,7 @@ export default function Apply() {
         className="py-[120px] bg-[var(--brand-surface)] relative -mt-16 pt-40"
         style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-30">
           {/* Tab Buttons */}
           <div className="flex justify-center mb-12 reveal">
             <div className="inline-flex flex-col sm:flex-row bg-white border border-[var(--brand-border-strong)] rounded-lg overflow-hidden w-full sm:w-auto">

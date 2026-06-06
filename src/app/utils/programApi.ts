@@ -1,4 +1,5 @@
 import { apiRequest } from './api';
+import { getProgramImage, type ProgramCategory } from './localImages';
 
 export type BackendProgramStatus = 'accepting' | 'coming_soon' | 'full' | 'closed';
 export type BackendProgramCategory = 'student' | 'professional' | 'institutional';
@@ -32,12 +33,27 @@ export interface Program {
   description?: string | null;
 }
 
+function normalizeProgramImage(program: Program, seed: number | string = 0): Program {
+  const category = program.category as ProgramCategory;
+  const image = getProgramImage(category, seed);
+
+  return {
+    ...program,
+    image,
+    imageUrl: image,
+  };
+}
+
 export const fetchPrograms = async (params?: Record<string, string>) => {
   const searchParams = new URLSearchParams(params);
   const suffix = searchParams.toString() ? `?${searchParams.toString()}` : '';
-  return apiRequest<Program[]>(`/programs${suffix}`);
+  const programs = await apiRequest<Program[]>(`/programs${suffix}`);
+  return programs.map((program, index) =>
+    normalizeProgramImage(program, program.slug || index),
+  );
 };
 
 export const fetchProgramBySlug = async (slug: string) => {
-  return apiRequest<Program>(`/programs/${encodeURIComponent(slug)}`);
+  const program = await apiRequest<Program>(`/programs/${encodeURIComponent(slug)}`);
+  return normalizeProgramImage(program, slug);
 };

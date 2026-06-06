@@ -95,7 +95,7 @@ export default function Header() {
       </div>
       <div
         id="mobile-navigation"
-        className={`md:hidden border-t border-brand-border/70 bg-white/92 backdrop-blur-xl transition-all duration-300 ease-out overflow-hidden ${
+        className={`lg:hidden border-t border-brand-border/70 bg-white/92 backdrop-blur-xl transition-all duration-300 ease-out overflow-hidden ${
           menuOpen ? 'max-h-[80vh] opacity-100' : 'max-h-0 opacity-0'
         }`}
         style={{ WebkitBackdropFilter: 'blur(18px)', backdropFilter: 'blur(18px)' }}

@@ -4,6 +4,7 @@ import { ImageWithFallback } from '../components/media/ImageWithFallback';
 import BrandIcon from '../components/brand/BrandIcon';
 import { ArrowRight, Check, Clock3, FileText, X } from 'lucide-react';
 import { fetchProgramBySlug, type Program } from '../utils/programApi';
+import { getProgramImage } from '../utils/localImages';
 
 export default function ProgramDetail() {
   const { slug } = useParams();
@@ -97,6 +98,7 @@ export default function ProgramDetail() {
   const excludes = program.excludes || [];
   const timeline = Array.isArray(program.timeline) ? program.timeline : [];
   const nextSteps = program.nextSteps || [];
+  const heroImage = program.image || getProgramImage(program.category, program.slug);
 
   return (
     <>
@@ -105,7 +107,7 @@ export default function ProgramDetail() {
         style={{ clipPath: 'polygon(0 0, 100% 0, 100% 85%, 0% 100%)' }}
       >
         <div className="absolute inset-0 opacity-[0.24] pointer-events-none">
-          <ImageWithFallback src={program.image || ''} alt="" className="w-full h-full object-cover" />
+          <ImageWithFallback src={heroImage} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-navy)]/30 via-[var(--brand-blue)]/18 to-[var(--brand-cyan)]/15" />
         </div>
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 relative z-10">

@@ -138,7 +138,6 @@ export default function AdminDashboard() {
 
       <div
         className="bg-white border border-[var(--brand-border)] mb-8"
-        style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}
       >
         <div className="p-6 border-b border-[var(--brand-border)]">
           <h2 className="font-bold text-xl text-[var(--brand-navy)]">Recent Applications</h2>
@@ -238,7 +237,6 @@ export default function AdminDashboard() {
 
       <div
         className="bg-[var(--brand-surface)] border border-[var(--brand-border)] p-6 sm:p-8 shadow-xl"
-        style={{ clipPath: 'polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)' }}
       >
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8">
           <div>
@@ -253,7 +251,7 @@ export default function AdminDashboard() {
         </div>
 
         <div className="space-y-5">
-          <div className="bg-white border border-[var(--brand-border)] p-5 sm:p-6" style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}>
+          <div className="bg-white border border-[var(--brand-border)] p-5 sm:p-6 rounded-2xl">
             <div className="flex items-center justify-between mb-5">
               <p className="font-bold text-[var(--brand-navy)] uppercase tracking-[0.2em] text-xs">Activity mix</p>
               <p className="text-xs text-[var(--brand-muted)]">Live snapshot</p>
@@ -309,7 +307,6 @@ export default function AdminDashboard() {
 
           <div
             className="bg-white border border-[var(--brand-border)] p-4 sm:p-5"
-            style={{ clipPath: 'polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)' }}
           >
             <div className="flex flex-wrap gap-4 sm:gap-6">
               {chartItems.map((item) => (

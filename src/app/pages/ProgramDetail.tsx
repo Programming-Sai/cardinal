@@ -104,7 +104,6 @@ export default function ProgramDetail() {
     <>
       <section
         className="pt-[120px] pb-20 bg-[var(--brand-navy)] text-white relative overflow-hidden"
-        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 85%, 0% 100%)' }}
       >
         <div className="absolute inset-0 opacity-[0.24] pointer-events-none">
           <ImageWithFallback src={heroImage} alt="" className="w-full h-full object-cover" />
@@ -139,7 +138,6 @@ export default function ProgramDetail() {
 
       <section
         className="py-[120px] bg-[var(--brand-surface)] relative -mt-16 pt-40"
-        style={{ clipPath: 'polygon(0 10%, 100% 0, 100% 90%, 0 100%)' }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-10 items-start">
@@ -234,7 +232,6 @@ export default function ProgramDetail() {
 
       <section
         className="py-[120px] bg-white relative -mt-12"
-        style={{ clipPath: 'polygon(0 10%, 100% 0, 100% 90%, 0 100%)' }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

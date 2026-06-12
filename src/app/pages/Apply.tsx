@@ -461,7 +461,7 @@ export default function Apply() {
 
   const handleFileClick = () => {
     showToast(
-      "CV upload is coming soon. For now, please email your CV to applications@andylcc.com",
+      "CV upload is coming soon. For now, please email your CV to applications@cardinalimmersions.com",
       "warning",
     );
   };
@@ -508,10 +508,7 @@ export default function Apply() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--brand-navy)]/55 backdrop-blur-sm">
           <div className="bg-white max-w-2xl w-full mx-4 p-0 rounded-lg shadow-2xl overflow-hidden">
-            <div
-              className="bg-[var(--brand-navy)] text-white px-8 py-6"
-              style={{ clipPath: "polygon(0 0, 100% 0, 100% 88%, 0 100%)" }}
-            >
+            <div className="bg-[var(--brand-navy)] text-white px-8 py-6">
               <p className="font-bold uppercase tracking-[0.2em] text-[var(--brand-red-soft)] text-xs mb-3">
                 Submission Confirmed
               </p>
@@ -543,10 +540,10 @@ export default function Apply() {
                         If you have any questions in the meantime, please
                         contact us at{" "}
                         <a
-                          href="mailto:hello@andylcc.com"
+                          href="mailto:hello@cardinalimmersions.com"
                           className="text-[var(--brand-red)] hover:underline"
                         >
-                          hello@andylcc.com
+                          hello@cardinalimmersions.com
                         </a>
                       </p>
                     </>
@@ -568,10 +565,10 @@ export default function Apply() {
                       <p>
                         For urgent matters, please contact{" "}
                         <a
-                          href="mailto:partnerships@andylcc.com"
+                          href="mailto:partnerships@cardinalimmersions.com"
                           className="text-[var(--brand-red)] hover:underline"
                         >
-                          partnerships@andylcc.com
+                          partnerships@cardinalimmersions.com
                         </a>
                       </p>
                     </>
@@ -631,10 +628,7 @@ export default function Apply() {
       )}
 
       {/* Hero Section */}
-      <section
-        className="pt-[120px] pb-20 bg-[var(--brand-navy)] text-white relative overflow-hidden"
-        style={{ clipPath: "polygon(0 0, 100% 0, 100% 85%, 0% 100%)" }}
-      >
+      <section className="pt-[120px] pb-20 bg-[var(--brand-navy)] text-white relative overflow-hidden">
         {/* Animated Background */}
         <div className="absolute inset-0 z-0 opacity-[0.08] pointer-events-none">
           <ImageWithFallback
@@ -692,8 +686,6 @@ export default function Apply() {
                 key={item.title}
                 className="bg-white border border-[var(--brand-border)] p-6 shadow-xl"
                 style={{
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
                   transitionDelay: `${index * 100}ms`,
                 }}
               >
@@ -713,11 +705,7 @@ export default function Apply() {
       </section>
 
       {/* How It Works Section */}
-      {/* Added slanted divider for section rhythm; remove the clipPath to revert. */}
-      <section
-        className="py-[120px] bg-white relative -mt-16 pt-40"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
-      >
+      <section className="py-[120px] bg-white relative -mt-16 pt-40">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
             <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-4 block">
@@ -779,11 +767,7 @@ export default function Apply() {
       </section>
 
       {/* Application Tabs Section */}
-      {/* Added slanted divider for section rhythm; remove the clipPath to revert. */}
-      <section
-        className="py-[120px] bg-[var(--brand-surface)] relative -mt-16 pt-40"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
-      >
+      <section className="py-[120px] bg-[var(--brand-surface)] relative -mt-16 pt-40">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-30">
           {/* Tab Buttons */}
           <div className="flex justify-center mb-12 reveal">
@@ -816,10 +800,7 @@ export default function Apply() {
             <div className="max-w-4xl mx-auto">
               <div
                 className="bg-white p-10 border border-[var(--brand-border)]"
-                style={{
-                  clipPath:
-                    "polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)",
-                }}
+                style={{}}
               >
                 <h2 className="font-bold text-[32px] sm:text-[36px] md:text-[40px] leading-[40px] sm:leading-[44px] md:leading-[48px] tracking-[-0.01em] text-[var(--brand-navy)] mb-2">
                   Individual Application
@@ -1108,7 +1089,7 @@ export default function Apply() {
                     />
                     <p className="text-sm text-[var(--brand-muted)] mt-2 italic">
                       CV upload placeholder â€“ please email CV to
-                      applications@andylcc.com after submitting.
+                      applications@cardinalimmersions.com after submitting.
                     </p>
                   </div>
 
@@ -1159,10 +1140,7 @@ export default function Apply() {
             <div className="max-w-4xl mx-auto">
               <div
                 className="bg-white p-10 border border-[var(--brand-border)]"
-                style={{
-                  clipPath:
-                    "polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)",
-                }}
+                style={{}}
               >
                 <h2 className="font-bold text-[32px] sm:text-[36px] md:text-[40px] leading-[40px] sm:leading-[44px] md:leading-[48px] tracking-[-0.01em] text-[var(--brand-navy)] mb-2">
                   Institutional Inquiry
@@ -1530,11 +1508,7 @@ export default function Apply() {
       </section>
 
       {/* Upcoming Programs Calendar */}
-      {/* Added slanted divider for section rhythm; remove the clipPath to revert. */}
-      <section
-        className="py-[120px] bg-white relative -mt-16 pt-40"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
-      >
+      <section className="py-[120px] bg-white relative -mt-16 pt-40">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
             <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-4 block">
@@ -1551,10 +1525,7 @@ export default function Apply() {
                 <div
                   key={`upcoming-skeleton-${index}`}
                   className="bg-[var(--brand-surface)] p-6 border border-[var(--brand-border)] animate-pulse"
-                  style={{
-                    clipPath:
-                      "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
-                  }}
+                  style={{}}
                 >
                   <div className="h-6 w-2/3 bg-[var(--brand-border)] mb-4" />
                   <div className="h-4 w-1/2 bg-[#eef1f4] mb-3" />
@@ -1579,8 +1550,6 @@ export default function Apply() {
                     className="bg-[var(--brand-surface)] p-6 border border-[var(--brand-border)] hover:border-[var(--brand-red)] transition-all reveal"
                     style={{
                       transitionDelay: `${index * 100}ms`,
-                      clipPath:
-                        "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
                     }}
                   >
                     <h3 className="font-bold text-xl text-[var(--brand-navy)] mb-2">

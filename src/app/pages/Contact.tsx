@@ -96,16 +96,13 @@ export default function Contact() {
   return (
     <>
       {/* Hero Section */}
-      <section
-        className="pt-[120px] pb-20 bg-[var(--brand-navy)] text-white relative overflow-hidden"
-        style={{ clipPath: "polygon(0 0, 100% 0, 100% 78%, 0% 100%)" }}
-      >
+      <section className="pt-[120px] pb-20 bg-[var(--brand-navy)] text-white relative overflow-hidden">
         {/* Animated Background */}
         <div className="absolute inset-0 z-0 opacity-[0.22] pointer-events-none">
           <svg className="w-full h-full animate-drift" viewBox="0 0 1440 800">
             <circle cx="200" cy="150" fill="var(--brand-blue)" r="4" />
             <circle cx="500" cy="250" fill="white" r="3" />
-            <circle cx="800" cy="180" fill="var(--brand-cyan)" r="3" />
+            <circle cx="800" cy="180" fill="var(--brand-red-soft)" r="3" />
             <circle cx="1100" cy="320" fill="white" r="4" />
             <circle cx="700" cy="500" fill="var(--brand-blue)" r="3" />
             <path
@@ -141,21 +138,14 @@ export default function Contact() {
       </section>
 
       {/* Contact Form + Info Section */}
-      {/* Added slanted divider for section rhythm; remove the clipPath to revert. */}
-      <section
-        className="py-[120px] bg-white relative -mt-16 pt-40"
-        style={{ clipPath: "polygon(0 14%, 100% 0, 100% 86%, 0 100%)" }}
-      >
+      <section className="py-[120px] bg-white relative -mt-16 pt-40">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-30">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
             {/* Left Column: Contact Form */}
             <div className="reveal">
               <div
                 className="bg-[var(--brand-surface)] p-6 sm:p-8 lg:p-10 border border-[var(--brand-border)]"
-                style={{
-                  clipPath:
-                    "polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)",
-                }}
+                style={{}}
               >
                 <h2 className="font-bold text-[32px] sm:text-[36px] md:text-[40px] leading-[40px] sm:leading-[44px] md:leading-[48px] tracking-[-0.01em] text-[var(--brand-navy)] mb-8">
                   Send Us a Message
@@ -294,7 +284,7 @@ export default function Contact() {
 
                 <div className="space-y-6">
                   <div className="flex gap-4 items-start">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[var(--brand-cyan)]/20 flex items-center justify-center rounded">
+                    <div className="flex-shrink-0 w-12 h-12 bg-[var(--brand-red-soft)]/20 flex items-center justify-center rounded">
                       <Mail className="w-5 h-5 text-[var(--brand-blue)]" />
                     </div>
                     <div>
@@ -302,27 +292,27 @@ export default function Contact() {
                         General Inquiries
                       </h4>
                       <a
-                        href="mailto:hello@andylcc.com"
+                        href="mailto:hello@cardinalimmersions.com"
                         className="text-[var(--brand-blue)] hover:underline"
                       >
-                        hello@andylcc.com
+                        hello@cardinalimmersions.com
                       </a>
                     </div>
                   </div>
 
                   <div className="flex gap-4 items-start">
                     <div className="flex-shrink-0 w-12 h-12 bg-[var(--brand-blue)]/15 flex items-center justify-center rounded">
-                      <Mail className="w-5 h-5 text-[var(--brand-cyan)]" />
+                      <Mail className="w-5 h-5 text-[var(--brand-red-soft)]" />
                     </div>
                     <div>
                       <h4 className="font-bold text-lg text-[var(--brand-navy)] mb-2">
                         Partnerships Team
                       </h4>
                       <a
-                        href="mailto:partnerships@andylcc.com"
-                        className="text-[var(--brand-cyan)] hover:underline"
+                        href="mailto:partnerships@cardinalimmersions.com"
+                        className="text-[var(--brand-red-soft)] hover:underline"
                       >
-                        partnerships@andylcc.com
+                        partnerships@cardinalimmersions.com
                       </a>
                     </div>
                   </div>
@@ -336,16 +326,16 @@ export default function Contact() {
                         Programs Team
                       </h4>
                       <a
-                        href="mailto:programs@andylcc.com"
+                        href="mailto:programs@cardinalimmersions.com"
                         className="text-[var(--brand-red)] hover:underline"
                       >
-                        programs@andylcc.com
+                        programs@cardinalimmersions.com
                       </a>
                     </div>
                   </div>
 
                   <div className="flex gap-4 items-start">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[var(--brand-cyan)]/20 flex items-center justify-center rounded">
+                    <div className="flex-shrink-0 w-12 h-12 bg-[var(--brand-red-soft)]/20 flex items-center justify-center rounded">
                       <Phone className="w-5 h-5 text-[var(--brand-blue)]" />
                     </div>
                     <div>
@@ -407,10 +397,7 @@ export default function Contact() {
                   src={professionalImages[5]}
                   alt="Professional team collaboration"
                   className="w-full h-64 object-cover shadow-lg grayscale hover:grayscale-0 transition-all duration-700"
-                  style={{
-                    clipPath:
-                      "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
-                  }}
+                  style={{}}
                 />
               </div>
             </div>
@@ -419,11 +406,7 @@ export default function Contact() {
       </section>
 
       {/* Map Section */}
-      {/* Added slanted divider for section rhythm; remove the clipPath to revert. */}
-      <section
-        className="py-[120px] bg-[var(--brand-surface)] relative -mt-16 pt-40"
-        style={{ clipPath: "polygon(0 14%, 100% 0, 100% 86%, 0 100%)" }}
-      >
+      <section className="py-[120px] bg-[var(--brand-surface)] relative -mt-16 pt-40">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="reveal">
             <div className="mb-6 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
@@ -443,10 +426,7 @@ export default function Contact() {
 
             <div
               className="bg-white border border-[var(--brand-border-strong)] overflow-hidden shadow-lg"
-              style={{
-                clipPath:
-                  "polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)",
-              }}
+              style={{}}
             >
               <iframe
                 title="Google Maps - Accra, Ghana coordination hub"
@@ -472,11 +452,7 @@ export default function Contact() {
       </section>
 
       {/* Social Media Section */}
-      {/* Added slanted divider for section rhythm; remove the clipPath to revert. */}
-      <section
-        className="py-[120px] bg-white relative -mt-16 pt-40"
-        style={{ clipPath: "polygon(0 14%, 100% 0, 100% 86%, 0 100%)" }}
-      >
+      <section className="py-[120px] bg-white relative -mt-16 pt-40">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 text-center">
           <div className="reveal">
             <h2 className="font-bold text-[32px] leading-[40px] tracking-[-0.01em] text-[var(--brand-navy)] mb-4">
@@ -496,7 +472,7 @@ export default function Contact() {
               </a>
               <a
                 href="#"
-                className="w-14 h-14 bg-[var(--brand-navy)] flex items-center justify-center rounded-full hover:bg-[var(--brand-cyan)] transition-all"
+                className="w-14 h-14 bg-[var(--brand-navy)] flex items-center justify-center rounded-full hover:bg-[var(--brand-red-soft)] transition-all"
                 aria-label="Twitter"
               >
                 <Twitter className="w-6 h-6 text-white" />
@@ -514,11 +490,7 @@ export default function Contact() {
       </section>
 
       {/* FAQ Section */}
-      {/* Added slanted divider for section rhythm; remove the clipPath to revert. */}
-      <section
-        className="py-[120px] bg-[var(--brand-surface)] relative -mt-16 pt-40"
-        style={{ clipPath: "polygon(0 14%, 100% 0, 100% 86%, 0 100%)" }}
-      >
+      <section className="py-[120px] bg-[var(--brand-surface)] relative -mt-16 pt-40">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
             <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-4 block">
@@ -552,8 +524,6 @@ export default function Contact() {
                 className="bg-white border border-[var(--brand-border)] overflow-hidden reveal"
                 style={{
                   transitionDelay: `${index * 100}ms`,
-                  clipPath:
-                    "polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)",
                 }}
               >
                 <button

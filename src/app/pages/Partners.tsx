@@ -119,7 +119,6 @@ export default function Partners() {
       {/* I. Hero */}
       <section
         className="pt-[120px] pb-16 bg-[var(--brand-navy)] text-white relative overflow-hidden"
-        style={{ clipPath: "polygon(0 0, 100% 0, 100% 85%, 0% 100%)" }}
       >
         <div className="absolute inset-0 z-0 opacity-[0.22] pointer-events-none">
           <ImageWithFallback
@@ -152,7 +151,6 @@ export default function Partners() {
       {/* II. Why Partner With Us */}
       <section
         className="py-[120px] bg-[var(--brand-surface)] relative -mt-8 z-10"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
@@ -176,8 +174,6 @@ export default function Partners() {
                 alt="Diverse educators in collaborative meeting"
                 className="w-full h-[400px] object-cover shadow-2xl"
                 style={{
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
                 }}
               />
             </div>
@@ -188,7 +184,6 @@ export default function Partners() {
       {/* III. Partnership Models */}
       <section
         className="py-[120px] bg-white relative -mt-8 z-20"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-30">
           <div className="text-center mb-16 reveal">
@@ -210,8 +205,6 @@ export default function Partners() {
                 key={model.title}
                 className="group bg-white border border-[var(--brand-border)] overflow-hidden hover:shadow-2xl hover:border-[var(--brand-red)] transition-all duration-500 reveal"
                 style={{
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
                   transitionDelay: `${index * 100}ms`,
                 }}
               >
@@ -253,7 +246,6 @@ export default function Partners() {
       {/* IV. Current Partners */}
       <section
         className="py-[120px] bg-[var(--brand-surface-alt)] relative -mt-16 pt-32"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-12 reveal">
@@ -281,8 +273,6 @@ export default function Partners() {
                 key={partner}
                 className="bg-[var(--brand-neutral)] h-32 flex items-center justify-center text-center p-4 opacity-70 hover:opacity-100 hover:bg-white transition-all cursor-default border border-[var(--brand-border)]"
                 style={{
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
                 }}
               >
                 <span className="font-bold text-sm text-[var(--brand-navy)] uppercase tracking-wider">
@@ -297,7 +287,6 @@ export default function Partners() {
       {/* V. What Partners Say */}
       <section
         className="py-[120px] bg-[var(--brand-surface)] relative -mt-8"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
@@ -385,7 +374,6 @@ export default function Partners() {
       {/* VI. Partnership Proof */}
       <section
         className="py-[120px] bg-white relative -mt-8 z-10"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-30">
           <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-12 items-start">
@@ -466,7 +454,6 @@ export default function Partners() {
       {/* VII. FAQ */}
       <section
         className="py-[120px] bg-[var(--brand-surface-alt)] relative -mt-8 pt-32"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
@@ -484,8 +471,6 @@ export default function Partners() {
                 key={faq.question}
                 className="bg-white border border-[var(--brand-border)] overflow-hidden transition-all"
                 style={{
-                  clipPath:
-                    "polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)",
                 }}
               >
                 <button
@@ -515,7 +500,6 @@ export default function Partners() {
       {/* VIII. Call to Action */}
       <section
         className="py-[120px] bg-[var(--brand-navy)] text-white relative z-10 -mb-10"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 100%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 text-center">
           <div className="max-w-3xl mx-auto space-y-8 reveal">

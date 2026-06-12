@@ -4,18 +4,15 @@ import { ImageWithFallback } from "../components/media/ImageWithFallback";
 import BrandIcon from "../components/brand/BrandIcon";
 import {
   ArrowRight,
-  BriefcaseBusiness,
   Check,
-  GraduationCap,
-  Landmark,
-  Globe,
-  Shield,
-  MessageCircle,
-  Star,
-  Award,
-  Users,
+  BookOpen,
+  Sun,
+  Briefcase,
+  Map,
+  Languages,
+  Heart,
 } from "lucide-react";
-import { fetchPrograms, type Program } from "../utils/programApi";
+// import { fetchPrograms, type Program } from "../utils/programApi";
 import { professionalImages, studentImages } from "../utils/localImages";
 import * as THREE from "three";
 import { geoEquirectangular, geoPath } from "d3-geo";
@@ -297,63 +294,7 @@ function GlobeCanvas() {
   );
 }
 
-// Accent config centralised so both borderTop and BrandIcon stay in sync
-const ACCENT_CONFIG = {
-  red: { var: "var(--brand-red)", hoverText: "white" },
-  blue: { var: "var(--brand-blue)", hoverText: "white" },
-  navyBlue: { var: "var(--brand-navy)", hoverText: "white" },
-  cyan: { var: "var(--brand-cyan)", hoverText: "var(--brand-navy)" },
-} as const;
-
-type AccentTone = keyof typeof ACCENT_CONFIG;
-
-// Hover-safe CTA button — uses CSS classes so colour is never lost on re-render
-function ProgramCTA({
-  href,
-  accentTone,
-}: {
-  href: string;
-  accentTone: AccentTone;
-}) {
-  const { var: color, hoverText } = ACCENT_CONFIG[accentTone];
-
-  // Inject a one-off class the first time each tone is rendered
-  const cls = `prog-btn-${accentTone}`;
-
-  if (
-    typeof document !== "undefined" &&
-    !document.getElementById(`style-${cls}`)
-  ) {
-    const tag = document.createElement("style");
-    tag.id = `style-${cls}`;
-    tag.textContent = `
-      .${cls} {
-        border-color: ${color};
-        color: ${color};
-        background-color: transparent;
-      }
-      .${cls}:hover {
-        background-color: ${color};
-        color: ${hoverText};
-      }
-    `;
-    document.head.appendChild(tag);
-  }
-
-  return (
-    <Link
-      to={href}
-      className={`${cls} inline-flex items-center justify-center w-full gap-2 font-bold uppercase text-xs tracking-widest px-6 py-3 border-2 transition-all duration-300`}
-    >
-      Learn More <ArrowRight className="h-4 w-4" />
-    </Link>
-  );
-}
-
 export default function Home() {
-  const [programs, setPrograms] = useState<Program[]>([]);
-  const [isLoadingPrograms, setIsLoadingPrograms] = useState(true);
-
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -365,145 +306,99 @@ export default function Home() {
     );
     document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, [programs]);
-
-  useEffect(() => {
-    let cancelled = false;
-    const loadPrograms = async () => {
-      try {
-        setIsLoadingPrograms(true);
-        const data = await fetchPrograms();
-        if (!cancelled) setPrograms(data);
-      } catch (error) {
-        console.error("Failed to load homepage programs:", error);
-      } finally {
-        if (!cancelled) setIsLoadingPrograms(false);
-      }
-    };
-    void loadPrograms();
-    return () => {
-      cancelled = true;
-    };
   }, []);
 
-  const programCards = programs.slice(0, 3).map((program, index) => ({
-    icon:
-      program.category === "student"
-        ? GraduationCap
-        : program.category === "professional"
-          ? BriefcaseBusiness
-          : Landmark,
-    title: program.title,
-    description:
-      program.summary ||
-      program.tagline ||
-      program.description ||
-      "Learn more about this program.",
-    href: `/programs/${program.slug}`,
-    bullets: null as string[] | null,
-    accentTone: (program.category === "professional"
-      ? "blue"
-      : index % 3 === 0
-        ? "red"
-        : index % 3 === 1
-          ? "blue"
-          : "cyan") as AccentTone,
-  }));
-
-  const staticPrograms: {
-    icon: typeof GraduationCap;
-    title: string;
-    description: string;
-    bullets: string[];
-    href: string;
-    accentTone: AccentTone;
-  }[] = [
+  const programPathways = [
     {
-      icon: GraduationCap,
-      title: "Students & Youth Programs",
+      icon: BookOpen,
+      title: "Academic & Cultural Exchange",
       description:
-        "Structured international learning experiences for students combining academic development with global exposure.",
-      bullets: [
-        "Summer Camps Abroad",
-        "Study Abroad Semesters",
-        "Language Immersion Courses",
-        "Academic & Cultural Exchange",
-        "International Study Tours",
-      ],
-      href: "/programs",
-      accentTone: "red",
+        "For students who want to learn within new academic and cultural environments.",
+      accent: "red" as const,
+      image:
+        "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&q=80",
     },
     {
-      icon: BriefcaseBusiness,
-      title: "Professional Development Programs",
+      icon: Sun,
+      title: "Summer Schools & Camps",
       description:
-        "Immersive international programmes that build global insight, cross-cultural competence, and leadership skills for working professionals.",
-      bullets: [
-        "Global Leadership Immersions",
-        "Industry Conference Delegations",
-        "Corporate Learning Expeditions",
-        "Executive Study Tours",
-        "Cross-Cultural Competence Programs",
-      ],
-      href: "/programs",
-      accentTone: "blue",
+        "Short-term programs built around study, personal growth, friendship, and shared experience.",
+      accent: "blue" as const,
+      image:
+        "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&q=80",
     },
     {
-      icon: Landmark,
-      title: "Institutional & Group Programs",
+      icon: Briefcase,
+      title: "Internships & Career Exposure",
       description:
-        "Bespoke institutional partnership programmes and corporate learning immersions strengthening global collaboration and capacity building.",
-      bullets: [
-        "Institutional Study Tours",
-        "Academic Exchange Programs",
-        "Faculty Development Immersions",
-        "Student Group Learning Expeditions",
-        "International Partnership Programmes",
-      ],
-      href: "/programs",
-      accentTone: "navyBlue", // ← cyan for the third card
+        "Opportunities that introduce participants to workplace culture and professional life in another country.",
+      accent: "cyan" as const,
+      image:
+        "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=600&q=80",
+    },
+    {
+      icon: Heart,
+      title: "Volunteer Abroad",
+      description:
+        "Service-based experiences that connect participants with communities, local initiatives, and practical contribution.",
+      accent: "red" as const,
+      image:
+        "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80",
+    },
+    {
+      icon: Languages,
+      title: "Language Study Programs",
+      description:
+        "Programs that help participants learn a language through classroom study and everyday use.",
+      accent: "blue" as const,
+      image:
+        "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=600&q=80",
+    },
+    {
+      icon: Map,
+      title: "Study Tours",
+      description:
+        "Guided visits designed around a subject, sector, destination, or group learning objective.",
+      accent: "cyan" as const,
+      image:
+        "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&q=80",
     },
   ];
 
-  // const displayPrograms = programCards.length > 0 ? programCards : staticPrograms;
-  const displayPrograms = staticPrograms;
+  const accentHex: Record<string, string> = {
+    red: "#F84272",
+    blue: "#7635C8",
+    cyan: "#9CF2F4",
+  };
 
-  const trustPillars = [
+  const flagshipPrograms = [
     {
-      icon: Shield,
-      title: "Verified Partner Network",
+      tag: "For students aged 13–18",
+      title: "Cardinal Global Edge",
       description:
-        "Every host institution and programme partner is rigorously vetted before any student is placed.",
+        "A global exposure program for teenagers building confidence, cultural awareness, and a wider understanding of the world.",
+      accent: "var(--brand-red)",
     },
     {
-      icon: Shield,
-      title: "Safety-First Design",
+      tag: "For ages 18–25",
+      title: "Cardinal VisionSprint",
       description:
-        "Every host institution and programme partner is rigorously vetted before any student is placed.",
+        "A focused study abroad experience for students and young adults exploring innovation, entrepreneurship, academic exchange, and practical global learning.",
+      accent: "var(--brand-blue)",
     },
     {
-      icon: MessageCircle,
-      title: "Transparent Communication",
+      tag: "For emerging leaders and professionals",
+      title: "Cardinal Nexus",
       description:
-        "Regular updates to parents and institutions throughout every stage of the journey.",
+        "A professional development experience for early-career and mid-career participants seeking international exposure, industry insight, and meaningful professional connection.",
+      accent: "var(--brand-muted)",
     },
     {
-      icon: Star,
-      title: "Professional Execution",
+      tag: "For institutions and organizations",
+      title: "Cardinal InsightLab",
       description:
-        "From application to completion, each journey is managed with structure, clarity, and accountability.",
-    },
-    {
-      icon: Award,
-      title: "Accredited Programmes",
-      description:
-        "Programmes aligned with international standards and clearly defined learning outcomes.",
-    },
-    {
-      icon: Users,
-      title: "Designed for African Students",
-      description:
-        "Structured programmes supporting students from Ghana and across Africa accessing global opportunities.",
+        "A custom international engagement program for schools, universities, companies, and organizations seeking group mobility, sector-based learning, partnerships, and institutional exposure.",
+      accent: "var(--brand-navy)",
     },
   ];
 
@@ -534,43 +429,18 @@ export default function Home() {
     },
   ];
 
-  const testimonials = [
-    {
-      quote:
-        "The entire experience was very well structured and professionally managed. I felt supported at every stage from application to completion.",
-      name: "Kofi Manu",
-      role: "High School Student",
-    },
-    {
-      quote:
-        "This was more than just a global exchange. It gave me real exposure to my field internationally and helped me make clearer decisions about my academic path.",
-      name: "Ama Mansah",
-      role: "University Student",
-    },
-    {
-      quote:
-        "Communication was clear and the programme was well coordinated throughout. As a parent, I felt confident my child was in safe hands.",
-      name: "Mr Yaw",
-      role: "Parent",
-    },
-  ];
-
   return (
     <>
-      {/* 1. Hero */}
-      <section
-        className="pt-[120px] pb-32 bg-white relative overflow-hidden"
-        style={{ clipPath: "polygon(0 0, 100% 0, 100% 88%, 0% 100%)" }}
-      >
-        <div className="absolute inset-0 z-0 opacity-[0.18] pointer-events-none">
-          <svg className="w-full h-full animate-drift" viewBox="0 0 1440 800">
+      {/* ─── 1. HERO ─────────────────────────────────────────────────────── */}
+      <section className="pt-[120px] pb-20 bg-white relative overflow-hidden">
+        <div className="absolute inset-0 z-0 opacity-[0.15] pointer-events-none">
+          <svg className="w-full h-full" viewBox="0 0 1440 800">
             <circle cx="100" cy="100" fill="var(--brand-blue)" r="3" />
             <circle cx="400" cy="300" fill="var(--brand-navy)" r="4" />
             <circle cx="900" cy="150" fill="var(--brand-cyan)" r="3" />
             <circle cx="1200" cy="400" fill="var(--brand-navy)" r="5" />
             <circle cx="600" cy="600" fill="var(--brand-cyan)" r="3" />
             <path
-              className="animate-pulse-slow"
               d="M100 100 L400 300 M400 300 L900 150 M900 150 L1200 400 M1200 400 L600 600 M600 600 L100 100 M400 300 L600 600"
               fill="none"
               stroke="var(--brand-blue)"
@@ -581,21 +451,23 @@ export default function Home() {
 
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
           <div className="space-y-8 reveal active">
-            <h1 className="font-extrabold text-[36px] md:text-[64px] leading-[44px] md:leading-[72px] tracking-[-0.02em] text-[var(--brand-ink)]">
-              <span className="text-[var(--brand-red)]">Discover</span> the
-              World through Purposeful Learning.
+            <p className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] text-xs">
+              Study Abroad &amp; International Learning
+            </p>
+            <h1 className="font-extrabold text-[36px] md:text-[60px] leading-[44px] md:leading-[68px] tracking-[-0.02em] text-[var(--brand-navy)]">
+              Study abroad programs for real-world learning.
             </h1>
             <p className="text-lg leading-7 text-[var(--brand-muted)] max-w-lg">
-              Transformative international learning programs designed for
-              students and young leaders. Immerse yourself in new cultures, gain
-              global perspectives, and build skills that last a lifetime.
+              Cardinal Immersions helps learners access meaningful educational
+              experiences abroad through guided study, exchange, and
+              cohort-based learning.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 to="/programs"
                 className="flex-1 bg-[var(--brand-red)] text-white font-bold px-8 py-4 rounded transition-all hover:brightness-110 tracking-widest text-sm inline-flex items-center justify-center gap-2"
               >
-                Explore our Programs <ArrowRight className="h-4 w-4" />
+                Explore Our Programs <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 to="/about"
@@ -612,85 +484,72 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. Upcoming Program */}
-      <section
-        className="bg-[var(--brand-navy)] relative z-10 -mt-10 py-20"
-        style={{ clipPath: "polygon(0 8%, 100% 0, 100% 92%, 0 100%)" }}
-      >
+      {/* ─── 2. FEATURED PROGRAM ─────────────────────────────────────────── */}
+      <section className="bg-[var(--brand-navy)] py-20 relative z-10">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6 reveal">
               <span className="inline-block font-bold text-[var(--brand-cyan)] uppercase tracking-[0.2em] text-xs border border-[var(--brand-cyan)] px-3 py-1">
-                Upcoming Program
+                Featured Program
               </span>
               <h2 className="font-extrabold text-[36px] md:text-[52px] leading-[44px] md:leading-[60px] text-white">
-                Cardinal Vision Sprint 1.0
+                Cardinal VisionSprint
               </h2>
-              <p className="text-[var(--brand-cyan)] font-semibold text-2xl">
-                Singapore — Edition
+              <p className="text-[var(--brand-cyan)] font-semibold text-xl">
+                Singapore Edition
               </p>
               <p className="text-white/75 text-lg leading-7">
-                A high-impact international learning experience designed for
-                university students to gain real-world exposure through curated
-                industry visits, expert-led sessions, and meaningful networking
-                opportunities in Singapore.
+                Cardinal VisionSprint is one of our flagship cohort programs for
+                students seeking focused international exposure.
               </p>
               <p className="text-white/60 text-base leading-6">
-                This program bridges academic learning with global practice —
-                helping students understand how industries operate in one of the
-                world's most innovative economies.
-              </p>
-              <p className="text-[var(--brand-red)] font-bold uppercase tracking-widest text-sm">
-                Applications opening soon.
+                The Singapore Edition is a 7-day study abroad program built
+                around innovation, entrepreneurship, academic exchange, and
+                professional learning. Participants engage with institutions,
+                organizations, and local learning environments while reflecting
+                on how ideas and opportunities take shape in a different global
+                context.
               </p>
               <Link
                 to="/programs"
                 className="inline-flex items-center gap-2 border-2 border-white text-white font-bold px-8 py-4 rounded hover:bg-white hover:text-[var(--brand-navy)] transition-all tracking-widest text-sm"
               >
-                Join the waitlist to be the first to apply{" "}
-                <ArrowRight className="h-4 w-4" />
+                View Program Details <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
             <div className="hidden md:block reveal">
               <ImageWithFallback
                 src={studentImages[0]}
-                alt="Singapore skyline"
-                className="w-full h-[400px] object-cover"
-                style={{
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
-                }}
+                alt="Cardinal VisionSprint Singapore"
+                className="w-full h-[420px] object-cover"
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. Stats + Trust Pillars */}
-      <section
-        className="py-[100px] bg-[var(--brand-surface)] relative z-10"
-        style={{ clipPath: "polygon(0 6%, 100% 0, 100% 94%, 0 100%)" }}
-      >
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-10">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20 reveal">
+      {/* ─── 3. STATS BAR ────────────────────────────────────────────────── */}
+      <section className="py-16 bg-[var(--brand-surface)] relative z-10">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 reveal">
             {[
               {
-                value: "50+",
-                label: "Students Placed Globally",
+                value: "6",
+                label: "Program Pathways",
                 color: "var(--brand-red)",
               },
               {
-                value: "5+",
-                label: "Destination Countries",
+                value: "4",
+                label: "Flagship Programs",
                 color: "var(--brand-navy)",
               },
               {
-                value: "10+",
-                label: "Program Tracks",
+                value: "5+",
+                label: "Destination Focus Areas",
                 color: "var(--brand-red)",
               },
               {
-                value: "3+",
+                value: "4+",
                 label: "Years of Experience",
                 color: "var(--brand-navy)",
               },
@@ -708,358 +567,285 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {trustPillars.map((pillar, index) => (
-              <div
-                key={pillar.title}
-                className="bg-white p-8 border border-[var(--brand-border)] hover:border-[var(--brand-blue)] hover:shadow-lg transition-all reveal"
-                style={{
-                  transitionDelay: `${index * 60}ms`,
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
-                }}
+      {/* ─── 4. ABOUT US (dark) ──────────────────────────────────────────── */}
+      <section className="py-[100px] bg-[var(--brand-navy)] relative z-10">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div className="space-y-6 reveal">
+              <span className="font-bold text-[var(--brand-cyan)] uppercase tracking-[0.2em] text-xs">
+                About Us
+              </span>
+              <h2 className="font-extrabold text-[32px] md:text-[52px] leading-[40px] md:leading-[60px] text-white">
+                Learning becomes clearer when it is experienced.
+              </h2>
+              <p className="text-white/70 text-lg leading-7">
+                Education should not only live in notes, lectures, or course
+                materials. It should also be shaped by people, places,
+                conversations, and the chance to see how the world works up
+                close.
+              </p>
+              <p className="text-white/60 text-base leading-6">
+                Cardinal Immersions creates opportunities for participants to
+                observe, ask questions, join new communities, and return with a
+                broader sense of what is possible.
+              </p>
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 border-2 border-white text-white font-bold px-8 py-4 rounded hover:bg-white hover:text-[var(--brand-navy)] transition-all tracking-widest text-sm"
               >
-                <BrandIcon
-                  icon={pillar.icon}
-                  size="sm"
-                  accent={
-                    index % 3 === 0 ? "red" : index % 3 === 1 ? "blue" : "cyan"
-                  }
-                  className="mb-4"
-                />
-                <h4 className="font-bold text-[var(--brand-navy)] text-lg mb-2">
-                  {pillar.title}
-                </h4>
-                <p className="text-[var(--brand-muted)] text-sm leading-6">
-                  {pillar.description}
-                </p>
+                Learn More <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-4 reveal">
+              <ImageWithFallback
+                src={studentImages[17]}
+                alt="Students collaborating"
+                className="w-full h-64 object-cover grayscale hover:grayscale-0 transition-all duration-700"
+              />
+              <ImageWithFallback
+                src={professionalImages[0]}
+                alt="International learning"
+                className="w-full h-64 object-cover grayscale hover:grayscale-0 transition-all duration-700 mt-10"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 5. WHAT WE DO (white) — images LEFT, text RIGHT ────────────── */}
+      <section className="py-[100px] bg-white relative z-10">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+            {/* LEFT: image grid */}
+            <div className="grid grid-cols-2 gap-4 reveal">
+              <ImageWithFallback
+                src={professionalImages[0]}
+                alt="Students arriving together"
+                className="col-span-2 w-full h-52 object-cover"
+              />
+              <ImageWithFallback
+                src={professionalImages[1]}
+                alt="Facilitated discussion"
+                className="w-full h-44 object-cover"
+              />
+              <ImageWithFallback
+                src={professionalImages[3]}
+                alt="Group learning"
+                className="w-full h-44 object-cover"
+              />
+            </div>
+            {/* RIGHT: text */}
+            <div className="space-y-6 reveal">
+              <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] text-xs">
+                What We Do
+              </span>
+              <h2 className="font-extrabold text-[32px] md:text-[48px] leading-[40px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
+                A home for students, schools, and institutions seeking global
+                experience.
+              </h2>
+              <p className="text-[var(--brand-muted)] text-lg leading-7">
+                Our work sits within the wider study abroad space, with a focus
+                on helping learners access experiences abroad that are
+                thoughtful, well-planned, and connected to growth.
+              </p>
+              <p className="text-[var(--brand-muted)] text-base leading-7">
+                We support participants through exchange programs, summer
+                schools, camps, internships, volunteer abroad, language study,
+                study tours, and our own Cardinal-led cohort experiences.
+              </p>
+              <p className="font-semibold text-[var(--brand-navy)] text-base">
+                Cardinal helps connect learners to the right experience abroad.
+              </p>
+              <Link
+                to="/programs"
+                className="inline-flex items-center gap-2 bg-[var(--brand-navy)] text-white font-bold px-8 py-4 rounded hover:brightness-110 transition-all tracking-widest text-sm"
+              >
+                Explore Our Programs <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 6. OUR PROGRAMS — 6 pathways ──────────────────────────────── */}
+      <section className="py-[100px] bg-gray-100 relative z-10">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
+          <div className="text-center mb-16 reveal">
+            <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-4 block text-xs">
+              Our Programs
+            </span>
+            <h2 className="font-extrabold text-[28px] md:text-[48px] leading-[36px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
+              Different pathways for different learning goals.
+            </h2>
+            <p className="text-[var(--brand-muted)] text-lg mt-4 max-w-2xl mx-auto">
+              Cardinal helps connect learners to the right experience abroad.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
+            {programPathways.map((program, index) => (
+              <div
+                key={program.title}
+                className="overflow-hidden hover:shadow-xl transition-all duration-300 reveal flex flex-col border border-[var(--brand-border)]"
+                style={{ transitionDelay: `${index * 80}ms` }}
+              >
+                {/* Image */}
+                <div className="w-full aspect-[16/9] overflow-hidden bg-[var(--brand-navy)]">
+                  <img
+                    src={program.image}
+                    alt={program.title}
+                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                  />
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-col gap-2 px-6 py-8 pb-20 bg-white flex-1">
+                  <h4 className="font-extrabold text-[18px] leading-snug tracking-[-0.01em] text-[var(--brand-navy)]">
+                    {program.title}
+                  </h4>
+                  <p className="text-[var(--brand-muted)] text-base leading-7">
+                    {program.description}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 6. Building Trust */}
-      <section
-        className="py-[100px] bg-[var(--brand-navy)] relative z-10 -mt-16 pt-32"
-        style={{ clipPath: "polygon(0 8%, 100% 0, 100% 92%, 0 100%)" }}
-      >
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div className="space-y-6 reveal">
-              <h2 className="font-extrabold text-[32px] md:text-[48px] leading-[40px] md:leading-[56px] text-white">
-                Building Global Citizens Through Structured International
-                Learning Experiences
-              </h2>
-              <p className="text-white/70 text-lg leading-7">
-                We design immersive international learning programs delivered
-                through a carefully selected network of trusted global partners
-              </p>
-              <p className="text-white/70 text-base leading-7">
-                Every programme is built on strong standards of safety, quality,
-                and consistency across all host institutions, ensuring seamless,
-                well-coordinated global immersion frameworks that are
-                professionally executed from start to finish
-              </p>
-            </div>
+      {/* ─── 7. CARDINAL FLAGSHIP PROGRAMS ──────────────────────────────── */}
+      <section className="py-[100px] bg-white relative z-10">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
+          <div className="text-center mb-16 reveal">
+            <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-4 block text-sm">
+              Cardinal Flagship Programs
+            </span>
+            <h2 className="font-extrabold text-[28px] md:text-[48px] leading-[36px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
+              Cohort experiences shaped by age, stage, and ambition.
+            </h2>
+            <p className="text-[var(--brand-muted)] text-lg mt-4 max-w-3xl mx-auto">
+              Cardinal flagship programs are designed for different stages of
+              learning and professional growth. Each program brings participants
+              together around a clear purpose, guided international exposure,
+              and a shared sense of community.
+            </p>
+          </div>
 
-            <div className="grid grid-cols-2 gap-4 reveal">
-              <ImageWithFallback
-                src={studentImages[17]}
-                alt="Students collaborating"
-                className="w-full h-64 object-cover grayscale hover:grayscale-0 transition-all duration-700"
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {flagshipPrograms.map((prog, index) => (
+              <div
+                key={prog.title}
+                className="group p-8 border border-[var(--brand-border)] hover:shadow-xl transition-all duration-500 reveal flex flex-col"
                 style={{
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
+                  transitionDelay: `${index * 100}ms`,
+                  borderTop: `6px solid ${prog.accent}`,
                 }}
-              />
-              <ImageWithFallback
-                src={professionalImages[0]}
-                alt="International meeting"
-                className="w-full h-64 object-cover grayscale hover:grayscale-0 transition-all duration-700 mt-10"
-                style={{
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
-                }}
-              />
-            </div>
+              >
+                <p
+                  className="font-bold uppercase tracking-widest text-xs mb-3"
+                  style={{ color: prog.accent }}
+                >
+                  {prog.tag}
+                </p>
+                <h4 className="font-extrabold text-[22px] md:text-[26px] text-[var(--brand-navy)] mb-4">
+                  {prog.title}
+                </h4>
+                <p className="text-[var(--brand-muted)] text-sm leading-6 flex-1">
+                  {prog.description}
+                </p>
+                <div className="mt-6 pt-5 border-t border-[var(--brand-border)]">
+                  <Link
+                    to="/programs"
+                    className="inline-flex items-center gap-2 font-bold text-xs uppercase tracking-widest transition-opacity hover:opacity-70"
+                    style={{ color: prog.accent }}
+                  >
+                    Learn More <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 4. About Us */}
-      <section
-        className="py-[100px] bg-white relative -mt-16 z-0 pt-32 overflow-hidden"
-        style={{ clipPath: "polygon(0 8%, 100% 0, 100% 92%, 0 100%)" }}
-      >
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-10">
+      {/* ─── 8. OUR APPROACH (light surface) ────────────────────────────── */}
+      <section className="py-[100px] bg-[var(--brand-surface)] relative z-10">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div className="space-y-6 reveal">
-              <span className="font-extrabold text-[var(--brand-red)] uppercase tracking-[0.2em] text-sm">
-                About Us
+              <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] text-xs">
+                Our Approach
               </span>
-              <h2 className="font-extrabold text-[32px] md:text-[48px] leading-[40px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
-                We believe global exposure is a defining advantage in a rapidly
-                changing world.
+              <h2 className="font-extrabold text-[32px] md:text-[48px] leading-[40px] md:leading-[56px] text-[var(--brand-navy)]">
+                Built carefully, because going abroad requires trust.
               </h2>
               <p className="text-[var(--brand-muted)] text-lg leading-7">
-                Cardinal Immersions exists to open access to international
-                learning environments that shape perspective, build capability,
-                and expand opportunity for students and professionals across
-                Ghana and Africa.
+                When a student, parent, school, or partner chooses Cardinal,
+                they are trusting us with more than a destination. They are
+                trusting us with preparation, safety, communication, and the
+                quality of the experience itself.
               </p>
-              <p className="text-[var(--brand-muted)] text-base leading-7">
-                We design and deliver immersive international experiences
-                through a carefully selected network of trusted global partners,
-                ensuring strong standards of quality, safety, and consistency
-                across every programme.
+              <p className="text-[var(--brand-muted)] text-base leading-6">
+                As a growing organization, we are building carefully from the
+                beginning. We focus on clear information, practical schedules,
+                responsible coordination, and support that helps participants
+                feel prepared before they leave and guided while they are away.
               </p>
-              <p className="text-[var(--brand-muted)] text-base leading-7">
-                Every experience is designed and delivered through trusted
-                partners, with a focus on quality, safety, and meaningful
-                educational outcomes.
-              </p>
+              <div className="space-y-3 pt-2">
+                {[
+                  "Clear information at every stage of the process.",
+                  "Practical schedules designed to maximise learning.",
+                  "Responsible coordination and consistent support.",
+                ].map((line) => (
+                  <div key={line} className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-[var(--brand-red)] flex-shrink-0 mt-0.5" />
+                    <p className="text-[var(--brand-navy)] text-sm leading-6">
+                      {line}
+                    </p>
+                  </div>
+                ))}
+              </div>
               <Link
                 to="/about"
                 className="inline-flex items-center gap-2 bg-[var(--brand-navy)] text-white font-bold px-8 py-4 rounded hover:brightness-110 transition-all tracking-widest text-sm"
               >
-                Learn More <ArrowRight className="h-4 w-4" />
+                How We Work <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-
-            <div className="grid grid-cols-2 gap-4 reveal auto-rows-[110px]">
-              {[
-                {
-                  src: professionalImages[0],
-                  alt: "Students and professionals arriving together",
-                  className: "col-span-2 row-span-2 h-full",
-                },
-                {
-                  src: professionalImages[1],
-                  alt: "Facilitated discussion in a bright room",
-                  className: "h-full",
-                },
-                {
-                  src: professionalImages[3],
-                  alt: "Collaborative group learning moment",
-                  className: "h-full",
-                },
-                {
-                  src: professionalImages[4],
-                  alt: "Roundtable learning experience",
-                  className: "col-span-2 h-full",
-                },
-              ].map((image, index) => (
-                <div
-                  key={image.alt}
-                  className={`overflow-hidden bg-[var(--brand-surface)] border border-[var(--brand-border)] ${image.className}`}
-                  style={{
-                    transitionDelay: `${index * 80}ms`,
-                    clipPath:
-                      "polygon(0 0, 92% 0, 100% 8%, 100% 100%, 8% 100%, 0 92%)",
-                  }}
-                >
-                  <ImageWithFallback
-                    src={image.src}
-                    alt={image.alt}
-                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Programs */}
-      <section
-        className="py-[100px] bg-[var(--brand-surface-alt)] relative z-10 -mt-16 pt-32"
-        style={{ clipPath: "polygon(0 8%, 100% 0, 100% 92%, 0 100%)" }}
-      >
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-10">
-          <div className="text-center mb-16 reveal">
-            <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-4 block text-sm">
-              Our Programs
-            </span>
-            <h2 className="font-extrabold text-[28px] md:text-[48px] leading-[36px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)] mb-4">
-              Purposefully designed international experiences
-              <br className="hidden md:block" /> for those ready to grow
-              globally.
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {isLoadingPrograms
-              ? Array.from({ length: 3 }).map((_, index) => (
-                  <div
-                    key={`program-skeleton-${index}`}
-                    className="bg-white p-8 border border-[var(--brand-border)] animate-pulse"
-                    style={{
-                      borderTop: "6px solid var(--brand-border)",
-                      clipPath:
-                        "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
-                    }}
-                  >
-                    <div className="w-12 h-12 bg-[var(--brand-blue-soft)] mb-6" />
-                    <div className="h-7 w-2/3 bg-[var(--brand-border)] mb-4" />
-                    <div className="h-4 w-full bg-[var(--brand-cyan-soft)] mb-2" />
-                    <div className="h-4 w-5/6 bg-[var(--brand-blue-soft)] mb-8" />
-                    <div className="h-4 w-28 bg-[var(--brand-cyan)]" />
-                  </div>
-                ))
-              : displayPrograms.map((program, index) => {
-                  const accentVar = ACCENT_CONFIG[program.accentTone].var;
-                  return (
-                    <div
-                      key={program.title}
-                      className="group bg-white p-8 hover:shadow-xl transition-all duration-500 reveal flex flex-col"
-                      style={{
-                        transitionDelay: `${index * 100}ms`,
-                        borderTop: `6px solid ${accentVar}`,
-                        clipPath:
-                          "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
-                      }}
-                    >
-                      {/* Icon */}
-                      <BrandIcon
-                        icon={program.icon}
-                        size="lg"
-                        accent={program.accentTone}
-                        className="mb-6"
-                      />
-
-                      {/* Title */}
-                      <h4 className="font-semibold text-[22px] mb-3 text-[var(--brand-navy)]">
-                        {program.title}
-                      </h4>
-
-                      {/* Description */}
-                      <p className="text-[var(--brand-muted)] mb-6 text-sm leading-6">
-                        {program.description}
-                      </p>
-
-                      {/* Bullet list */}
-                      {program.bullets && program.bullets.length > 0 && (
-                        <ul className="space-y-2 mb-6 flex-1">
-                          {program.bullets.map((b) => (
-                            <li
-                              key={b}
-                              className="flex items-center gap-2 text-sm text-[var(--brand-muted)]"
-                            >
-                              <span
-                                className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                                style={{ backgroundColor: accentVar }}
-                              />
-                              {b}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-
-                      {/* Learn More CTA — uses injected CSS class to avoid inline hover flicker */}
-                      <div className="mt-auto pt-6 border-t border-[var(--brand-border)]">
-                        <ProgramCTA
-                          href={program.href}
-                          accentTone={program.accentTone}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Building Trust */}
-      <section
-        className="py-[100px] bg-[var(--brand-navy)] relative z-10 -mt-16 pt-32"
-        style={{ clipPath: "polygon(0 8%, 100% 0, 100% 92%, 0 100%)" }}
-      >
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div className="space-y-6 reveal">
-              {/* <span className="font-bold text-[var(--brand-cyan)] uppercase tracking-[0.2em] text-sm">
-                Our Commitment
-              </span> */}
-              <h2 className="font-extrabold text-[32px] md:text-[48px] leading-[40px] md:leading-[56px] text-white">
-                Building Trust, Delivering Excellence
-              </h2>
-              <p className="text-white/70 text-lg leading-7">
-                We understand that participating in an international learning
-                program is a significant commitment for students, families, and
-                institutions that requires confidence in both process and
-                delivery.
-              </p>
-              <p className="text-white/70 text-base leading-7">
-                That is why every experience we design is built with careful
-                attention to safety, structure, and consistency, supported by a
-                network of verified international partners.
-              </p>
-              <div className="space-y-3 pt-2">
-                {[
-                  "For families, it means reassurance that every detail is considered.",
-                  "For institutions, it means a reliable partner in delivering meaningful global exposure.",
-                  "For participants, it means the freedom to focus fully on learning, growth, and experience.",
-                ].map((line) => (
-                  <div key={line} className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-[var(--brand-cyan)] flex-shrink-0 mt-0.5" />
-                    <p className="text-white/80 text-sm leading-6">{line}</p>
-                  </div>
-                ))}
-              </div>
-              <p className="text-white font-semibold italic border-l-4 border-[var(--brand-red)] pl-4 text-base">
-                At Cardinal Immersions, trust is not a claim. It is a standard
-                we operate by in every programme we deliver.
-              </p>
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 border-2 border-white text-white font-bold px-8 py-4 rounded hover:bg-white hover:text-[var(--brand-navy)] transition-all tracking-widest text-sm"
-              >
-                Enquire Now <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-
             <div className="grid grid-cols-2 gap-4 reveal">
               <ImageWithFallback
-                src={studentImages[17]}
-                alt="Students collaborating"
-                className="w-full h-64 object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                style={{
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
-                }}
+                src={studentImages[0]}
+                alt="Students prepared to travel"
+                className="w-full h-64 object-cover"
               />
               <ImageWithFallback
-                src={professionalImages[0]}
-                alt="International meeting"
-                className="w-full h-64 object-cover grayscale hover:grayscale-0 transition-all duration-700 mt-10"
-                style={{
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
-                }}
+                src={professionalImages[4]}
+                alt="Professional briefing"
+                className="w-full h-64 object-cover mt-10"
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* 7. Destinations */}
-      <section
-        className="py-[100px] bg-[var(--brand-surface)] relative z-10 -mt-16 pt-32"
-        style={{ clipPath: "polygon(0 8%, 100% 0, 100% 92%, 0 100%)" }}
-      >
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-10">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-12 reveal">
-            <div>
-              <span className="font-extrabold text-[28px] md:text-[40px] leading-[36px] md:leading-[48px] text-[var(--brand-navy)]">
-                Where will you Go?
-              </span>
-              <h2 className="font-bold text-[var(--brand-red)]  mb-3 block text-md mt-[1rem]">
-                Our programs span several destinations across multiple countries
-                and regions worldwide.
-              </h2>
-            </div>
+      {/* ─── 9. DESTINATIONS ─────────────────────────────────────────────── */}
+      <section className="py-[100px] bg-white relative z-10">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
+          <div className="mb-12 reveal">
+            <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] text-xs block mb-4">
+              Program Destinations
+            </span>
+            <h2 className="font-extrabold text-[28px] md:text-[48px] leading-[36px] md:leading-[56px] text-[var(--brand-navy)]">
+              Places chosen for what they can teach.
+            </h2>
+            <p className="text-[var(--brand-muted)] text-lg mt-4 max-w-2xl">
+              We look at destinations through a learning lens: their culture,
+              academic environment, industries, institutions, and the
+              opportunities they offer for meaningful engagement.
+            </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -1067,11 +853,7 @@ export default function Home() {
               <div
                 key={dest.name}
                 className="group relative overflow-hidden cursor-pointer reveal"
-                style={{
-                  transitionDelay: `${index * 80}ms`,
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
-                }}
+                style={{ transitionDelay: `${index * 80}ms` }}
               >
                 <ImageWithFallback
                   src={dest.img}
@@ -1087,97 +869,67 @@ export default function Home() {
               </div>
             ))}
           </div>
-
-          <Link
-            to="/programs"
-            className="inline-flex items-center gap-2 border-2 border-[var(--brand-navy)] text-[var(--brand-navy)] font-bold px-8 py-4 rounded hover:bg-[var(--brand-navy)] hover:text-[white] transition-all tracking-widest text-sm mt-[2rem]"
-          >
-            View All
-          </Link>
         </div>
       </section>
 
-      {/* 8. Testimonials */}
-      <section
-        className="py-[100px] bg-white relative z-10 -mt-16 pt-32"
-        style={{ clipPath: "polygon(0 8%, 100% 0, 100% 92%, 0 100%)" }}
-      >
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-10">
-          <div className="text-center mb-16 reveal">
-            <h2 className="font-extrabold text-[28px] md:text-[40px] text-[var(--brand-navy)]">
-              Experiences That Speak for Themselves
-            </h2>
-            <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-3 block text-sm mt-2">
-              Hear from students, parents, and professionals
-              <br className="hidden md:block" /> who have experienced Cardinal
-              Immersions firsthand.
+      {/* ─── 10. COMMUNITY ───────────────────────────────────────────────── */}
+      <section className="py-[100px] bg-[var(--brand-surface)] relative z-10">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
+          {/* Text centered on top */}
+          <div className="text-center mb-12 reveal">
+            <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] text-xs block mb-4">
+              Our Community
             </span>
+            <h2 className="font-extrabold text-[28px] md:text-[48px] leading-[36px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)] max-w-4xl mx-auto">
+              A growing community of learners, families, educators, and
+              partners.
+            </h2>
+            <p className="text-[var(--brand-muted)] text-lg leading-7 mt-4 max-w-2xl mx-auto">
+              Cardinal is built around people: the students who take part, the
+              families who support them, the educators who believe in global
+              learning, and the partners who help make each experience
+              meaningful.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t, index) => (
-              <div
-                key={t.name}
-                className="bg-[var(--brand-surface)] p-8 border border-[var(--brand-border)] hover:border-[var(--brand-blue)] transition-colors reveal"
-                style={{
-                  transitionDelay: `${index * 100}ms`,
-                  maskImage:
-                    "radial-gradient(circle 40px at 0 0, transparent 0, transparent 40px, black 41px)",
-                  WebkitMaskImage:
-                    "radial-gradient(circle 40px at 0 0, transparent 0, transparent 40px, black 41px)",
-                }}
-              >
-                <p className="text-base italic text-[var(--brand-ink)] leading-7 mb-8">
-                  "{t.quote}"
-                </p>
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-[var(--brand-blue-soft)] border-2 border-[var(--brand-blue)] flex-shrink-0" />
-                  <div>
-                    <p className="font-bold text-[var(--brand-navy)]">
-                      {t.name}
-                    </p>
-                    <p className="text-sm text-[var(--brand-muted)]">
-                      {t.role}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
+          {/* 3 images side by side */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 reveal">
+            <img
+              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80"
+              alt="Students collaborating"
+              className="w-full h-96 object-cover md:block"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&q=80"
+              alt="Networking event"
+              className="hidden md:block w-full h-96 object-cover"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1529390079861-591de354faf5?w=800&q=80"
+              alt="Student on program"
+              className="hidden md:block w-full h-96 object-cover"
+            />
           </div>
         </div>
       </section>
 
-      {/* 9. CTA */}
-      <section
-        style={{ clipPath: "polygon(0 8%, 100% 0, 100% 92%, 0 100%)" }}
-        className="py-28 bg-[var(--brand-surface-alt)] border-t border-[var(--brand-border)] relative z-10 -mt-16 text-center mb-[40%] lg:mb-16"
-      >
-        <div className="max-w-[800px] mx-auto px-4 sm:px-6 lg:px-16 reveal">
-          <h2 className="font-extrabold text-[40px] md:text-[64px] leading-[48px] md:leading-[72px] tracking-[-0.02em] text-[var(--brand-navy)] mb-4">
-            Ready to Go Global?
+      {/* ─── 11. CTA ─────────────────────────────────────────────────────── */}
+      <section className="py-28 bg-white border-t border-[var(--brand-border)] relative z-10 text-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-16 reveal">
+          <h2 className="font-extrabold text-[40px] md:text-[60px] leading-[48px] md:leading-[68px] tracking-[-0.02em] text-[var(--brand-navy)] mb-6">
+            Start with the pathway that fits your goals.
           </h2>
-          <p className="font-semibold text-[var(--brand-navy)] text-xl mb-2">
-            Your international journey starts here.
+          <p className="text-[var(--brand-muted)] text-lg mb-4 max-w-xl mx-auto">
+            Whether you are a student, parent, educator, or institution,
+            Cardinal Immersions can help you explore opportunities abroad that
+            are thoughtful, guided, and aligned with your next step.
           </p>
-          <p className="text-[var(--brand-muted)] text-base mb-2">
-            Applications for our 2025 cohorts are now open. Spaces are limited.
-          </p>
-          <p className="font-bold text-[var(--brand-red)] uppercase tracking-widest text-sm mb-10">
-            Early-bird pricing available for applications
-            <br className="hidden md:block" /> submitted by 30 June 2025.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
             <Link
               to="/programs"
               className="bg-[var(--brand-red)] text-white font-bold px-10 py-4 rounded hover:brightness-110 transition-all tracking-widest text-sm inline-flex items-center justify-center gap-2"
             >
-              View Upcoming Programs <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to="/contact"
-              className="border-2 border-[var(--brand-navy)] text-[var(--brand-navy)] font-bold px-10 py-4 rounded hover:bg-[var(--brand-navy)] hover:text-white transition-all tracking-widest text-sm inline-flex items-center justify-center"
-            >
-              Speak to an Advisor
+              Explore Our Programs <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>

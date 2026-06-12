@@ -159,7 +159,7 @@ export default function AdminInquiries() {
       </div>
 
       {/* Filters Bar */}
-      <div className="bg-white p-6 border border-[var(--brand-border)] mb-6" style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}>
+      <div className="bg-white p-6 border border-[var(--brand-border)] mb-6 rounded-2xl">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label className="block text-sm font-bold text-[var(--brand-navy)] mb-2">Organization Type</label>
@@ -246,7 +246,7 @@ export default function AdminInquiries() {
       </div>
 
       {/* Data Table */}
-      <div className="bg-white border border-[var(--brand-border)]" style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}>
+      <div className="bg-white border border-[var(--brand-border)] rounded-2xl">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-[var(--brand-surface)] border-b border-[var(--brand-border)]">
@@ -331,7 +331,7 @@ export default function AdminInquiries() {
       {/* View/Edit Modal */}
       {showModal && selectedInquiry && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--brand-navy)]/55 backdrop-blur-sm px-4">
-          <div className="bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl" style={{ clipPath: 'polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)' }}>
+          <div className="bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl rounded-2xl">
             {/* Modal Header */}
             <div className="bg-[var(--brand-red)] text-white p-6 flex justify-between items-center sticky top-0 z-10">
               <h2 className="font-bold text-xl">Inquiry Details</h2>

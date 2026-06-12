@@ -3,16 +3,16 @@
 :root {
   --font-size: 16px;
 
-  --brand-red: #F84272;
-  --brand-red-soft: #FCB3C7;
+  --brand-red: #f84272;
+  --brand-red-soft: #fcb3c7;
   --brand-red-deep: #941134;
-  --brand-navy: #0C0F3F;
-  --brand-navy-soft: #35375F;
+  --brand-navy: #0c0f3f;
+  --brand-navy-soft: #35375f;
   --brand-navy-deep: #050619;
-  --brand-blue: #7635C8;
-  --brand-blue-soft: #C8AEE9;
-  --brand-cyan: #9CF2F4;
-  --brand-cyan-soft: #D7FAFB;
+  --brand-blue: #7635c8;
+  --brand-blue-soft: #c8aee9;
+  --brand-cyan: #9cf2f4;
+  --brand-cyan-soft: #d7fafb;
   --brand-surface: #f8fafc;
   --brand-surface-alt: #f1f4f9;
   --brand-surface-hover: #e8edf5;
@@ -160,19 +160,37 @@
 
 /* Custom Animations */
 @keyframes float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(5deg); }
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
 }
 
 @keyframes pulse-slow {
-  0%, 100% { opacity: 0.1; transform: scale(1); }
-  50% { opacity: 0.3; transform: scale(1.05); }
+  0%,
+  100% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.05);
+  }
 }
 
 @keyframes drift {
-  0% { transform: translate(0, 0); }
-  50% { transform: translate(30px, 20px); }
-  100% { transform: translate(0, 0); }
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(30px, 20px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }
 
 .animate-float {

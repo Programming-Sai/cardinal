@@ -41,7 +41,6 @@ export default function About() {
       {/* Hero Section */}
       <section
         className="pt-[120px] pb-20 bg-white relative overflow-hidden py-20"
-        style={{ clipPath: "polygon(0 0, 100% 0, 100% 85%, 0% 100%)" }}
       >
         {/* Animated Connectivity Background */}
         <div className="absolute inset-0 z-0 opacity-[0.18] pointer-events-none">
@@ -99,8 +98,6 @@ export default function About() {
                 alt="Students learning internationally"
                 className="w-full h-[560px] object-cover shadow-2xl"
                 style={{
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
                 }}
               />
             </div>
@@ -111,7 +108,6 @@ export default function About() {
       {/* Our Story */}
       <section
         className="bg-[#0C0F3F] text-white relative -mt-16 z-20 "
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
@@ -155,8 +151,6 @@ export default function About() {
                 alt="Globe representing global education"
                 className="w-full h-[320px] sm:h-[400px] lg:h-[500px] object-cover shadow-2xl"
                 style={{
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
                 }}
               />
             </div>
@@ -167,7 +161,6 @@ export default function About() {
       {/* Mission & Vision */}
       <section
         className=" bg-[var(--brand-surface)] relative -mt-20 pt-40 "
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-25">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -175,8 +168,6 @@ export default function About() {
             <div
               className="bg-[#0C0F3F] text-white overflow-hidden hover:brightness-110 transition-all reveal"
               style={{
-                clipPath:
-                  "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
               }}
             >
               <ImageWithFallback
@@ -222,8 +213,6 @@ export default function About() {
             <div
               className="bg-white overflow-hidden border border-[var(--brand-border)] hover:border-[#F71C56] transition-all reveal"
               style={{
-                clipPath:
-                  "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
               }}
             >
               <div className="p-10">
@@ -273,7 +262,6 @@ export default function About() {
       {/* What We Believe */}
       <section
         className="py-[120px] bg-[var(--brand-surface-alt)] relative z-10 -mt-20"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-80">
           <div className="text-center mb-16 reveal">
@@ -338,8 +326,6 @@ export default function About() {
                 className="bg-white overflow-hidden border border-[var(--brand-border)] hover:border-[#F71C56] transition-all reveal"
                 style={{
                   transitionDelay: `${index * 100}ms`,
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
                 }}
               >
                 <ImageWithFallback
@@ -369,8 +355,6 @@ export default function About() {
           <div
             className="mt-16 bg-[#0C0F3F] text-white p-12 text-center reveal mb-15no"
             style={{
-              clipPath:
-                "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
             }}
           >
             <p className="text-2xl sm:text-3xl font-bold italic leading-relaxed mb-4 text-white/95">
@@ -399,7 +383,6 @@ export default function About() {
       {/* What We Do */}
       <section
         className="py-[120px] bg-[var(--brand-surface)] relative -mt-120 pt-40"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-80">
           <div className="text-center mb-16 reveal">
@@ -484,8 +467,6 @@ export default function About() {
                 className="bg-white border border-[var(--brand-border)] hover:border-[#F71C56] transition-all flex flex-col overflow-hidden reveal"
                 style={{
                   transitionDelay: `${index * 100}ms`,
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
                 }}
               >
                 <ImageWithFallback
@@ -534,7 +515,6 @@ export default function About() {
       {/* Our Commitment */}
       <section
         className="py-[120px] bg-[var(--brand-surface-alt)] relative z-10"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
@@ -567,8 +547,6 @@ export default function About() {
                     className={`overflow-hidden shadow-lg ${image.className}`}
                     style={{
                       transitionDelay: `${index * 80}ms`,
-                      clipPath:
-                        "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
                     }}
                   >
                     <ImageWithFallback
@@ -645,7 +623,6 @@ export default function About() {
       {/* Meet the Team */}
       <section
         className="py-[120px] bg-[var(--brand-surface)] relative -mt-16 pt-40"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
@@ -696,7 +673,6 @@ export default function About() {
                     alt={member.name}
                     className="w-full h-64 object-cover grayscale hover:grayscale-0 transition-all duration-700"
                     style={{
-                      clipPath: "polygon(0 0, 100% 0, 100% 85%, 0 100%)",
                     }}
                   />
                   <div className="p-6">
@@ -717,7 +693,6 @@ export default function About() {
       {/* Call to Action */}
       <section
         className="py-[120px] bg-[#0C0F3F] text-white relative z-10 -mb-10"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 100%, 0 100%)" }}
       >
         {/* Background decoration */}
         <div className="absolute bottom-10 right-[5%] opacity-20 pointer-events-none">

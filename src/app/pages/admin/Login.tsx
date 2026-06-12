@@ -36,7 +36,6 @@ export default function AdminLogin() {
         <div
           className="bg-white p-8 sm:p-10 shadow-2xl border border-[var(--brand-border)]"
           style={{
-            clipPath: 'polygon(0 0, 98% 0, 100% 2%, 100% 100%, 2% 100%, 0 98%)',
           }}
         >
           <div className="text-center mb-8">

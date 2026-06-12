@@ -3,11 +3,8 @@ import BrandLogo from "./brand/BrandLogo";
 
 export default function Footer() {
   return (
-    <footer
-      className="w-full bg-gradient-to-b from-brand-navy to-brand-navy-deep text-white relative  pt-32 pb-16 sm:pt-36 sm:pb-20 lg:pt-40 lg:pb-20 z-0 overflow-hidden -mt-50 md:-mt-25"
-      style={{ clipPath: "polygon(0 14%, 100% 0, 100% 100%, 0 100%)" }}
-    >
-      <div className="py-20">
+    <footer className="w-full bg-gradient-to-b from-brand-navy to-brand-navy-deep text-white relative  pt-32 pb-16 sm:pt-36 sm:pb-20 lg:pt-40 lg:pb-20 z-0 overflow-hidden">
+      <div>
         <div className="absolute inset-0 pointer-events-none opacity-20">
           <div className="absolute -top-24 right-8 h-72 w-72 rounded-full bg-brand-red/20 blur-3xl" />
           <div className="absolute top-24 left-1/4 h-64 w-64 rounded-full bg-brand-blue/15 blur-3xl" />
@@ -24,10 +21,10 @@ export default function Footer() {
             <div className="flex gap-4">
               <a
                 className="text-white hover:text-brand-cyan transition-colors flex items-center gap-2"
-                href="mailto:hello@andylcc.com"
+                href="mailto:hello@cardinalimmersions.com"
               >
                 <Mail className="h-4 w-4" />
-                hello@andylcc.com
+                hello@cardinalimmersions.com
               </a>
             </div>
           </div>
@@ -113,19 +110,13 @@ export default function Footer() {
             <div className="flex flex-col gap-4">
               <input
                 className="bg-transparent border border-white/30 p-3 text-white text-sm font-bold focus:border-brand-cyan outline-none transition-all placeholder:text-white/50"
-                style={{
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
-                }}
+                style={{ borderRadius: "0.875rem" }}
                 placeholder="ENTER YOUR EMAIL"
                 type="email"
               />
               <button
                 className="bg-brand-red text-white py-3 font-bold uppercase tracking-widest text-xs hover:brightness-110 transition-colors"
-                style={{
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
-                }}
+                style={{ borderRadius: "0.875rem" }}
               >
                 Join Mobility Network
               </button>

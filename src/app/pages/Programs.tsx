@@ -184,7 +184,6 @@ export default function Programs() {
       {/* I. Hero Section */}
       <section
         className="pt-[120px] pb-16 bg-[var(--brand-navy)] text-white relative overflow-hidden"
-        style={{ clipPath: "polygon(0 0, 100% 0, 100% 85%, 0% 100%)" }}
       >
         <div className="absolute inset-0 z-0 opacity-[0.22] pointer-events-none">
           <ImageWithFallback
@@ -215,7 +214,6 @@ export default function Programs() {
       {/* II. Core Program Categories */}
       <section
         className=" bg-[var(--brand-surface)] relative -mt-8 z-10"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="absolute bottom-16 left-[3%] opacity-[0.18] pointer-events-none ">
           <ImageWithFallback
@@ -234,8 +232,6 @@ export default function Programs() {
                   className="bg-white overflow-hidden border border-[var(--brand-border)] animate-pulse"
                   style={{
                     borderTop: "6px solid var(--brand-border)",
-                    clipPath:
-                      "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
                   }}
                 >
                   <div className="w-full h-52 bg-[#eef1f4]" />
@@ -264,8 +260,6 @@ export default function Programs() {
                     className="group bg-white overflow-hidden border border-[var(--brand-border)] hover:shadow-2xl transition-all duration-500 reveal"
                     style={{
                       borderTop: `6px solid ${accentColor}`,
-                      clipPath:
-                        "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
                       transitionDelay: `${index * 120}ms`,
                     }}
                   >
@@ -350,7 +344,6 @@ export default function Programs() {
       {/* III. What Makes Our Programs Different */}
       <section
         className="py-[120px] bg-white relative -mt-8 z-20"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="absolute top-20 right-[5%] opacity-[0.18] pointer-events-none">
           <ImageWithFallback
@@ -399,7 +392,6 @@ export default function Programs() {
       {/* IV. Find Your Fit */}
       <section
         className="py-[120px] bg-[var(--brand-surface)] relative -mt-35 z-10"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-25 ">
           <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 items-stretch">
@@ -416,8 +408,6 @@ export default function Programs() {
                     key={item.title}
                     className="flex gap-4 items-start p-4 bg-[var(--brand-surface)] border border-[var(--brand-border)]"
                     style={{
-                      clipPath:
-                        "polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)",
                     }}
                   >
                     <BrandIcon
@@ -489,7 +479,6 @@ export default function Programs() {
       {/* V. We Are Not a Travel Agency */}
       <section
         className="py-[120px] bg-[var(--brand-surface-alt)] relative -mt-16 pt-32"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="bg-white border-2 border-[var(--brand-border)] p-12 shadow-xl reveal">
@@ -551,7 +540,6 @@ export default function Programs() {
       {/* VI. Program Openings */}
       <section
         className="py-[120px] bg-[var(--brand-surface)] relative -mt-8"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="absolute top-32 right-[5%] opacity-[0.18] pointer-events-none">
           <ImageWithFallback
@@ -583,8 +571,6 @@ export default function Programs() {
                   key={`opening-skeleton-${index}`}
                   className="bg-white border border-[var(--brand-border)] p-6 animate-pulse"
                   style={{
-                    clipPath:
-                      "polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)",
                   }}
                 >
                   <div className="h-56 w-full bg-[#eef1f4] mb-5" />
@@ -609,8 +595,6 @@ export default function Programs() {
                     key={program.slug}
                     className="bg-white border border-[var(--brand-border)] hover:border-[var(--brand-red)] hover:shadow-2xl transition-all duration-300 overflow-hidden h-full flex flex-col"
                     style={{
-                      clipPath:
-                        "polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)",
                       transitionDelay: `${index * 100}ms`,
                     }}
                   >
@@ -717,7 +701,6 @@ export default function Programs() {
       {/* VII. Compare At A Glance */}
       <section
         className="py-[120px] bg-white relative -mt-8 z-10"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-20">
           <div className="text-center mb-16 reveal">
@@ -739,8 +722,6 @@ export default function Programs() {
                 key={`compare-${program.slug}`}
                 className="bg-[var(--brand-surface)] border border-[var(--brand-border)] p-7 shadow-lg h-full flex flex-col justify-between"
                 style={{
-                  clipPath:
-                    "polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)",
                 }}
               >
                 <div className="flex items-start justify-between gap-4 mb-5">
@@ -807,7 +788,6 @@ export default function Programs() {
       {/* VIII. For Institutions */}
       <section
         className="py-[120px] bg-white relative -mt-8 z-10"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 py-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
@@ -864,8 +844,6 @@ export default function Programs() {
                 alt="Educators in professional meeting"
                 className="w-full h-[420px] object-cover shadow-2xl"
                 style={{
-                  clipPath:
-                    "polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)",
                 }}
               />
             </div>
@@ -876,7 +854,6 @@ export default function Programs() {
       {/* IX. FAQ Section */}
       <section
         className="py-[120px] bg-[var(--brand-surface-alt)] relative -mt-16 pt-32"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16">
           <div className="text-center mb-16 reveal">
@@ -891,8 +868,6 @@ export default function Programs() {
                 key={faq.question}
                 className="bg-white border border-[var(--brand-border)] overflow-hidden transition-all"
                 style={{
-                  clipPath:
-                    "polygon(0 0, 99% 0, 100% 1%, 100% 100%, 1% 100%, 0 99%)",
                 }}
               >
                 <button
@@ -922,7 +897,6 @@ export default function Programs() {
       {/* X. Call to Action */}
       <section
         className="py-[120px] bg-[var(--brand-navy)] text-white relative z-10 -mb-10"
-        style={{ clipPath: "polygon(0 10%, 100% 0, 100% 100%, 0 100%)" }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 text-center">
           <div className="max-w-3xl mx-auto space-y-8 reveal">

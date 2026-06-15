@@ -196,7 +196,7 @@ export default function Programs() {
 
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 relative z-10">
           <div className="max-w-3xl space-y-6 reveal active">
-            <h1 className="font-extrabold text-[36px] sm:text-[48px] md:text-[64px] leading-[42px] sm:leading-[56px] md:leading-[72px] tracking-[-0.02em]">
+            <h1 className="font-display font-extrabold text-[36px] sm:text-[48px] md:text-[64px] leading-[42px] sm:leading-[56px] md:leading-[72px] tracking-[-0.02em]">
               Our Programs
             </h1>
             <p className="text-2xl leading-relaxed text-white/90">

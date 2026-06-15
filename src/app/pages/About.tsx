@@ -66,7 +66,7 @@ export default function About() {
               <span className="font-bold text-[#F71C56] uppercase tracking-[0.2em] text-sm">
                 About Us
               </span>
-              <h1 className="font-extrabold text-[36px] sm:text-[48px] md:text-[64px] leading-[42px] sm:leading-[56px] md:leading-[72px] tracking-[-0.02em] text-[#0C0F3F]">
+              <h1 className="font-display font-extrabold text-[36px] sm:text-[48px] md:text-[64px] leading-[42px] sm:leading-[56px] md:leading-[72px] tracking-[-0.02em] text-[#0C0F3F]">
                 Every Experience is a{" "}
                 <span className="text-[#F71C56]">Cardinal Moment</span>
               </h1>

@@ -454,7 +454,7 @@ export default function Home() {
             <p className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] text-xs">
               Study Abroad &amp; International Learning
             </p>
-            <h1 className="font-extrabold text-[36px] md:text-[60px] leading-[44px] md:leading-[68px] tracking-[-0.02em] text-[var(--brand-navy)]">
+            <h1 className="font-display font-extrabold text-[36px] md:text-[60px] leading-[44px] md:leading-[68px] tracking-[-0.02em] text-[var(--brand-navy)]">
               Study abroad programs for real-world learning.
             </h1>
             <p className="text-lg leading-7 text-[var(--brand-muted)] max-w-lg">
@@ -492,7 +492,7 @@ export default function Home() {
               <span className="inline-block font-bold text-[var(--brand-cyan)] uppercase tracking-[0.2em] text-xs border border-[var(--brand-cyan)] px-3 py-1">
                 Featured Program
               </span>
-              <h2 className="font-extrabold text-[36px] md:text-[52px] leading-[44px] md:leading-[60px] text-white">
+              <h2 className="font-display font-extrabold text-[36px] md:text-[52px] leading-[44px] md:leading-[60px] text-white">
                 Cardinal VisionSprint
               </h2>
               <p className="text-[var(--brand-cyan)] font-semibold text-xl">
@@ -556,7 +556,7 @@ export default function Home() {
             ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <p
-                  className="font-extrabold text-[56px] md:text-[72px] leading-[64px] md:leading-[80px] tracking-[-0.02em] mb-1"
+                className="font-display font-extrabold text-[56px] md:text-[72px] leading-[64px] md:leading-[80px] tracking-[-0.02em] mb-1"
                   style={{ color: stat.color }}
                 >
                   {stat.value}
@@ -578,7 +578,7 @@ export default function Home() {
               <span className="font-bold text-[var(--brand-cyan)] uppercase tracking-[0.2em] text-xs">
                 About Us
               </span>
-              <h2 className="font-extrabold text-[32px] md:text-[52px] leading-[40px] md:leading-[60px] text-white">
+              <h2 className="font-display font-extrabold text-[32px] md:text-[52px] leading-[40px] md:leading-[60px] text-white">
                 Learning becomes clearer when it is experienced.
               </h2>
               <p className="text-white/70 text-lg leading-7">
@@ -642,7 +642,7 @@ export default function Home() {
               <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] text-xs">
                 What We Do
               </span>
-              <h2 className="font-extrabold text-[32px] md:text-[48px] leading-[40px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
+              <h2 className="font-display font-extrabold text-[32px] md:text-[48px] leading-[40px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
                 A home for students, schools, and institutions seeking global
                 experience.
               </h2>
@@ -677,7 +677,7 @@ export default function Home() {
             <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-4 block text-xs">
               Our Programs
             </span>
-            <h2 className="font-extrabold text-[28px] md:text-[48px] leading-[36px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
+            <h2 className="font-display font-extrabold text-[28px] md:text-[48px] leading-[36px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
               Different pathways for different learning goals.
             </h2>
             <p className="text-[var(--brand-muted)] text-lg mt-4 max-w-2xl mx-auto">
@@ -703,7 +703,7 @@ export default function Home() {
 
                 {/* Content */}
                 <div className="flex flex-col gap-2 px-6 py-8 pb-20 bg-white flex-1">
-                  <h4 className="font-extrabold text-[18px] leading-snug tracking-[-0.01em] text-[var(--brand-navy)]">
+                  <h4 className="font-display font-extrabold text-[18px] leading-snug tracking-[-0.01em] text-[var(--brand-navy)]">
                     {program.title}
                   </h4>
                   <p className="text-[var(--brand-muted)] text-base leading-7">
@@ -723,7 +723,7 @@ export default function Home() {
             <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] mb-4 block text-sm">
               Cardinal Flagship Programs
             </span>
-            <h2 className="font-extrabold text-[28px] md:text-[48px] leading-[36px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
+            <h2 className="font-display font-extrabold text-[28px] md:text-[48px] leading-[36px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)]">
               Cohort experiences shaped by age, stage, and ambition.
             </h2>
             <p className="text-[var(--brand-muted)] text-lg mt-4 max-w-3xl mx-auto">
@@ -750,7 +750,7 @@ export default function Home() {
                 >
                   {prog.tag}
                 </p>
-                <h4 className="font-extrabold text-[22px] md:text-[26px] text-[var(--brand-navy)] mb-4">
+                <h4 className="font-display font-extrabold text-[22px] md:text-[26px] text-[var(--brand-navy)] mb-4">
                   {prog.title}
                 </h4>
                 <p className="text-[var(--brand-muted)] text-sm leading-6 flex-1">
@@ -779,7 +779,7 @@ export default function Home() {
               <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] text-xs">
                 Our Approach
               </span>
-              <h2 className="font-extrabold text-[32px] md:text-[48px] leading-[40px] md:leading-[56px] text-[var(--brand-navy)]">
+              <h2 className="font-display font-extrabold text-[32px] md:text-[48px] leading-[40px] md:leading-[56px] text-[var(--brand-navy)]">
                 Built carefully, because going abroad requires trust.
               </h2>
               <p className="text-[var(--brand-muted)] text-lg leading-7">
@@ -838,7 +838,7 @@ export default function Home() {
             <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] text-xs block mb-4">
               Program Destinations
             </span>
-            <h2 className="font-extrabold text-[28px] md:text-[48px] leading-[36px] md:leading-[56px] text-[var(--brand-navy)]">
+            <h2 className="font-display font-extrabold text-[28px] md:text-[48px] leading-[36px] md:leading-[56px] text-[var(--brand-navy)]">
               Places chosen for what they can teach.
             </h2>
             <p className="text-[var(--brand-muted)] text-lg mt-4 max-w-2xl">
@@ -880,7 +880,7 @@ export default function Home() {
             <span className="font-bold text-[var(--brand-red)] uppercase tracking-[0.2em] text-xs block mb-4">
               Our Community
             </span>
-            <h2 className="font-extrabold text-[28px] md:text-[48px] leading-[36px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)] max-w-4xl mx-auto">
+            <h2 className="font-display font-extrabold text-[28px] md:text-[48px] leading-[36px] md:leading-[56px] tracking-[-0.01em] text-[var(--brand-navy)] max-w-4xl mx-auto">
               A growing community of learners, families, educators, and
               partners.
             </h2>
@@ -916,7 +916,7 @@ export default function Home() {
       {/* ─── 11. CTA ─────────────────────────────────────────────────────── */}
       <section className="py-28 bg-white border-t border-[var(--brand-border)] relative z-10 text-center">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-16 reveal">
-          <h2 className="font-extrabold text-[40px] md:text-[60px] leading-[48px] md:leading-[68px] tracking-[-0.02em] text-[var(--brand-navy)] mb-6">
+          <h2 className="font-display font-extrabold text-[40px] md:text-[60px] leading-[48px] md:leading-[68px] tracking-[-0.02em] text-[var(--brand-navy)] mb-6">
             Start with the pathway that fits your goals.
           </h2>
           <p className="text-[var(--brand-muted)] text-lg mb-4 max-w-xl mx-auto">

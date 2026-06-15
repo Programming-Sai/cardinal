@@ -112,7 +112,7 @@ export default function ProgramDetail() {
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-16 relative z-10">
           <div className="max-w-3xl space-y-6">
             <span className="font-bold text-[var(--brand-red-soft)] uppercase tracking-[0.2em] text-sm">{categoryLabel}</span>
-            <h1 className="font-extrabold text-[36px] sm:text-[48px] md:text-[64px] leading-[42px] sm:leading-[56px] md:leading-[72px] tracking-[-0.02em]">
+            <h1 className="font-display font-extrabold text-[36px] sm:text-[48px] md:text-[64px] leading-[42px] sm:leading-[56px] md:leading-[72px] tracking-[-0.02em]">
               {program.title}
             </h1>
             <p className="text-xl leading-8 text-white/90">{program.tagline}</p>

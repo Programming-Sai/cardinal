@@ -32,7 +32,7 @@ export default function BrandLogo({
         <>
           <BrandMark size={size === "sm" ? "sm" : size === "lg" ? "lg" : "md"} />
           {showWordmark && (
-            <span className="font-extrabold tracking-[-0.03em] text-brand-navy text-lg sm:text-xl">
+            <span className="font-display font-extrabold tracking-[-0.03em] text-brand-navy text-lg sm:text-xl">
               Cardinal Immersions
             </span>
           )}

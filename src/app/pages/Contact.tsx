@@ -120,7 +120,7 @@ export default function Contact() {
             <span className="font-bold text-[var(--brand-red-soft)] uppercase tracking-[0.2em] text-sm">
               Get in Touch
             </span>
-            <h1 className="font-extrabold text-[36px] sm:text-[48px] md:text-[64px] leading-[42px] sm:leading-[56px] md:leading-[72px] tracking-[-0.02em] text-white">
+            <h1 className="font-display font-extrabold text-[36px] sm:text-[48px] md:text-[64px] leading-[42px] sm:leading-[56px] md:leading-[72px] tracking-[-0.02em] text-white">
               Contact{" "}
               <span className="text-[var(--brand-red)]">
                 Cardinal Immersions

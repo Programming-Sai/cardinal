@@ -101,7 +101,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-brand-sans);
+  --font-sans: var(--font-brand-body);
+  --font-body: var(--font-brand-body);
+  --font-display: var(--font-brand-display);
   --color-brand-red: var(--brand-red);
   --color-brand-red-soft: var(--brand-red-soft);
   --color-brand-red-deep: var(--brand-red-deep);
@@ -224,7 +226,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-brand-sans);
+    font-family: var(--font-brand-body);
     letter-spacing: -0.012em;
     line-height: 1.55;
     text-rendering: optimizeLegibility;
@@ -238,6 +240,17 @@
 
   html {
     font-size: var(--font-size);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-display {
+    font-family: var(--font-brand-display);
+    font-weight: 700;
   }
 
   h1 {
@@ -264,6 +277,22 @@
     font-size: var(--text-base);
     font-weight: var(--font-weight-medium);
     line-height: 1.25;
+  }
+
+  p,
+  li,
+  label,
+  button,
+  input,
+  textarea,
+  select,
+  option,
+  a,
+  th,
+  td,
+  summary,
+  small {
+    font-family: var(--font-brand-body);
   }
 
   p,
